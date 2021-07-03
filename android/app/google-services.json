@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "6212744169",
+    "project_id": "pengo-42363",
+    "storage_bucket": "pengo-42363.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:6212744169:android:3586279be1915eb1d01178",
+        "android_client_info": {
+          "package_name": "com.example.pengo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "6212744169-qg9s9d4ljtbu9jdv96le1cste1d9pe8c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDV8-MKVCh3sKgJ4DEphBxsUYtPI13jbeA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "6212744169-qg9s9d4ljtbu9jdv96le1cste1d9pe8c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
