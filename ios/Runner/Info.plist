@@ -41,5 +41,14 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<!-- for iOS 11 + -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Reason why app needs location</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Reason why app needs location</string>
+
+	<!-- additionally for iOS 9/10, if you need always permission -->
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Reason why app needs location</string>
 </dict>
 </plist>
