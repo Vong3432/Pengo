@@ -1,5 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:pengo/ui/home/widgets/quick_tap_item.dart';
+import 'package:pengo/ui/home/widgets/self_booking_item.dart';
+import 'package:pengo/ui/penger/info_view.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -18,49 +23,70 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverAppBar(
-            expandedHeight: MediaQuery.of(context).size.height * 0.05,
-            backgroundColor: Colors.white,
-            pinned: true,
-            centerTitle: false,
-            title: const Text(
-              "Home",
-              style: TextStyle(color: Colors.black),
+    TextTheme textTheme = Theme.of(context).textTheme;
+    return CustomScrollView(
+      slivers: <Widget>[
+        SliverAppBar(
+          expandedHeight: MediaQuery.of(context).size.height * 0.05,
+          backgroundColor: Colors.white,
+          pinned: true,
+          centerTitle: false,
+          title: const Text(
+            "Find & Book",
+            style: TextStyle(color: Colors.black),
+          ),
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const Icon(Icons.location_on_outlined),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const <Widget>[
+                      Text(
+                        "Current location",
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        "Gelang Patah, Johor",
+                        style: TextStyle(color: Colors.black, fontSize: 12),
+                      )
+                    ],
+                  )
+                ],
+              ),
             ),
-            actions: <IconButton>[
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.search_outlined),
+          ],
+          actionsIconTheme: const IconThemeData(color: Colors.black),
+          textTheme: TextTheme(headline1: Typography.blackCupertino.headline1),
+        ),
+        SliverList(
+          delegate: SliverChildListDelegate(<Widget>[
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                // ignore: prefer_const_literals_to_create_immutables
+                children: <Widget>[
+                  CupertinoSearchTextField(
+                    onChanged: (String value) {
+                      debugPrint('The text has changed to: $value');
+                    },
+                    onSubmitted: (String value) {
+                      debugPrint('Submitted text: $value');
+                    },
+                  ),
+                  const QuickTapSection(),
+                  MyBookingSection(textTheme: textTheme),
+                ],
               ),
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.qr_code_scanner_outlined),
-              )
-            ],
-            actionsIconTheme: const IconThemeData(color: Colors.black),
-            textTheme:
-                TextTheme(headline1: Typography.blackCupertino.headline1),
-          ),
-          SliverList(
-            delegate: SliverChildListDelegate(<Widget>[
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  // ignore: prefer_const_literals_to_create_immutables
-                  children: <Widget>[
-                    const Text('This is home page.'),
-                  ],
-                ),
-              ),
-            ]),
-          ),
-        ],
-      ),
+            ),
+          ]),
+        ),
+      ],
     );
   }
 
@@ -104,5 +130,105 @@ class _HomePageState extends State<HomePage> {
     // continue accessing the position of the device.
     Position position = await Geolocator.getCurrentPosition();
     debugPrint("Position: ${position.toString()}");
+  }
+}
+
+class MyBookingSection extends StatefulWidget {
+  const MyBookingSection({
+    Key? key,
+    required this.textTheme,
+  }) : super(key: key);
+
+  final TextTheme textTheme;
+
+  @override
+  _MyBookingSectionState createState() => _MyBookingSectionState();
+}
+
+class _MyBookingSectionState extends State<MyBookingSection> {
+  final PageController _controller = PageController(viewportFraction: 0.85);
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Text("My Booking", style: widget.textTheme.headline6),
+            const Spacer(),
+            const Text(
+              "See all",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 0),
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.22,
+            child: PageView(
+              controller: _controller,
+              // This next line does the trick.
+              children: <Widget>[
+                SelfBookingItem(textTheme: widget.textTheme),
+                SelfBookingItem(textTheme: widget.textTheme),
+              ],
+            ),
+          ),
+        ),
+        Divider(),
+      ],
+    );
+  }
+}
+
+class QuickTapSection extends StatelessWidget {
+  const QuickTapSection({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            const Text(
+              "Quick Tap",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const Spacer(),
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.more_horiz),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: const <QuickTapItem>[
+            QuickTapItem(),
+            QuickTapItem(),
+            QuickTapItem(),
+            QuickTapItem()
+          ],
+        ),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+          child: Divider(),
+        )
+      ],
+    );
   }
 }
