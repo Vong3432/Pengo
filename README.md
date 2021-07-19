@@ -1,16 +1,17 @@
-# pengo
+# Pengo
 
-User-experience first booking application.
+![](https://res.cloudinary.com/dpjso4bmh/image/upload/v1626712457/pengo/SplashScreen_ngguco.png)
 
-## Getting Started
+> #### The actual booking app.
 
-This project is a starting point for a Flutter application.
+### Features
+- All in one multipurpose booking app.
+- Easiest booking app for everyone.
+- UX First Design 
+- GooCard Cloud Identification.
+- Seamless delay device communication.
+- Rewarding System that actually is about "win-win".
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Wishlist
+- IOT GooCard Integration.
+- Open-source API/SDK.
