@@ -1,10 +1,13 @@
+import 'package:after_layout/after_layout.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pengo/config/color.dart';
 import 'package:pengo/helpers/notification/push_notification_manager.dart';
-import 'package:pengo/routes/routes.dart';
+import 'package:pengo/onboarding.dart';
 import 'package:pengo/ui/home/home_view.dart';
 import 'package:pengo/ui/profile/profile_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: avoid_void_async
 void main() async {
@@ -14,7 +17,8 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -33,9 +37,50 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: Colors.white,
           dividerColor: Colors.black38,
           platform: TargetPlatform.iOS),
-      // home: const HomePage(),
-      home: MyHomePage(),
+      // home: const HomePage(), //Material App,
+      home: const Splash(),
     );
+  }
+}
+
+class Splash extends StatefulWidget {
+  const Splash({Key? key}) : super(key: key);
+
+  @override
+  _SplashState createState() => _SplashState();
+}
+
+class _SplashState extends State<Splash> with AfterLayoutMixin<Splash> {
+  final String home = "HOME";
+  final String onboard = "ONBOARD";
+
+  Future<void> checkFirstSeen() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final bool _seen = prefs.getBool('seen') ?? false;
+
+    if (_seen) {
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (BuildContext context) => const MyHomePage()));
+    } else {
+      // Set the flag to true at the end of onboarding screen if everything is successfull and so I am commenting it out
+      await prefs.setBool('seen', true);
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (BuildContext context) => const OnboardingPage()));
+    }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) => checkFirstSeen();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(body: CircularProgressIndicator());
   }
 }
 
