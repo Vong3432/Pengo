@@ -2,6 +2,7 @@ import 'package:after_layout/after_layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pengo/config/color.dart';
 import 'package:pengo/helpers/notification/push_notification_manager.dart';
 import 'package:pengo/onboarding.dart';
@@ -12,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 // ignore: avoid_void_async
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
   await PushNotificationManager().init();
   runApp(MyApp());
 }
@@ -51,19 +53,16 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> with AfterLayoutMixin<Splash> {
-  final String home = "HOME";
-  final String onboard = "ONBOARD";
-
   Future<void> checkFirstSeen() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final bool _seen = prefs.getBool('seen') ?? false;
+    final bool _seen = prefs.getBool('seen') ?? true; // default: false
 
     if (_seen) {
       Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (BuildContext context) => const MyHomePage()));
     } else {
       // Set the flag to true at the end of onboarding screen if everything is successfull and so I am commenting it out
-      await prefs.setBool('seen', true);
+      // await prefs.setBool('seen', true);
       Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (BuildContext context) => const OnboardingPage()));
     }
@@ -121,6 +120,12 @@ class _MyHomePageState extends State<MyHomePage> {
     // TODO: implement initState
     super.initState();
     PushNotificationManager().init();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override

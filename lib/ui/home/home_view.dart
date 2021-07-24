@@ -2,9 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:pengo/ui/home/widgets/home_h_listview.dart';
+import 'package:pengo/ui/home/widgets/penger_item.dart';
 import 'package:pengo/ui/home/widgets/quick_tap_item.dart';
 import 'package:pengo/ui/home/widgets/self_booking_item.dart';
-import 'package:pengo/ui/penger/info_view.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -19,6 +20,12 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement initState
     super.initState();
     _determinePosition();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
@@ -80,7 +87,34 @@ class _HomePageState extends State<HomePage> {
                     },
                   ),
                   const QuickTapSection(),
-                  MyBookingSection(textTheme: textTheme),
+                  HomeHListView(
+                    textTheme: textTheme,
+                    title: "My Booking",
+                    children: <Widget>[
+                      SelfBookingItem(textTheme: textTheme),
+                      SelfBookingItem(textTheme: textTheme),
+                      SelfBookingItem(textTheme: textTheme),
+                    ],
+                  ),
+                  HomeHListView(
+                    textTheme: textTheme,
+                    title: "Popular",
+                    children: const <Widget>[
+                      PengerItem(),
+                      PengerItem(),
+                      PengerItem(),
+                      PengerItem(),
+                      PengerItem(),
+                    ],
+                  ),
+                  HomeHListView(
+                    textTheme: textTheme,
+                    title: "Nearby you",
+                    children: <Widget>[
+                      PengerItem(),
+                      PengerItem(),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -130,64 +164,6 @@ class _HomePageState extends State<HomePage> {
     // continue accessing the position of the device.
     Position position = await Geolocator.getCurrentPosition();
     debugPrint("Position: ${position.toString()}");
-  }
-}
-
-class MyBookingSection extends StatefulWidget {
-  const MyBookingSection({
-    Key? key,
-    required this.textTheme,
-  }) : super(key: key);
-
-  final TextTheme textTheme;
-
-  @override
-  _MyBookingSectionState createState() => _MyBookingSectionState();
-}
-
-class _MyBookingSectionState extends State<MyBookingSection> {
-  final PageController _controller = PageController(viewportFraction: 0.85);
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            Text("My Booking", style: widget.textTheme.headline6),
-            const Spacer(),
-            const Text(
-              "See all",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 0),
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height * 0.22,
-            child: PageView(
-              controller: _controller,
-              // This next line does the trick.
-              children: <Widget>[
-                SelfBookingItem(textTheme: widget.textTheme),
-                SelfBookingItem(textTheme: widget.textTheme),
-              ],
-            ),
-          ),
-        ),
-        Divider(),
-      ],
-    );
   }
 }
 
