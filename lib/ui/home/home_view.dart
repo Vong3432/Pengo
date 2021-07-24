@@ -30,96 +30,151 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    TextTheme textTheme = Theme.of(context).textTheme;
+    final TextTheme textTheme = Theme.of(context).textTheme;
     return CustomScrollView(
       slivers: <Widget>[
-        SliverAppBar(
-          expandedHeight: MediaQuery.of(context).size.height * 0.05,
-          backgroundColor: Colors.white,
-          pinned: true,
-          centerTitle: false,
-          title: const Text(
-            "Find & Book",
-            style: TextStyle(color: Colors.black),
+        _buildAppBar(context),
+        _buildBody(textTheme),
+      ],
+    );
+  }
+
+  SliverList _buildBody(TextTheme textTheme) {
+    return SliverList(
+      delegate: SliverChildListDelegate(<Widget>[
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            // ignore: prefer_const_literals_to_create_immutables
+            children: <Widget>[
+              CupertinoSearchTextField(
+                onChanged: (String value) {
+                  debugPrint('The text has changed to: $value');
+                },
+                onSubmitted: (String value) {
+                  debugPrint('Submitted text: $value');
+                },
+              ),
+              _buildQuickTapSection(),
+              _buildUserBookingList(textTheme),
+              _buildPopularList(textTheme),
+              _buildNearbyList(textTheme),
+            ],
           ),
-          actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const Icon(Icons.location_on_outlined),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: const <Widget>[
-                      Text(
-                        "Current location",
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        "Gelang Patah, Johor",
-                        style: TextStyle(color: Colors.black, fontSize: 12),
-                      )
-                    ],
+        ),
+      ]),
+    );
+  }
+
+  SliverAppBar _buildAppBar(BuildContext context) {
+    return SliverAppBar(
+      expandedHeight: MediaQuery.of(context).size.height * 0.05,
+      backgroundColor: Colors.white,
+      pinned: true,
+      centerTitle: false,
+      title: const Text(
+        "Find & Book",
+        style: TextStyle(color: Colors.black),
+      ),
+      actions: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Icon(Icons.location_on_outlined),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const <Widget>[
+                  Text(
+                    "Current location",
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    "Gelang Patah, Johor",
+                    style: TextStyle(color: Colors.black, fontSize: 12),
                   )
                 ],
+              )
+            ],
+          ),
+        ),
+      ],
+      actionsIconTheme: const IconThemeData(color: Colors.black),
+      textTheme: TextTheme(headline1: Typography.blackCupertino.headline1),
+    );
+  }
+
+  HomeHListView _buildNearbyList(TextTheme textTheme) {
+    return HomeHListView(
+      textTheme: textTheme,
+      title: "Nearby you",
+      children: const <Widget>[
+        PengerItem(),
+        PengerItem(),
+      ],
+    );
+  }
+
+  HomeHListView _buildPopularList(TextTheme textTheme) {
+    return HomeHListView(
+      textTheme: textTheme,
+      title: "Popular",
+      children: const <Widget>[
+        PengerItem(),
+        PengerItem(),
+        PengerItem(),
+        PengerItem(),
+        PengerItem(),
+      ],
+    );
+  }
+
+  HomeHListView _buildUserBookingList(TextTheme textTheme) {
+    return HomeHListView(
+      textTheme: textTheme,
+      title: "My Booking",
+      children: <Widget>[
+        SelfBookingItem(textTheme: textTheme),
+        SelfBookingItem(textTheme: textTheme),
+        SelfBookingItem(textTheme: textTheme),
+      ],
+    );
+  }
+
+  Widget _buildQuickTapSection() {
+    return Column(
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            const Text(
+              "Quick Tap",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
               ),
+            ),
+            const Spacer(),
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.more_horiz),
             ),
           ],
-          actionsIconTheme: const IconThemeData(color: Colors.black),
-          textTheme: TextTheme(headline1: Typography.blackCupertino.headline1),
         ),
-        SliverList(
-          delegate: SliverChildListDelegate(<Widget>[
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                // ignore: prefer_const_literals_to_create_immutables
-                children: <Widget>[
-                  CupertinoSearchTextField(
-                    onChanged: (String value) {
-                      debugPrint('The text has changed to: $value');
-                    },
-                    onSubmitted: (String value) {
-                      debugPrint('Submitted text: $value');
-                    },
-                  ),
-                  const QuickTapSection(),
-                  HomeHListView(
-                    textTheme: textTheme,
-                    title: "My Booking",
-                    children: <Widget>[
-                      SelfBookingItem(textTheme: textTheme),
-                      SelfBookingItem(textTheme: textTheme),
-                      SelfBookingItem(textTheme: textTheme),
-                    ],
-                  ),
-                  HomeHListView(
-                    textTheme: textTheme,
-                    title: "Popular",
-                    children: const <Widget>[
-                      PengerItem(),
-                      PengerItem(),
-                      PengerItem(),
-                      PengerItem(),
-                      PengerItem(),
-                    ],
-                  ),
-                  HomeHListView(
-                    textTheme: textTheme,
-                    title: "Nearby you",
-                    children: <Widget>[
-                      PengerItem(),
-                      PengerItem(),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ]),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: const <QuickTapItem>[
+            QuickTapItem(),
+            QuickTapItem(),
+            QuickTapItem(),
+            QuickTapItem()
+          ],
         ),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+          child: Divider(),
+        )
       ],
     );
   }
@@ -164,47 +219,5 @@ class _HomePageState extends State<HomePage> {
     // continue accessing the position of the device.
     Position position = await Geolocator.getCurrentPosition();
     debugPrint("Position: ${position.toString()}");
-  }
-}
-
-class QuickTapSection extends StatelessWidget {
-  const QuickTapSection({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            const Text(
-              "Quick Tap",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const Spacer(),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.more_horiz),
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const <QuickTapItem>[
-            QuickTapItem(),
-            QuickTapItem(),
-            QuickTapItem(),
-            QuickTapItem()
-          ],
-        ),
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-          child: Divider(),
-        )
-      ],
-    );
   }
 }

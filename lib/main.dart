@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pengo/config/color.dart';
 import 'package:pengo/helpers/notification/push_notification_manager.dart';
 import 'package:pengo/onboarding.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: primaryColor,
           scaffoldBackgroundColor: Colors.white,
           dividerColor: Colors.black38,
+          textTheme: GoogleFonts.workSansTextTheme(Theme.of(context).textTheme),
           platform: TargetPlatform.iOS),
       // home: const HomePage(), //Material App,
       home: const Splash(),
