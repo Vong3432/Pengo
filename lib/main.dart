@@ -1,10 +1,9 @@
+import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
+import 'package:flutter/foundation.dart';
 import 'package:after_layout/after_layout.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:pengo/config/color.dart';
+import 'package:flutter/material.dart';
 import 'package:pengo/helpers/notification/push_notification_manager.dart';
 import 'package:pengo/onboarding.dart';
 import 'package:pengo/ui/home/home_view.dart';
@@ -24,6 +23,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -37,9 +37,49 @@ class MyApp extends StatelessWidget {
           // Notice that the counter didn't reset back to zero; the application
           // is not restarted.
           primarySwatch: primaryColor,
+          primaryColor: primaryColor,
           scaffoldBackgroundColor: Colors.white,
+          fontFamily: 'Poppins',
           dividerColor: Colors.black38,
-          textTheme: GoogleFonts.workSansTextTheme(Theme.of(context).textTheme),
+          textTheme: const TextTheme(
+            headline1: TextStyle(
+              fontSize: 28,
+              fontFamily: 'Poppins',
+              letterSpacing: -1,
+              fontWeight: FontWeight.bold,
+            ),
+            headline2: TextStyle(
+              fontSize: 26,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold,
+            ),
+            headline3: TextStyle(
+              fontSize: 24,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold,
+            ),
+            headline4: TextStyle(
+              fontSize: 22,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold,
+            ),
+            headline5: TextStyle(
+              fontSize: 20,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w700,
+            ),
+            headline6: TextStyle(
+              fontSize: 18,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w600,
+            ),
+            subtitle1: TextStyle(fontFamily: 'Work Sans'),
+            subtitle2: TextStyle(fontFamily: 'Work Sans'),
+            caption: TextStyle(fontFamily: 'Work Sans'),
+          ).apply(
+            bodyColor: textColor,
+            displayColor: textColor,
+          ),
           platform: TargetPlatform.iOS),
       // home: const HomePage(), //Material App,
       home: const Splash(),
@@ -139,37 +179,64 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
+      extendBody: true,
       body: IndexedStack(
         index: _selectedIndex,
         children: _pages,
       ),
-      bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: FloatingNavbar(
+        backgroundColor: textColor,
         currentIndex: _selectedIndex,
+        selectedBackgroundColor: Colors.transparent,
+        borderRadius: 50,
+        iconSize: 27,
+        selectedItemColor: Colors.white,
         onTap: _onBottomNavItemTapped,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        selectedItemColor: Theme.of(context).primaryColor,
-        unselectedItemColor: Colors.black,
-        type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined, size: 32),
-            label: 'Home',
+        items: <FloatingNavbarItem>[
+          FloatingNavbarItem(
+            customWidget: navIcon(_selectedIndex == 0, Icons.home_outlined),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.credit_card, size: 32),
-            label: 'GooCard',
+          FloatingNavbarItem(
+            customWidget: navIcon(_selectedIndex == 1, Icons.credit_card),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today_outlined, size: 28),
-            label: 'Calendar',
+          FloatingNavbarItem(
+            customWidget:
+                navIcon(_selectedIndex == 2, Icons.calendar_today_outlined),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline_outlined, size: 32),
-            label: 'Profile',
+          FloatingNavbarItem(
+            customWidget: navIcon(_selectedIndex == 3, Icons.person_outlined),
           ),
         ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+
+  // ignore: avoid_positional_boolean_parameters
+  Stack navIcon(bool show, IconData icon) {
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: Align(
+            alignment: Alignment.topRight,
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: primaryColor,
+              ),
+              width: show ? 8 : 0,
+              height: show ? 8 : 0,
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(3.0),
+          child: Icon(
+            icon,
+            size: 27,
+            color: Colors.white,
+          ),
+        ),
+      ],
     );
   }
 }

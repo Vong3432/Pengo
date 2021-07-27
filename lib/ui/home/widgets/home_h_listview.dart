@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/ui/widgets/stacks/h_stack.dart';
 
 class HomeHListView extends StatefulWidget {
@@ -31,7 +32,7 @@ class _HomeHListViewState extends State<HomeHListView> {
       children: <Widget>[
         Row(
           children: <Widget>[
-            Text(widget.title, style: widget.textTheme.headline6),
+            Text(widget.title, style: widget.textTheme.headline5),
             const Spacer(),
             const Text(
               "See all",
@@ -42,17 +43,17 @@ class _HomeHListViewState extends State<HomeHListView> {
           ],
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           child: SizedBox(
-            height: MediaQuery.of(context).size.height * 0.22,
+            height: mediaQuery(context).size.height * 0.32,
             child: HStack(
+              gap: 20,
               children: widget.children,
             ),
           ),
         ),
         const Padding(
           padding: EdgeInsets.symmetric(vertical: 10),
-          child: Divider(),
         )
       ],
     );

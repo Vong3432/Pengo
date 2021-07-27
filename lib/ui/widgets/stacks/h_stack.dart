@@ -12,12 +12,15 @@ class HStack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double dimension = 300;
+
     return ListView.separated(
+      clipBehavior: Clip.none,
       separatorBuilder: (BuildContext ctx, int idx) => SizedBox(
         width: gap ?? 10,
       ),
       scrollDirection: Axis.horizontal,
-      physics: const CustomScrollPhysics(itemDimension: 300),
+      physics: CustomScrollPhysics(itemDimension: dimension),
       itemCount: children.length,
       itemBuilder: (BuildContext context, int idx) {
         return children[idx];
@@ -30,8 +33,7 @@ class CustomScrollPhysics extends ScrollPhysics {
   final double itemDimension;
 
   // ignore: sort_constructors_first
-  const CustomScrollPhysics(
-      {required this.itemDimension, ScrollPhysics? parent})
+  CustomScrollPhysics({required this.itemDimension, ScrollPhysics? parent})
       : super(parent: parent);
 
   @override

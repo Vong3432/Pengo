@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pengo/config/shadow.dart';
+import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/ui/penger/info_view.dart';
 
 class QuickTapItem extends StatelessWidget {
@@ -19,17 +21,22 @@ class QuickTapItem extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Container(
-              decoration: const BoxDecoration(
-                color: Colors.grey,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10),
-                ),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: normalShadow(Theme.of(context)),
+              shape: BoxShape.circle,
+            ),
+            width: 65,
+            height: 65,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text(
+              "Things 1",
+              style: TextStyle(
+                fontSize: textTheme(context).subtitle2!.fontSize,
               ),
-              width: 50,
-              height: 50),
-          const Padding(
-            padding: EdgeInsets.only(top: 8.0),
-            child: Text("Things 1"),
+            ),
           ),
         ],
       ),

@@ -14,30 +14,27 @@ class CustomListItem extends StatelessWidget {
       onTap: () {
         debugPrint("Tapped");
       },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 18),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              width: 52,
-              height: 52,
-              decoration: const BoxDecoration(
-                color: Colors.grey,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(8),
-                ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            width: 52,
+            height: 52,
+            decoration: const BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.all(
+                Radius.circular(8),
               ),
-              child: leading,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: content),
-            ),
-          ],
-        ),
+            child: leading,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: content),
+          ),
+        ],
       ),
     );
   }

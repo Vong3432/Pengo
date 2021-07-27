@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/ui/home/widgets/home_h_listview.dart';
 import 'package:pengo/ui/home/widgets/penger_item.dart';
 import 'package:pengo/ui/home/widgets/quick_tap_item.dart';
@@ -28,12 +29,18 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
+  final List<Widget> pengers = const <Widget>[
+    PengerItem(),
+    PengerItem(),
+    PengerItem(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     return CustomScrollView(
       slivers: <Widget>[
-        _buildAppBar(context),
+        _buildAppBar(context, textTheme),
         _buildBody(textTheme),
       ],
     );
@@ -46,6 +53,7 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             // ignore: prefer_const_literals_to_create_immutables
             children: <Widget>[
               CupertinoSearchTextField(
@@ -56,10 +64,10 @@ class _HomePageState extends State<HomePage> {
                   debugPrint('Submitted text: $value');
                 },
               ),
-              _buildQuickTapSection(),
               _buildUserBookingList(textTheme),
-              _buildPopularList(textTheme),
-              _buildNearbyList(textTheme),
+              _buildQuickTapSection(textTheme),
+              _buildPopularList(context),
+              _buildNearbyList(context),
             ],
           ),
         ),
@@ -67,15 +75,16 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  SliverAppBar _buildAppBar(BuildContext context) {
+  SliverAppBar _buildAppBar(BuildContext context, TextTheme textTheme) {
     return SliverAppBar(
-      expandedHeight: MediaQuery.of(context).size.height * 0.05,
+      toolbarHeight: mediaQuery(context).size.height * 0.1,
       backgroundColor: Colors.white,
       pinned: true,
       centerTitle: false,
-      title: const Text(
-        "Find & Book",
-        style: TextStyle(color: Colors.black),
+      elevation: 0,
+      title: Text(
+        "Home",
+        style: textTheme.headline1,
       ),
       actions: <Widget>[
         Padding(
@@ -107,61 +116,76 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  HomeHListView _buildNearbyList(TextTheme textTheme) {
-    return HomeHListView(
-      textTheme: textTheme,
-      title: "Nearby you",
-      children: const <Widget>[
-        PengerItem(),
-        PengerItem(),
-      ],
-    );
-  }
-
-  HomeHListView _buildPopularList(TextTheme textTheme) {
-    return HomeHListView(
-      textTheme: textTheme,
-      title: "Popular",
-      children: const <Widget>[
-        PengerItem(),
-        PengerItem(),
-        PengerItem(),
-        PengerItem(),
-        PengerItem(),
-      ],
-    );
-  }
-
-  HomeHListView _buildUserBookingList(TextTheme textTheme) {
-    return HomeHListView(
-      textTheme: textTheme,
-      title: "My Booking",
+  Widget _buildPopularList(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        SelfBookingItem(textTheme: textTheme),
-        SelfBookingItem(textTheme: textTheme),
-        SelfBookingItem(textTheme: textTheme),
+        const SizedBox(height: 18),
+        Text(
+          "Popular",
+          style: textTheme(context).headline5,
+        ),
+        ListView.builder(
+          shrinkWrap: true,
+          padding: const EdgeInsets.all(0),
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: pengers.length,
+          itemBuilder: (BuildContext ctx, int index) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: pengers[index],
+            );
+          },
+        ),
       ],
     );
   }
 
-  Widget _buildQuickTapSection() {
+  Widget _buildNearbyList(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        const SizedBox(height: 18),
+        Text(
+          "Nearby you",
+          style: textTheme(context).headline5,
+        ),
+        ListView.builder(
+          shrinkWrap: true,
+          padding: const EdgeInsets.all(0),
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: pengers.length,
+          itemBuilder: (BuildContext ctx, int index) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: pengers[index],
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildUserBookingList(TextTheme textTheme) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 18.0),
+      child: HomeHListView(
+        textTheme: textTheme,
+        title: "My Booking",
+        children: <Widget>[
+          SelfBookingItem(),
+          SelfBookingItem(),
+          SelfBookingItem(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildQuickTapSection(TextTheme textTheme) {
     return Column(
       children: <Widget>[
-        Row(
-          children: <Widget>[
-            const Text(
-              "Quick Tap",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const Spacer(),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.more_horiz),
-            ),
-          ],
-        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: const <QuickTapItem>[
@@ -172,8 +196,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         const Padding(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-          child: Divider(),
+          padding: EdgeInsets.symmetric(vertical: 10),
         )
       ],
     );

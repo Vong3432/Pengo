@@ -1,63 +1,79 @@
 import 'package:flutter/material.dart';
+import 'package:pengo/config/color.dart';
+import 'package:pengo/config/shadow.dart';
+import 'package:pengo/helpers/theme/theme_helper.dart';
 
 class SelfBookingItem extends StatelessWidget {
   const SelfBookingItem({
     Key? key,
-    required this.textTheme,
   }) : super(key: key);
-
-  final TextTheme textTheme;
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     return GestureDetector(
       onTap: () {},
-      child: Stack(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Container(
-            width: MediaQuery.of(context).size.width * 0.7,
-            decoration: const BoxDecoration(
-              color: Colors.grey,
-              borderRadius: BorderRadius.all(
-                Radius.circular(8),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              boxShadow: normalShadow(theme),
+            ),
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.7,
+              child: Stack(
+                children: <Widget>[
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Image.network(
+                      "https://img.freepik.com/free-photo/observation-urban-building-business-steel_1127-2397.jpg?size=626&ext=jpg",
+                      fit: BoxFit.fill,
+                      width: double.infinity,
+                    ),
+                  ),
+                  Positioned.fill(
+                    child: Align(
+                        alignment: Alignment.topRight,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 4.0),
+                          child: Chip(
+                            backgroundColor: textColor,
+                            label: Text(
+                              "32km",
+                              style: TextStyle(
+                                fontSize: textTheme(context).caption!.fontSize,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        )),
+                  ),
+                ],
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(18.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                const Text("Est distance"),
-                Text(
-                  "32 km",
-                  style: textTheme.headline4,
-                ),
-                const Spacer(),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "Cat campaign",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: textTheme.subtitle1!.fontSize,
-                      ),
-                    ),
-                    Row(
-                      children: <Widget>[
-                        const Icon(
-                          Icons.location_on,
-                          size: 18,
-                        ),
-                        Text("Sutera, Johor", style: textTheme.caption),
-                      ],
-                    )
-                  ],
-                )
-              ],
+          const SizedBox(height: 10),
+          Text(
+            "Cat campaign",
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontFamily: 'Poppins',
+              fontSize: textTheme(context).subtitle1!.fontSize,
             ),
-          )
+          ),
+          Row(
+            children: <Widget>[
+              Icon(
+                Icons.location_on,
+                size: 16,
+                color: Theme.of(context).primaryColor,
+              ),
+              Text("Sutera, Johor", style: textTheme(context).subtitle2),
+            ],
+          ),
         ],
       ),
     );
