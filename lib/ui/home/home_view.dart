@@ -7,6 +7,8 @@ import 'package:pengo/ui/home/widgets/home_h_listview.dart';
 import 'package:pengo/ui/home/widgets/penger_item.dart';
 import 'package:pengo/ui/home/widgets/quick_tap_item.dart';
 import 'package:pengo/ui/home/widgets/self_booking_item.dart';
+import 'package:pengo/ui/widgets/layout/sliver_appbar.dart';
+import 'package:pengo/ui/widgets/layout/sliver_body.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -40,79 +42,64 @@ class _HomePageState extends State<HomePage> {
     final TextTheme textTheme = Theme.of(context).textTheme;
     return CustomScrollView(
       slivers: <Widget>[
-        _buildAppBar(context, textTheme),
-        _buildBody(textTheme),
-      ],
-    );
-  }
-
-  SliverList _buildBody(TextTheme textTheme) {
-    return SliverList(
-      delegate: SliverChildListDelegate(<Widget>[
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            // ignore: prefer_const_literals_to_create_immutables
-            children: <Widget>[
-              CupertinoSearchTextField(
-                onChanged: (String value) {
-                  debugPrint('The text has changed to: $value');
-                },
-                onSubmitted: (String value) {
-                  debugPrint('Submitted text: $value');
-                },
-              ),
-              _buildUserBookingList(textTheme),
-              _buildQuickTapSection(textTheme),
-              _buildPopularList(context),
-              _buildNearbyList(context),
-            ],
+        CustomSliverAppBar(
+          title: Text(
+            "Home",
+            style: textTheme.headline1,
           ),
-        ),
-      ]),
-    );
-  }
-
-  SliverAppBar _buildAppBar(BuildContext context, TextTheme textTheme) {
-    return SliverAppBar(
-      toolbarHeight: mediaQuery(context).size.height * 0.1,
-      backgroundColor: Colors.white,
-      pinned: true,
-      centerTitle: false,
-      elevation: 0,
-      title: Text(
-        "Home",
-        style: textTheme.headline1,
-      ),
-      actions: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Icon(Icons.location_on_outlined),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: const <Widget>[
-                  Text(
-                    "Current location",
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    "Gelang Patah, Johor",
-                    style: TextStyle(color: Colors.black, fontSize: 12),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const Icon(Icons.location_on_outlined),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const <Widget>[
+                      Text(
+                        "Current location",
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        "Gelang Patah, Johor",
+                        style: TextStyle(color: Colors.black, fontSize: 12),
+                      )
+                    ],
                   )
                 ],
-              )
-            ],
-          ),
+              ),
+            ),
+          ],
+        ),
+        CustomSliverBody(
+          content: <Widget>[
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                // ignore: prefer_const_literals_to_create_immutables
+                children: <Widget>[
+                  CupertinoSearchTextField(
+                    onChanged: (String value) {
+                      debugPrint('The text has changed to: $value');
+                    },
+                    onSubmitted: (String value) {
+                      debugPrint('Submitted text: $value');
+                    },
+                  ),
+                  _buildUserBookingList(textTheme),
+                  _buildQuickTapSection(textTheme),
+                  _buildPopularList(context),
+                  _buildNearbyList(context),
+                ],
+              ),
+            ),
+          ],
         ),
       ],
-      actionsIconTheme: const IconThemeData(color: Colors.black),
-      textTheme: TextTheme(headline1: Typography.blackCupertino.headline1),
     );
   }
 

@@ -2,11 +2,14 @@ import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.da
 import 'package:flutter/foundation.dart';
 import 'package:after_layout/after_layout.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pengo/config/color.dart';
 import 'package:flutter/material.dart';
 import 'package:pengo/helpers/notification/push_notification_manager.dart';
 import 'package:pengo/onboarding.dart';
 import 'package:pengo/ui/home/home_view.dart';
+import 'package:pengo/ui/penger/booking/booking_cubit.dart';
+import 'package:pengo/ui/penger/booking/booking_state.dart';
 import 'package:pengo/ui/profile/profile_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,9 +27,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (BuildContext context) => BookingCubit(),
+        )
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
           // This is the theme of your application.
           //
           // Try running your application with "flutter run". You'll see the
@@ -80,9 +89,11 @@ class MyApp extends StatelessWidget {
             bodyColor: textColor,
             displayColor: textColor,
           ),
-          platform: TargetPlatform.iOS),
-      // home: const HomePage(), //Material App,
-      home: const Splash(),
+          platform: TargetPlatform.iOS,
+        ),
+        // home: const HomePage(), //Material App,
+        home: const Splash(),
+      ),
     );
   }
 }
@@ -100,12 +111,12 @@ class _SplashState extends State<Splash> with AfterLayoutMixin<Splash> {
     final bool _seen = prefs.getBool('seen') ?? true; // default: false
 
     if (_seen) {
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
+      Navigator.of(context).pushReplacement(CupertinoPageRoute(
           builder: (BuildContext context) => const MyHomePage()));
     } else {
       // Set the flag to true at the end of onboarding screen if everything is successfull and so I am commenting it out
       // await prefs.setBool('seen', true);
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
+      Navigator.of(context).pushReplacement(CupertinoPageRoute(
           builder: (BuildContext context) => const OnboardingPage()));
     }
   }
@@ -143,15 +154,27 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
-
-  static final List<Widget> _pages = <Widget>[
-    const HomePage(),
-    const HomePage(),
-    const HomePage(),
-    const ProfilePage(),
-  ];
+  final _navigatorKey = GlobalKey<NavigatorState>();
 
   void _onBottomNavItemTapped(int idx) {
+    switch (idx) {
+      case 0:
+        _navigatorKey.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
+        break;
+      case 1:
+        _navigatorKey.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
+        break;
+      case 2:
+        _navigatorKey.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
+        break;
+      case 3:
+        _navigatorKey.currentState!
+            .pushNamedAndRemoveUntil('/profile', (_) => false);
+        break;
+      default:
+        _navigatorKey.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
+    }
+
     setState(() {
       _selectedIndex = idx;
     });
@@ -180,9 +203,44 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       extendBody: true,
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _pages,
+      body: WillPopScope(
+        onWillPop: () async {
+          if (_navigatorKey.currentState!.canPop()) {
+            _navigatorKey.currentState!.pop();
+            return false;
+          }
+          return true;
+        },
+        child: Navigator(
+          key: _navigatorKey,
+          initialRoute: '/',
+          onGenerateRoute: (RouteSettings settings) {
+            WidgetBuilder builder;
+            // Manage your route names here
+            switch (settings.name) {
+              case '/':
+                builder = (BuildContext context) => HomePage();
+                break;
+              case '/goocard':
+                builder = (BuildContext context) => HomePage();
+                break;
+              case '/history':
+                builder = (BuildContext context) => HomePage();
+                break;
+              case '/profile':
+                builder = (BuildContext context) => ProfilePage();
+                break;
+              default:
+                throw Exception('Invalid route: ${settings.name}');
+            }
+            // You can also return a PageRouteBuilder and
+            // define custom transitions between pages
+            return CupertinoPageRoute(
+              builder: builder,
+              settings: settings,
+            );
+          },
+        ),
       ),
       bottomNavigationBar: FloatingNavbar(
         backgroundColor: textColor,

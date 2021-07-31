@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pengo/models/booking_item_model.dart';
+import 'package:pengo/ui/penger/booking/booking_view.dart';
 import 'package:pengo/ui/widgets/list/custom_list_item.dart';
 import 'package:pengo/ui/widgets/stacks/h_stack.dart';
 
@@ -129,41 +131,54 @@ class _InfoPageState extends State<InfoPage>
   List<Widget> _generateTabView(TextTheme textTheme) {
     return List.generate(
       5,
-      (int index) => CustomListItem(
-        leading: ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: const Image(
-            fit: BoxFit.cover,
-            image: NetworkImage(
-                "https://images.unsplash.com/photo-1534237710431-e2fc698436d0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YnVpbGRpbmd8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80"),
-          ),
-        ),
-        content: <Widget>[
-          Text(
-            "Durian Party Night",
-            style: TextStyle(
-                fontSize: textTheme.subtitle1!.fontSize,
-                fontWeight: FontWeight.bold),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: Text(
-                  "Impian emas",
-                  style: textTheme.subtitle2,
+      (int index) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: CustomListItem(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BookingView(
+                  bookingItem: bookingItemsMockData[0],
                 ),
               ),
-              Text("RM5.00",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                    fontSize: textTheme.subtitle2!.fontSize,
-                  )),
-            ],
-          )
-        ],
+            );
+          },
+          leading: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: const Image(
+              fit: BoxFit.cover,
+              image: NetworkImage(
+                  "https://images.unsplash.com/photo-1534237710431-e2fc698436d0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YnVpbGRpbmd8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80"),
+            ),
+          ),
+          content: <Widget>[
+            Text(
+              "Durian Party Night",
+              style: TextStyle(
+                  fontSize: textTheme.subtitle1!.fontSize,
+                  fontWeight: FontWeight.bold),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: Text(
+                    "Impian emas",
+                    style: textTheme.subtitle2,
+                  ),
+                ),
+                Text("RM5.00",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                      fontSize: textTheme.subtitle2!.fontSize,
+                    )),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

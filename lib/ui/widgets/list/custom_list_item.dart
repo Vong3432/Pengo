@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 
 class CustomListItem extends StatelessWidget {
-  const CustomListItem({Key? key, required this.leading, required this.content})
-      : super(key: key);
+  CustomListItem({
+    Key? key,
+    required this.leading,
+    required this.content,
+    this.onTap,
+  }) : super(key: key);
 
   final Widget leading;
   final List<Widget> content;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: () {
-        debugPrint("Tapped");
-      },
+      onTap: onTap,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
