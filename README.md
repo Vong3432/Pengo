@@ -1,17 +1,22 @@
 # Pengo
 
-![](https://res.cloudinary.com/dpjso4bmh/image/upload/v1626712457/pengo/SplashScreen_ngguco.png)
-
-> #### The actual booking app.
+<p align="center" width="100%">
+  <img src="https://res.cloudinary.com/dpjso4bmh/image/upload/v1628016130/pengo/First_s96c7t.png">
+</p>
+<p align="center" width="100%">
+<small><i>The actual booking app.</i></small>
+</p>
 
 ### Features
+
 - All in one multipurpose booking app.
 - Easiest booking app for everyone.
-- UX First Design 
+- UX First Design
 - GooCard Cloud Identification.
 - Seamless delay device communication.
 - Rewarding System that actually is about "win-win".
 
 ### Wishlist
+
 - IOT GooCard Integration.
 - Open-source API/SDK.
