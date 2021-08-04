@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pengo/app.dart';
 import 'package:pengo/config/color.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
-import 'package:pengo/main.dart';
 import 'package:pengo/models/booking_item_model.dart';
-import 'package:pengo/ui/profile/profile_view.dart';
 import 'package:pengo/ui/widgets/button/custom_button.dart';
 import 'package:pengo/ui/widgets/layout/sliver_appbar.dart';
 import 'package:pengo/ui/widgets/layout/sliver_body.dart';
