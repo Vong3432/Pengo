@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pengo/config/color.dart';
+import 'package:pengo/const/space_const.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/models/booking_item_model.dart';
 import 'package:pengo/ui/penger/booking/booking_cubit.dart';
@@ -179,7 +180,7 @@ class _BookingViewState extends State<BookingView> {
                 style: textTheme(context).headline6,
               ),
               const SizedBox(
-                height: 18,
+                height: SECTION_GAP_HEIGHT,
               ),
               Container(
                 decoration: BoxDecoration(
@@ -245,7 +246,7 @@ class _BookingViewState extends State<BookingView> {
                 style: textTheme(context).headline6,
               ),
               const SizedBox(
-                height: 18,
+                height: SECTION_GAP_HEIGHT,
               ),
               Expanded(
                 child: ListView.builder(
@@ -295,7 +296,7 @@ class _BookingViewState extends State<BookingView> {
                 style: textTheme(context).headline6,
               ),
               const SizedBox(
-                height: 18,
+                height: SECTION_GAP_HEIGHT,
               ),
               CustomButton(
                 text: Text("Pay"),

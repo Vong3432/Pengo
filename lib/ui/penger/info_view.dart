@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pengo/const/space_const.dart';
 import 'package:pengo/models/booking_item_model.dart';
 import 'package:pengo/ui/penger/booking/booking_view.dart';
 import 'package:pengo/ui/widgets/list/custom_list_item.dart';
@@ -65,10 +66,10 @@ class _InfoPageState extends State<InfoPage>
         ),
         const Divider(),
         const SizedBox(
-          height: 10,
+          height: SECTION_GAP_HEIGHT,
         ),
         _buildPengerDetail(textTheme),
-        const SizedBox(height: 20),
+        const SizedBox(height: SECTION_GAP_HEIGHT),
         _buildPengerImgs(),
         _buildTabBarView(context),
       ],

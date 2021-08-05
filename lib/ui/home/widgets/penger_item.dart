@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/ui/penger/info_view.dart';
 import 'package:pengo/ui/widgets/list/custom_list_item.dart';
@@ -26,14 +27,11 @@ class PengerItem extends StatelessWidget {
       content: <Widget>[
         Text(
           "Penger name",
-          style: TextStyle(
-            fontSize: textTheme(context).subtitle1!.fontSize,
-            fontWeight: FontWeight.w700,
-          ),
+          style: PengoStyle.title2(context),
         ),
         Text(
           "Impian Emas",
-          style: textTheme(context).subtitle2,
+          style: PengoStyle.text(context),
         ),
       ],
     );

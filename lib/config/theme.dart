@@ -39,9 +39,10 @@ ThemeData themeData = ThemeData(
       fontFamily: 'Poppins',
       fontWeight: FontWeight.w600,
     ),
-    subtitle1: TextStyle(fontFamily: 'Work Sans'),
-    subtitle2: TextStyle(fontFamily: 'Work Sans'),
-    caption: TextStyle(fontFamily: 'Work Sans'),
+    subtitle1: TextStyle(fontFamily: 'Work Sans', fontWeight: FontWeight.w500),
+    subtitle2: TextStyle(fontFamily: 'Work Sans', fontWeight: FontWeight.w500),
+    caption: TextStyle(
+        fontFamily: 'Poppins', fontSize: 14, fontWeight: FontWeight.w600),
   ).apply(
     bodyColor: textColor,
     displayColor: textColor,

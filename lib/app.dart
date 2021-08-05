@@ -2,19 +2,13 @@ import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.da
 import 'package:flutter/material.dart';
 import 'package:pengo/config/color.dart';
 import 'package:pengo/helpers/notification/push_notification_manager.dart';
-import 'package:pengo/helpers/routes/generate_route.dart';
+import 'package:pengo/helpers/routes/route.dart';
+import 'package:pengo/ui/goocard/goocard_view.dart';
+import 'package:pengo/ui/home/home_view.dart';
+import 'package:pengo/ui/profile/profile_view.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -22,28 +16,42 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
-  final _navigatorKey = GlobalKey<NavigatorState>();
+  // final _navigatorKey = GlobalKey<NavigatorState>();
+  final PageStorageBucket bucket = PageStorageBucket();
+  Widget currentScreen = const HomePage();
 
   void _onBottomNavItemTapped(int idx) {
+    Widget screen;
     switch (idx) {
       case 0:
-        _navigatorKey.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
+        // home
+        screen = const HomePage();
+        // _navigatorKey.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
         break;
       case 1:
-        _navigatorKey.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
+        // goocard
+        screen = const GooCardPage();
+        // _navigatorKey.currentState!
+        //     .pushNamedAndRemoveUntil('/goocard', (_) => false);
         break;
       case 2:
-        _navigatorKey.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
+        // history
+        screen = const HomePage();
+        // _navigatorKey.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
         break;
       case 3:
-        _navigatorKey.currentState!
-            .pushNamedAndRemoveUntil('/profile', (_) => false);
+        // profile
+        screen = const ProfilePage();
+        // _navigatorKey.currentState!
+        //     .pushNamedAndRemoveUntil('/profile', (_) => false);
         break;
       default:
-        _navigatorKey.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
+        screen = const HomePage();
+      // _navigatorKey.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
     }
 
     setState(() {
+      currentScreen = screens[idx];
       _selectedIndex = idx;
     });
   }
@@ -71,20 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       extendBody: true,
-      body: WillPopScope(
-        onWillPop: () async {
-          if (_navigatorKey.currentState!.canPop()) {
-            _navigatorKey.currentState!.pop();
-            return false;
-          }
-          return true;
-        },
-        child: Navigator(
-          key: _navigatorKey,
-          initialRoute: '/',
-          onGenerateRoute: generateAppRoute,
-        ),
-      ),
+      body: PageStorage(bucket: bucket, child: currentScreen),
       bottomNavigationBar: FloatingNavbar(
         backgroundColor: textColor,
         currentIndex: _selectedIndex,

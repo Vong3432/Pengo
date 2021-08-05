@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pengo/config/color.dart';
 import 'package:pengo/config/shadow.dart';
+import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
 
 class SelfBookingItem extends StatelessWidget {
@@ -58,11 +59,7 @@ class SelfBookingItem extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             "Cat campaign",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontFamily: 'Poppins',
-              fontSize: textTheme(context).subtitle1!.fontSize,
-            ),
+            style: PengoStyle.title(context),
           ),
           Row(
             children: <Widget>[
@@ -71,7 +68,7 @@ class SelfBookingItem extends StatelessWidget {
                 size: 16,
                 color: Theme.of(context).primaryColor,
               ),
-              Text("Sutera, Johor", style: textTheme(context).subtitle2),
+              Text("Sutera, Johor", style: PengoStyle.subtitle(context)),
             ],
           ),
         ],

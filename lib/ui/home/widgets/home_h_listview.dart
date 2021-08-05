@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/ui/widgets/stacks/h_stack.dart';
 
@@ -32,7 +33,7 @@ class _HomeHListViewState extends State<HomeHListView> {
       children: <Widget>[
         Row(
           children: <Widget>[
-            Text(widget.title, style: widget.textTheme.headline5),
+            Text(widget.title, style: PengoStyle.header(context)),
             const Spacer(),
             const Text(
               "See all",

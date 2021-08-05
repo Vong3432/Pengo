@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:pengo/const/space_const.dart';
+import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/ui/home/widgets/home_h_listview.dart';
 import 'package:pengo/ui/home/widgets/penger_item.dart';
@@ -45,7 +47,7 @@ class _HomePageState extends State<HomePage> {
         CustomSliverAppBar(
           title: Text(
             "Home",
-            style: textTheme.headline1,
+            style: PengoStyle.navigationTitle(context),
           ),
           actions: [
             Padding(
@@ -108,10 +110,10 @@ class _HomePageState extends State<HomePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const SizedBox(height: 18),
+        const SizedBox(height: SECTION_GAP_HEIGHT),
         Text(
           "Popular",
-          style: textTheme(context).headline5,
+          style: PengoStyle.header(context),
         ),
         ListView.builder(
           shrinkWrap: true,
@@ -134,10 +136,10 @@ class _HomePageState extends State<HomePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const SizedBox(height: 18),
+        const SizedBox(height: SECTION_GAP_HEIGHT),
         Text(
           "Nearby you",
-          style: textTheme(context).headline5,
+          style: PengoStyle.header(context),
         ),
         ListView.builder(
           shrinkWrap: true,
