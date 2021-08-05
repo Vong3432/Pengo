@@ -20,13 +20,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: multiBlocProviders(context),
-      child: MaterialApp(
-        title: 'Pengo',
-        theme: themeData,
-        home: const Splash(),
-      ),
+    return MaterialApp(
+      title: 'Pengo',
+      theme: themeData,
+      home: const Splash(),
     );
   }
 }

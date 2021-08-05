@@ -1,17 +1,12 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pengo/config/color.dart';
 import 'package:pengo/const/space_const.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/models/booking_item_model.dart';
-import 'package:pengo/ui/penger/booking/booking_cubit.dart';
 import 'package:pengo/ui/penger/booking/booking_result.dart';
-import 'package:pengo/ui/penger/booking/booking_state.dart';
 import 'package:pengo/ui/widgets/button/custom_button.dart';
 import 'package:pengo/ui/widgets/layout/sliver_appbar.dart';
 import 'package:pengo/ui/widgets/layout/sliver_body.dart';
@@ -28,10 +23,13 @@ class BookingView extends StatefulWidget {
 }
 
 class _BookingViewState extends State<BookingView> {
-  late List<String> time;
+  late List<String> timeslots;
   bool _isDateModalOpened = false;
   bool _isTimeModalOpened = false;
   bool _isPayModalOpened = false;
+
+  late String _date = "";
+  late String _time = "";
 
   @override
   void initState() {
@@ -43,122 +41,117 @@ class _BookingViewState extends State<BookingView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<BookingCubit, BookingState>(
-        builder: (BuildContext context, BookingState detail) {
-          return CustomScrollView(
-            slivers: <Widget>[
-              CustomSliverAppBar(
-                toolbarHeight: mediaQuery(context).size.height * 0.15,
-                title: CustomListItem(
-                  leading: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8),
-                      ),
-                    ),
-                  ),
-                  content: <Widget>[
-                    Text(
-                      widget.bookingItem.title,
-                      style: TextStyle(
-                        fontSize: textTheme(context).subtitle1!.fontSize,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    Text(
-                      widget.bookingItem.location,
-                      style: textTheme(context).subtitle2,
-                    ),
-                    Text(
-                      "RM ${widget.bookingItem.price}",
-                      style: textTheme(context).caption,
-                    ),
-                  ],
-                ),
-                bottom: PreferredSize(
-                  preferredSize: Size.fromHeight(0),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: LinearProgressIndicator(
-                      color: textColor,
-                      minHeight: 6,
-                      backgroundColor: textColor.withOpacity(0.2),
-                      value: 0.2,
-                      semanticsLabel: "Booking flow progress",
-                    ),
-                  ),
+        body: CustomScrollView(
+      slivers: <Widget>[
+        CustomSliverAppBar(
+          toolbarHeight: mediaQuery(context).size.height * 0.15,
+          title: CustomListItem(
+            leading: Container(
+              decoration: const BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(8),
                 ),
               ),
-              CustomSliverBody(content: <Widget>[
-                SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[
-                      ListTile(
-                        onTap: () => _onDateTapped(context),
-                        contentPadding: EdgeInsets.all(18),
-                        title: Text(
-                          "1. Pick a date",
-                          style: textTheme(context).headline5,
-                        ),
-                        subtitle: Text(
-                          detail.date ?? "When you want to go?",
-                          style: TextStyle(
-                            fontSize: textTheme(context).subtitle2!.fontSize,
-                            fontWeight: FontWeight.w100,
-                          ),
-                        ),
-                        trailing: Icon(_isDateModalOpened
-                            ? Icons.keyboard_arrow_down_outlined
-                            : Icons.keyboard_arrow_up_outlined),
-                      ),
-                      const Divider(),
-                      ListTile(
-                        onTap: () => _onTimeTapped(context),
-                        contentPadding: const EdgeInsets.all(18),
-                        title: Text(
-                          "2. Pick a time",
-                          style: textTheme(context).headline5,
-                        ),
-                        subtitle: Text(
-                          "Choose a time",
-                          style: TextStyle(
-                            fontSize: textTheme(context).subtitle2!.fontSize,
-                            fontWeight: FontWeight.w100,
-                          ),
-                        ),
-                        trailing: Icon(_isTimeModalOpened
-                            ? Icons.keyboard_arrow_down_outlined
-                            : Icons.keyboard_arrow_up_outlined),
-                      ),
-                      const Divider(),
-                      ListTile(
-                        onTap: () => _onPayTapped(context),
-                        contentPadding: const EdgeInsets.all(18),
-                        title: Text(
-                          "3. Pay",
-                          style: textTheme(context).headline5,
-                        ),
-                        subtitle: Text(
-                          "Waiting for payment",
-                          style: TextStyle(
-                            fontSize: textTheme(context).subtitle2!.fontSize,
-                            fontWeight: FontWeight.w100,
-                          ),
-                        ),
-                        trailing: Icon(_isPayModalOpened
-                            ? Icons.keyboard_arrow_down_outlined
-                            : Icons.keyboard_arrow_up_outlined),
-                      ),
-                    ],
-                  ),
+            ),
+            content: <Widget>[
+              Text(
+                widget.bookingItem.title,
+                style: TextStyle(
+                  fontSize: textTheme(context).subtitle1!.fontSize,
+                  fontWeight: FontWeight.w700,
                 ),
-              ])
+              ),
+              Text(
+                widget.bookingItem.location,
+                style: textTheme(context).subtitle2,
+              ),
+              Text(
+                "RM ${widget.bookingItem.price}",
+                style: textTheme(context).caption,
+              ),
             ],
-          );
-        },
-      ),
-    );
+          ),
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(0),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: LinearProgressIndicator(
+                color: textColor,
+                minHeight: 6,
+                backgroundColor: textColor.withOpacity(0.2),
+                value: 0.2,
+                semanticsLabel: "Booking flow progress",
+              ),
+            ),
+          ),
+        ),
+        CustomSliverBody(content: <Widget>[
+          SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                ListTile(
+                  onTap: () => _onDateTapped(context),
+                  contentPadding: EdgeInsets.all(18),
+                  title: Text(
+                    "1. Pick a date",
+                    style: textTheme(context).headline5,
+                  ),
+                  subtitle: Text(
+                    _date.isEmpty ? "When you want to go?" : _date,
+                    style: TextStyle(
+                      fontSize: textTheme(context).subtitle2!.fontSize,
+                      fontWeight: FontWeight.w100,
+                    ),
+                  ),
+                  trailing: Icon(_isDateModalOpened
+                      ? Icons.keyboard_arrow_down_outlined
+                      : Icons.keyboard_arrow_up_outlined),
+                ),
+                const Divider(),
+                ListTile(
+                  onTap: () => _onTimeTapped(context),
+                  contentPadding: const EdgeInsets.all(18),
+                  title: Text(
+                    "2. Pick a time",
+                    style: textTheme(context).headline5,
+                  ),
+                  subtitle: Text(
+                    "Choose a time",
+                    style: TextStyle(
+                      fontSize: textTheme(context).subtitle2!.fontSize,
+                      fontWeight: FontWeight.w100,
+                    ),
+                  ),
+                  trailing: Icon(_isTimeModalOpened
+                      ? Icons.keyboard_arrow_down_outlined
+                      : Icons.keyboard_arrow_up_outlined),
+                ),
+                const Divider(),
+                ListTile(
+                  onTap: () => _onPayTapped(context),
+                  contentPadding: const EdgeInsets.all(18),
+                  title: Text(
+                    "3. Pay",
+                    style: textTheme(context).headline5,
+                  ),
+                  subtitle: Text(
+                    "Waiting for payment",
+                    style: TextStyle(
+                      fontSize: textTheme(context).subtitle2!.fontSize,
+                      fontWeight: FontWeight.w100,
+                    ),
+                  ),
+                  trailing: Icon(_isPayModalOpened
+                      ? Icons.keyboard_arrow_down_outlined
+                      : Icons.keyboard_arrow_up_outlined),
+                ),
+              ],
+            ),
+          ),
+        ])
+      ],
+    ));
   }
 
   Future<dynamic> _onDateTapped(BuildContext context) {
@@ -192,7 +185,9 @@ class _BookingViewState extends State<BookingView> {
                       (DateRangePickerSelectionChangedArgs args) {
                     final String formattedDate = DateFormat('dd/MM/yyyy')
                         .format(DateTime.parse(args.value.toString()));
-                    context.read<BookingCubit>().setDate(formattedDate);
+                    setState(() {
+                      _date = formattedDate;
+                    });
                   },
                   selectionColor: textColor,
                   rangeSelectionColor: textColor,
@@ -251,10 +246,10 @@ class _BookingViewState extends State<BookingView> {
               Expanded(
                 child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: time.length,
+                  itemCount: timeslots.length,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      title: Text(time[index]),
+                      title: Text(timeslots[index]),
                       trailing: Chip(
                         backgroundColor: textColor,
                         label: Text(
@@ -320,7 +315,7 @@ class _BookingViewState extends State<BookingView> {
   Future<void> load() async {
     Future.delayed(const Duration(seconds: 3));
     setState(() {
-      time = <String>[
+      timeslots = <String>[
         "10:00 PM - 11:00 PM",
         "11:00 PM - 12:00 PM",
         "12:00 PM - 13:00 PM",
