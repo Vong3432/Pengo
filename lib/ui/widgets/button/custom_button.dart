@@ -22,7 +22,7 @@ class CustomButton extends StatelessWidget {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         primary: backgroundColor ?? textColor,
-        onPrimary: backgroundColor ?? Colors.white,
+        onPrimary: color ?? Colors.white,
         minimumSize: minimumSize ?? const Size(double.infinity, 48),
       ),
       onPressed: onPressed,

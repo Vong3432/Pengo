@@ -35,7 +35,10 @@ class PengoStyle {
   }
 
   static TextStyle captionNormal(BuildContext context) {
-    return Theme.of(context).textTheme.caption!.copyWith();
+    return Theme.of(context)
+        .textTheme
+        .caption!
+        .copyWith(fontWeight: FontWeight.normal);
   }
 
   static TextStyle caption(BuildContext context) {

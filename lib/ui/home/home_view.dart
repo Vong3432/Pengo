@@ -178,10 +178,14 @@ class _HomePageState extends State<HomePage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: const <QuickTapItem>[
-            QuickTapItem(),
-            QuickTapItem(),
-            QuickTapItem(),
-            QuickTapItem()
+            QuickTapItem(title: "Quick tap"),
+            QuickTapItem(title: "Things 1"),
+            QuickTapItem(
+              title: "Things 1",
+            ),
+            QuickTapItem(
+              title: "Things 1",
+            )
           ],
         ),
         const Padding(

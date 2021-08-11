@@ -5,6 +5,7 @@ import 'package:pengo/const/icon_const.dart';
 import 'package:pengo/const/space_const.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
+import 'package:pengo/ui/coupon/coupon_view.dart';
 import 'package:pengo/ui/goocard/widgets/goocard.dart';
 import 'package:pengo/ui/home/widgets/quick_tap_item.dart';
 import 'package:pengo/ui/widgets/layout/sliver_appbar.dart';
@@ -25,18 +26,26 @@ class GooCardPage extends StatelessWidget {
             ),
           ),
           CustomSliverBody(content: <Widget>[
-            SingleChildScrollView(
+            Container(
               padding: const EdgeInsets.all(18),
-              child: ListView(
-                padding: const EdgeInsets.all(0),
-                shrinkWrap: true,
+              child: Column(
                 children: <Widget>[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      QuickTapItem(),
-                      QuickTapItem(),
-                      QuickTapItem(),
+                      QuickTapItem(
+                        title: "My booking",
+                      ),
+                      QuickTapItem(
+                          title: "Coupons",
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CouponPage()),
+                            );
+                          }),
+                      QuickTapItem(title: "Logs"),
                     ],
                   ),
                   const SizedBox(

@@ -5,20 +5,16 @@ import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/ui/penger/info_view.dart';
 
 class QuickTapItem extends StatelessWidget {
-  const QuickTapItem({
-    Key? key,
-  }) : super(key: key);
+  const QuickTapItem({Key? key, required this.title, this.onTap})
+      : super(key: key);
+
+  final String title;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        // Just for navigation testing.
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => InfoPage()),
-        // );
-      },
+      onTap: onTap,
       child: Column(
         children: <Widget>[
           Container(
@@ -33,7 +29,7 @@ class QuickTapItem extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: Text(
-              "Things 1",
+              title,
               style: PengoStyle.subtitle(context),
             ),
           ),

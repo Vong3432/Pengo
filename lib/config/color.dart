@@ -54,7 +54,22 @@ Map<int, Color> success = <int, Color>{
   900: const Color.fromRGBO(57, 188, 136, 1),
 };
 
+// Colors
 MaterialColor primaryColor = MaterialColor(0xFF5CDB9E, color);
 MaterialColor dangerColor = MaterialColor(0xFFFA627D, color);
 MaterialColor successColor = MaterialColor(0xFF39BC88, color);
 MaterialColor textColor = MaterialColor(0xFF1A212E, text);
+Color grayTextColor = const Color(0xFF4B5656);
+Color secondaryTextColor = const Color(0xFF727373);
+Color greyBgColor = const Color(0xFFF0F0F3);
+Color whiteColor = Colors.white;
+
+// Gradient
+LinearGradient primaryLinear = const LinearGradient(
+  begin: Alignment.topLeft,
+  end: Alignment.bottomRight,
+  colors: <Color>[
+    Color(0xFF5CDB9E),
+    Color(0xFF49C8C0),
+  ],
+);
