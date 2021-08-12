@@ -86,11 +86,12 @@ class BookingResultPage extends StatelessWidget {
                     CustomButton(
                       text: Text("Go to Goocard"),
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) => MyHomePage()),
-                        );
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    MyHomePage()),
+                            (_) => false);
                       },
                     ),
                     const SizedBox(
