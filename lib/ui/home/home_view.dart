@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:pengo/const/icon_const.dart';
 import 'package:pengo/const/space_const.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
@@ -34,9 +35,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   final List<Widget> pengers = const <Widget>[
-    PengerItem(),
-    PengerItem(),
-    PengerItem(),
+    PengerItem(name: "Durian party night", location: "Sutera, Impian Emas"),
+    PengerItem(name: "Durian party night", location: "Sutera, Impian Emas"),
+    PengerItem(name: "Durian party night", location: "Sutera, Impian Emas"),
   ];
 
   @override
@@ -178,14 +179,16 @@ class _HomePageState extends State<HomePage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: const <QuickTapItem>[
-            QuickTapItem(title: "Quick tap"),
-            QuickTapItem(title: "Things 1"),
             QuickTapItem(
-              title: "Things 1",
+              title: "Scan",
+              assetName: SCAN_ICON_PATH,
             ),
             QuickTapItem(
-              title: "Things 1",
-            )
+              title: "FAQ",
+              assetName: INFO_ICON_PATH,
+            ),
+            QuickTapItem(title: "Coupons", assetName: COUPON_ICON_PATH),
+            QuickTapItem(title: "Feedback", assetName: REPORT_ICON_PATH)
           ],
         ),
         const Padding(

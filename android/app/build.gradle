@@ -21,6 +21,11 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+def googleMapKey = localProperties.getProperty('segment.writeKey') // Notice we get the property we the exact same name we wrote in the local.properties file
+if(googleMapKey == null) {
+    throw new GradleException("Map API Key is required")
+}
+
 apply plugin: 'com.android.application'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 apply plugin: 'com.google.gms.google-services'
@@ -31,10 +36,11 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.example.pengo"
-        minSdkVersion 16
+        minSdkVersion 20
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        manifestPlaceholders = [mapsApiKey: googleMapKey]
     }
 
     buildTypes {

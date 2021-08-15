@@ -59,6 +59,7 @@ MaterialColor primaryColor = MaterialColor(0xFF5CDB9E, color);
 MaterialColor dangerColor = MaterialColor(0xFFFA627D, color);
 MaterialColor successColor = MaterialColor(0xFF39BC88, color);
 MaterialColor textColor = MaterialColor(0xFF1A212E, text);
+Color primaryLightColor = const Color(0xFFE1FEF0);
 Color grayTextColor = const Color(0xFF4B5656);
 Color secondaryTextColor = const Color(0xFF727373);
 Color greyBgColor = const Color(0xFFF0F0F3);

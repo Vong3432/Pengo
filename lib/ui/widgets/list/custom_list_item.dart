@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pengo/config/color.dart';
 
 class CustomListItem extends StatelessWidget {
   CustomListItem({
@@ -23,9 +24,9 @@ class CustomListItem extends StatelessWidget {
           Container(
             width: 52,
             height: 52,
-            decoration: const BoxDecoration(
-              color: Colors.grey,
-              borderRadius: BorderRadius.all(
+            decoration: BoxDecoration(
+              color: primaryLightColor,
+              borderRadius: const BorderRadius.all(
                 Radius.circular(8),
               ),
             ),

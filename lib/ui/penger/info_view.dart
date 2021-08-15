@@ -1,26 +1,41 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:pengo/config/color.dart';
+import 'package:pengo/const/icon_const.dart';
 import 'package:pengo/const/space_const.dart';
+import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/models/booking_item_model.dart';
-import 'package:pengo/ui/penger/booking/booking_view.dart';
+import 'package:pengo/models/penger_model.dart';
+import 'package:pengo/ui/home/widgets/penger_item.dart';
+import 'package:pengo/ui/widgets/layout/sliver_appbar.dart';
+import 'package:pengo/ui/widgets/layout/sliver_body.dart';
 import 'package:pengo/ui/widgets/list/custom_list_item.dart';
-import 'package:pengo/ui/widgets/stacks/h_stack.dart';
+import 'package:pengo/ui/widgets/list/outlined_list_tile.dart';
 
 class InfoPage extends StatefulWidget {
-  const InfoPage({Key? key}) : super(key: key);
+  const InfoPage({Key? key, required this.penger}) : super(key: key);
+
+  final Penger penger;
 
   @override
   _InfoPageState createState() => _InfoPageState();
 }
 
-class _InfoPageState extends State<InfoPage>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+class _InfoPageState extends State<InfoPage> {
+  final Completer<GoogleMapController> _controller = Completer();
+
+  static const CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(37.4220002, -122.0840167),
+    zoom: 14.4746,
+  );
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _tabController = TabController(vsync: this, length: 5);
   }
 
   @override
@@ -28,240 +43,223 @@ class _InfoPageState extends State<InfoPage>
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
-          _buildAppBar(context),
-          _buildBody(context),
+          CustomSliverAppBar(
+            title: Text(
+              widget.penger.name,
+              style: PengoStyle.navigationTitle(context),
+            ),
+            actions: <Widget>[
+              IconButton(
+                onPressed: () {},
+                icon: SvgPicture.asset(INFO_ICON_PATH, fit: BoxFit.scaleDown),
+              )
+            ],
+          ),
+          CustomSliverBody(
+            content: <Widget>[
+              Container(
+                padding: const EdgeInsets.all(18),
+                child: Column(
+                  children: [
+                    _buildMap(),
+                    const SizedBox(
+                      height: SECTION_GAP_HEIGHT * 1.5,
+                    ),
+                    _buildAction(),
+                    const SizedBox(
+                      height: SECTION_GAP_HEIGHT * 1.5,
+                    ),
+                    _buildBookingListView(),
+                    const SizedBox(
+                      height: SECTION_GAP_HEIGHT * 1.5,
+                    ),
+                    _buildHistory(context),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
   }
 
-  SliverList _buildBody(BuildContext ctx) {
-    final TextTheme textTheme = Theme.of(ctx).textTheme;
-
-    return SliverList(
-      delegate: SliverChildListDelegate(<Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 18,
-            horizontal: 18,
-          ),
-          child: _buildPengerInfo(textTheme),
-        ),
-      ]),
-    );
-  }
-
-  Column _buildPengerInfo(TextTheme textTheme) {
+  Column _buildHistory(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
-      // ignore: prefer_const_literals_to_create_immutables
       children: <Widget>[
         Row(
           children: <Widget>[
-            Text("Gelang Patah, Johor", style: textTheme.bodyText1),
+            Text(
+              "History",
+              style: PengoStyle.header(context),
+            ),
             const Spacer(),
-            const Icon(Icons.location_on_outlined),
+            GestureDetector(
+              child: Text(
+                "See all",
+                style: PengoStyle.caption(context),
+              ),
+            ),
           ],
         ),
-        const Divider(),
-        const SizedBox(
-          height: SECTION_GAP_HEIGHT,
-        ),
-        _buildPengerDetail(textTheme),
-        const SizedBox(height: SECTION_GAP_HEIGHT),
-        _buildPengerImgs(),
-        _buildTabBarView(context),
+        ListView.separated(
+            separatorBuilder: (BuildContext context, int index) {
+              return const SizedBox(
+                height: SECTION_GAP_HEIGHT,
+              );
+            },
+            shrinkWrap: true,
+            itemCount: 2,
+            itemBuilder: (BuildContext context, int index) {
+              return CustomListItem(
+                  leading: Container(
+                    width: 42,
+                    height: 42,
+                    color: primaryLightColor,
+                    padding: const EdgeInsets.all(8),
+                    child: index.isEven
+                        ? SvgPicture.asset(
+                            COUPON_ICON_PATH,
+                            fit: BoxFit.scaleDown,
+                          )
+                        : SvgPicture.asset(TICKET_ICON_PATH,
+                            fit: BoxFit.scaleDown),
+                  ),
+                  content: <Widget>[
+                    Text(
+                      index.isEven ? "Used CouponA" : "Used Ticket A",
+                      style: PengoStyle.caption(context),
+                    ),
+                    Text(
+                      "1 Jul 2021 03:00PM",
+                      style: PengoStyle.captionNormal(context),
+                    ),
+                  ]);
+            })
       ],
     );
   }
 
-  Widget _buildTabBarView(BuildContext ctx) {
-    final Size size = MediaQuery.of(ctx).size;
-    final TextTheme textTheme = Theme.of(ctx).textTheme;
-
-    return SizedBox(
-      height: size.height,
-      child: Column(
-        children: <Widget>[
-          Container(
-            decoration: const BoxDecoration(
-              //This is for bottom border that is needed
-              border: Border(bottom: BorderSide(color: Colors.grey)),
-            ),
-            child: TabBar(
-              isScrollable: true,
-              controller: _tabController,
-              unselectedLabelColor: Colors.black,
-              labelColor: Colors.black,
-              indicatorColor: Colors.black,
-              tabs: _generateTabBar,
-            ),
-          ),
-          Flexible(
-            child: TabBarView(
-                controller: _tabController,
-                // list.generate should be replaced with actual tabview.
-                children: _generateTabView(textTheme)),
-          ),
-        ],
-      ),
-    );
-  }
-
-  List<Tab> get _generateTabBar {
-    return const <Tab>[
-      Tab(
-        text: "Events",
-      ),
-      Tab(
-        text: "Appointments",
-      ),
-      Tab(
-        text: "Items",
-      ),
-      Tab(
-        text: "Items",
-      ),
-      Tab(
-        text: "Items",
-      ),
-    ];
-  }
-
-  List<Widget> _generateTabView(TextTheme textTheme) {
-    return List.generate(
-      5,
-      (int index) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: CustomListItem(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => BookingView(
-                  bookingItem: bookingItemsMockData[0],
-                ),
-              ),
-            );
-          },
-          leading: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: const Image(
-              fit: BoxFit.cover,
-              image: NetworkImage(
-                  "https://images.unsplash.com/photo-1534237710431-e2fc698436d0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YnVpbGRpbmd8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80"),
-            ),
-          ),
-          content: <Widget>[
+  Column _buildBookingListView() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Row(
+          children: [
             Text(
-              "Durian Party Night",
-              style: TextStyle(
-                  fontSize: textTheme.subtitle1!.fontSize,
-                  fontWeight: FontWeight.bold),
+              "Booking",
+              style: PengoStyle.header(context),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: Text(
-                    "Impian emas",
-                    style: textTheme.subtitle2,
-                  ),
-                ),
-                Text("RM5.00",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                      fontSize: textTheme.subtitle2!.fontSize,
-                    )),
-              ],
-            )
+            const Spacer(),
+            GestureDetector(
+              child: Text(
+                "See all",
+                style: PengoStyle.caption(context),
+              ),
+            ),
           ],
         ),
-      ),
+        const SizedBox(height: SECTION_GAP_HEIGHT),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  height: 50,
+                  child: ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: widget.penger.items.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final BookingItem item = widget.penger.items[index];
+                      return index.isEven
+                          ? PengerItem(
+                              name: item.title, location: item.location)
+                          : Container();
+                    },
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  height: 50,
+                  child: ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: widget.penger.items.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final BookingItem item = widget.penger.items[index];
+                      return index.isOdd
+                          ? PengerItem(
+                              name: item.title, location: item.location)
+                          : Container();
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        )
+      ],
     );
   }
 
-  Column _buildPengerDetail(TextTheme textTheme) {
+  Widget _buildAction() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          "Penger name",
-          style: textTheme.headline6,
+          "Actions",
+          style: PengoStyle.header(context),
         ),
-        const SizedBox(
-          height: 5,
+        OutlinedListTile(
+          assetName: LOCATION_ICON_PATH,
+          title: "Copy location",
+          subTitle: widget.penger.location,
+          trailing: Icon(Icons.copy),
+          onTap: () {
+            debugPrint("Copied");
+          },
         ),
-        Text(
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Proin libero nunc consequat interdum varius sit amet. Ultrices mi tempus imperdiet nulla malesuada pellentesque elit eget gravida",
-            style: textTheme.bodyText2),
+        OutlinedListTile(
+          assetName: REVIEW_ICON_PATH,
+          title: "View review",
+          subTitle: "${widget.penger.reviews.length} people reviewed",
+          trailing: Icon(Icons.chevron_right),
+          onTap: () {
+            debugPrint("Review");
+          },
+        ),
+        const OutlinedListTile(
+            assetName: SHARE_ICON_PATH,
+            title: "Shared",
+            subTitle: "Share to social media"),
       ],
     );
   }
 
-  SizedBox _buildPengerImgs() {
-    return const SizedBox(
-      height: 70,
-      child: HStack(
-        children: <Image>[
-          Image(
-            width: 70,
-            fit: BoxFit.cover,
-            image: NetworkImage(
-                "https://images.unsplash.com/photo-1534237710431-e2fc698436d0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YnVpbGRpbmd8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80"),
+  Widget _buildMap() {
+    return SizedBox(
+      height: 250,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15),
+        child: Align(
+          child: GoogleMap(
+            mapType: MapType.hybrid,
+            initialCameraPosition: _kGooglePlex,
+            onMapCreated: (GoogleMapController controller) {
+              _controller.complete(controller);
+            },
           ),
-          Image(
-            width: 70,
-            fit: BoxFit.cover,
-            image: NetworkImage(
-                "https://images.unsplash.com/photo-1534237710431-e2fc698436d0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YnVpbGRpbmd8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80"),
-          ),
-          Image(
-            width: 70,
-            fit: BoxFit.cover,
-            image: NetworkImage(
-                "https://images.unsplash.com/photo-1534237710431-e2fc698436d0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YnVpbGRpbmd8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80"),
-          ),
-          Image(
-            width: 70,
-            fit: BoxFit.cover,
-            image: NetworkImage(
-                "https://images.unsplash.com/photo-1534237710431-e2fc698436d0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YnVpbGRpbmd8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80"),
-          ),
-        ],
+        ),
       ),
-    );
-  }
-
-  SliverAppBar _buildAppBar(BuildContext context) {
-    return SliverAppBar(
-      iconTheme: IconTheme.of(context),
-      bottom: PreferredSize(
-        preferredSize: const Size(0, 20),
-        child: Container(),
-      ),
-      expandedHeight: MediaQuery.of(context).size.height * 0.4,
-      centerTitle: false,
-      flexibleSpace: Stack(
-        children: const <Widget>[
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Image(
-              fit: BoxFit.cover,
-              image: NetworkImage(
-                  "https://i.guim.co.uk/img/media/ac01822e1237b350779e9e41ab69c8bcc8d292ea/0_0_6016_3611/master/6016.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=e8ed1dcb5b915acb79446d4bf5202eac"),
-            ),
-          ),
-        ],
-      ),
-      actionsIconTheme: const IconThemeData(color: Colors.black),
-      textTheme: TextTheme(headline1: Typography.blackCupertino.headline1),
     );
   }
 }

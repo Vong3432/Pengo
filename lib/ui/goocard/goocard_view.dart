@@ -32,12 +32,12 @@ class GooCardPage extends StatelessWidget {
                 children: <Widget>[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      QuickTapItem(
-                        title: "My booking",
-                      ),
+                    children: <Widget>[
+                      const QuickTapItem(
+                          title: "My booking", assetName: TICKET_ICON_PATH),
                       QuickTapItem(
                           title: "Coupons",
+                          assetName: COUPON_ICON_PATH,
                           onTap: () {
                             Navigator.push(
                               context,
@@ -45,7 +45,10 @@ class GooCardPage extends StatelessWidget {
                                   builder: (context) => CouponPage()),
                             );
                           }),
-                      QuickTapItem(title: "Logs"),
+                      const QuickTapItem(
+                        title: "Logs",
+                        assetName: HISTORY_ICON_PATH,
+                      ),
                     ],
                   ),
                   const SizedBox(
@@ -69,7 +72,7 @@ class GooCardPage extends StatelessWidget {
         leading: Container(
           width: 42,
           height: 42,
-          color: primaryColor.shade50,
+          color: primaryLightColor,
           padding: const EdgeInsets.all(8),
           child: SvgPicture.asset(COUPON_ICON_PATH),
         ),
@@ -92,7 +95,7 @@ class GooCardPage extends StatelessWidget {
         leading: Container(
           width: 42,
           height: 42,
-          color: primaryColor.shade50,
+          color: primaryLightColor,
           padding: const EdgeInsets.all(8),
           child: SvgPicture.asset(GOOCARD_ICON_PATH),
         ),
