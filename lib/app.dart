@@ -8,7 +8,9 @@ import 'package:pengo/ui/home/home_view.dart';
 import 'package:pengo/ui/profile/profile_view.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({Key? key, this.idx}) : super(key: key);
+
+  final int? idx;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -60,6 +62,14 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    if (widget.idx != null) {
+      setState(() {
+        currentScreen = screens[widget.idx!];
+        _selectedIndex = widget.idx!;
+      });
+    }
+
     PushNotificationManager().init();
   }
 

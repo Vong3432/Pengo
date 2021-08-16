@@ -39,6 +39,7 @@ dependencies:
   google_maps_flutter: ^2.0.6
   intl: ^0.17.0
   introduction_screen: ^2.1.0
+  lottie: ^1.1.0
   modal_bottom_sheet: ^2.0.0
   shared_preferences: ^2.0.6
   syncfusion_flutter_datepicker: ^19.2.49
@@ -66,6 +67,7 @@ flutter:
     - assets/svg/shapes/
     - assets/svg/logo/
     - assets/svg/icons/
+    - assets/lottie/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

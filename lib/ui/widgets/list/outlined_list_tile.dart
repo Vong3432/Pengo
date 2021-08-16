@@ -6,14 +6,14 @@ import 'package:pengo/helpers/theme/custom_font.dart';
 class OutlinedListTile extends StatelessWidget {
   const OutlinedListTile({
     Key? key,
-    required this.assetName,
+    this.assetName,
     required this.title,
     this.subTitle,
     this.trailing,
     this.onTap,
   }) : super(key: key);
 
-  final String assetName;
+  final String? assetName;
   final String title;
   final String? subTitle;
   final Widget? trailing;
@@ -29,25 +29,31 @@ class OutlinedListTile extends StatelessWidget {
       child: ListTile(
         onTap: onTap,
         minLeadingWidth: 20,
-        leading: SvgPicture.asset(
-          assetName,
-          width: 27,
-          height: 27,
-          fit: BoxFit.scaleDown,
-        ),
+        leading: _buildLeading(),
         title: Text(
           title,
           style: PengoStyle.caption(context),
         ),
-        subtitle: (subTitle != null && subTitle!.isNotEmpty == true)
+        subtitle: subTitle != null
             ? Text(
                 subTitle!,
                 style: PengoStyle.captionNormal(context),
                 overflow: TextOverflow.ellipsis,
               )
-            : Container(),
+            : null,
         trailing: trailing,
       ),
+    );
+  }
+
+  Widget? _buildLeading() {
+    if (assetName == null) return null;
+
+    return SvgPicture.asset(
+      assetName!,
+      width: 27,
+      height: 27,
+      fit: BoxFit.scaleDown,
     );
   }
 }

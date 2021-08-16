@@ -334,13 +334,14 @@ class _BookingViewState extends State<BookingView> {
   }
 
   void redirectToResultPage() {
-    Navigator.push(
+    Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
         builder: (BuildContext context) => BookingResultPage(
           bookingItem: widget.bookingItem,
         ),
       ),
+      (_) => false,
     );
   }
 }
