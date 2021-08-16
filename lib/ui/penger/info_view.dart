@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -10,6 +11,7 @@ import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/models/booking_item_model.dart';
 import 'package:pengo/models/penger_model.dart';
 import 'package:pengo/ui/home/widgets/penger_item.dart';
+import 'package:pengo/ui/penger/booking/booking_view.dart';
 import 'package:pengo/ui/widgets/layout/sliver_appbar.dart';
 import 'package:pengo/ui/widgets/layout/sliver_body.dart';
 import 'package:pengo/ui/widgets/list/custom_list_item.dart';
@@ -65,7 +67,7 @@ class _InfoPageState extends State<InfoPage> {
                     const SizedBox(
                       height: SECTION_GAP_HEIGHT * 1.5,
                     ),
-                    _buildAction(),
+                    _buildActions(),
                     const SizedBox(
                       height: SECTION_GAP_HEIGHT * 1.5,
                     ),
@@ -117,7 +119,10 @@ class _InfoPageState extends State<InfoPage> {
                   leading: Container(
                     width: 42,
                     height: 42,
-                    color: primaryLightColor,
+                    decoration: BoxDecoration(
+                      color: primaryLightColor,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                     padding: const EdgeInsets.all(8),
                     child: index.isEven
                         ? SvgPicture.asset(
@@ -179,7 +184,18 @@ class _InfoPageState extends State<InfoPage> {
                       final BookingItem item = widget.penger.items[index];
                       return index.isEven
                           ? PengerItem(
-                              name: item.title, location: item.location)
+                              name: item.title,
+                              location: item.location,
+                              onTap: () {
+                                Navigator.of(context, rootNavigator: true).push(
+                                  CupertinoPageRoute(
+                                    builder: (context) => BookingView(
+                                      bookingItem: item,
+                                    ),
+                                  ),
+                                );
+                              },
+                            )
                           : Container();
                     },
                   ),
@@ -211,7 +227,7 @@ class _InfoPageState extends State<InfoPage> {
     );
   }
 
-  Widget _buildAction() {
+  Widget _buildActions() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[

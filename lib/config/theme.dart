@@ -6,7 +6,8 @@ ThemeData themeData = ThemeData(
   primaryColor: primaryColor,
   scaffoldBackgroundColor: Colors.white,
   fontFamily: 'Poppins',
-  dividerColor: Colors.black38,
+  dividerTheme: DividerThemeData(color: greyBgColor, thickness: 2.5),
+  dividerColor: greyBgColor,
   textTheme: const TextTheme(
     headline1: TextStyle(
       fontSize: 28,

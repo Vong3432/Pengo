@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pengo/config/color.dart';
 
 class CustomListItem extends StatelessWidget {
-  CustomListItem({
+  const CustomListItem({
     Key? key,
     required this.leading,
     required this.content,
@@ -19,7 +19,6 @@ class CustomListItem extends StatelessWidget {
       behavior: HitTestBehavior.translucent,
       onTap: onTap,
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
             width: 52,

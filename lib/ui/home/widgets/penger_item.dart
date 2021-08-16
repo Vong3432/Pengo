@@ -7,23 +7,26 @@ import 'package:pengo/ui/penger/info_view.dart';
 import 'package:pengo/ui/widgets/list/custom_list_item.dart';
 
 class PengerItem extends StatelessWidget {
-  const PengerItem({Key? key, required this.name, required this.location})
+  const PengerItem(
+      {Key? key, required this.name, required this.location, this.onTap})
       : super(key: key);
 
   final String name;
   final String location;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return CustomListItem(
-      onTap: () {
-        Navigator.of(context, rootNavigator: true).push(
-          CupertinoPageRoute(
-              builder: (context) => InfoPage(
-                    penger: pengersMockingData[0],
-                  )),
-        );
-      },
+      onTap: onTap ??
+          () {
+            Navigator.of(context, rootNavigator: true).push(
+              CupertinoPageRoute(
+                  builder: (context) => InfoPage(
+                        penger: pengersMockingData[0],
+                      )),
+            );
+          },
       leading: Container(
         decoration: const BoxDecoration(
           color: Colors.grey,
@@ -39,7 +42,7 @@ class PengerItem extends StatelessWidget {
         ),
         Text(
           location,
-          style: PengoStyle.captionNormal(context),
+          style: PengoStyle.smallerText(context),
         ),
       ],
     );

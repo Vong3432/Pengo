@@ -164,7 +164,6 @@ class _BookingViewState extends State<BookingView> {
         controller: ModalScrollController.of(context),
         child: Container(
           padding: const EdgeInsets.all(18),
-          color: textColor.shade50,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -225,14 +224,13 @@ class _BookingViewState extends State<BookingView> {
     setState(() {
       _isTimeModalOpened = true;
     });
-    return showModalBottomSheet(
+    return showCupertinoModalBottomSheet(
       context: context,
       builder: (BuildContext context) => SingleChildScrollView(
         controller: ModalScrollController.of(context),
         child: Container(
           padding: const EdgeInsets.all(18),
           height: mediaQuery(context).size.height * 0.4,
-          color: textColor.shade50,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -248,13 +246,21 @@ class _BookingViewState extends State<BookingView> {
                   shrinkWrap: true,
                   itemCount: timeslots.length,
                   itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(timeslots[index]),
-                      trailing: Chip(
-                        backgroundColor: textColor,
-                        label: Text(
-                          "Book",
-                          style: TextStyle(color: Colors.white),
+                    return Material(
+                      child: ListTile(
+                        tileColor: whiteColor,
+                        title: Text(timeslots[index]),
+                        trailing: Chip(
+                          backgroundColor: textColor,
+                          label: GestureDetector(
+                            onTap: () {
+                              debugPrint("Book");
+                            },
+                            child: Text(
+                              "Book",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
                         ),
                       ),
                     );
@@ -276,13 +282,12 @@ class _BookingViewState extends State<BookingView> {
     setState(() {
       _isPayModalOpened = true;
     });
-    return showModalBottomSheet(
+    return showCupertinoModalBottomSheet(
       context: context,
       builder: (BuildContext context) => SingleChildScrollView(
         controller: ModalScrollController.of(context),
         child: Container(
           padding: const EdgeInsets.all(18),
-          color: textColor.shade50,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[

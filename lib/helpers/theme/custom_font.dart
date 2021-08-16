@@ -34,6 +34,10 @@ class PengoStyle {
     return Theme.of(context).textTheme.bodyText2!.copyWith();
   }
 
+  static TextStyle smallerText(BuildContext context) {
+    return Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 14);
+  }
+
   static TextStyle captionNormal(BuildContext context) {
     return Theme.of(context)
         .textTheme
