@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pengo/config/color.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/models/penger_model.dart';
@@ -8,10 +9,15 @@ import 'package:pengo/ui/widgets/list/custom_list_item.dart';
 
 class PengerItem extends StatelessWidget {
   const PengerItem(
-      {Key? key, required this.name, required this.location, this.onTap})
+      {Key? key,
+      required this.name,
+      required this.location,
+      this.onTap,
+      required this.logo})
       : super(key: key);
 
   final String name;
+  final String logo;
   final String location;
   final VoidCallback? onTap;
 
@@ -28,12 +34,14 @@ class PengerItem extends StatelessWidget {
             );
           },
       leading: Container(
-        decoration: const BoxDecoration(
-          color: Colors.grey,
-          borderRadius: BorderRadius.all(
+        decoration: BoxDecoration(
+          border: Border.all(width: 2.5, color: greyBgColor),
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(
             Radius.circular(8),
           ),
         ),
+        child: Image.network(logo),
       ),
       content: <Widget>[
         Text(

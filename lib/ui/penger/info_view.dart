@@ -29,15 +29,16 @@ class InfoPage extends StatefulWidget {
 class _InfoPageState extends State<InfoPage> {
   final Completer<GoogleMapController> _controller = Completer();
 
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.4220002, -122.0840167),
-    zoom: 14.4746,
-  );
+  static late CameraPosition _kGooglePlex;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _kGooglePlex = CameraPosition(
+      target: LatLng(widget.penger.location.lat, widget.penger.location.lng),
+      zoom: 14.4746,
+    );
   }
 
   @override
@@ -170,61 +171,78 @@ class _InfoPageState extends State<InfoPage> {
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  height: 50,
-                  child: ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: widget.penger.items.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final BookingItem item = widget.penger.items[index];
-                      return index.isEven
-                          ? PengerItem(
-                              name: item.title,
-                              location: item.location,
-                              onTap: () {
-                                Navigator.of(context, rootNavigator: true).push(
-                                  CupertinoPageRoute(
-                                    builder: (context) => BookingView(
-                                      bookingItem: item,
-                                    ),
-                                  ),
-                                );
-                              },
-                            )
-                          : Container();
-                    },
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  height: 50,
-                  child: ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: widget.penger.items.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final BookingItem item = widget.penger.items[index];
-                      return index.isOdd
-                          ? PengerItem(
-                              name: item.title, location: item.location)
-                          : Container();
-                    },
-                  ),
-                ),
-              ),
-            ],
+            children: _buildBookingItems,
           ),
         )
       ],
     );
+  }
+
+  List<Widget> get _buildBookingItems {
+    return <Widget>[
+      if (widget.penger.items.isEmpty)
+        Text(
+          'No items',
+          style: PengoStyle.caption(context).copyWith(color: grayTextColor),
+        )
+      else
+        Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                height: 50,
+                child: ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: widget.penger.items.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final BookingItem item = widget.penger.items[index];
+                    return index.isEven
+                        ? PengerItem(
+                            name: item.title,
+                            location: item.location,
+                            logo: item.poster,
+                            onTap: () {
+                              Navigator.of(context, rootNavigator: true).push(
+                                CupertinoPageRoute(
+                                  builder: (context) => BookingView(
+                                    bookingItem: item,
+                                  ),
+                                ),
+                              );
+                            },
+                          )
+                        : Container();
+                  },
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                height: 50,
+                child: ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: widget.penger.items.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final BookingItem item = widget.penger.items[index];
+                    return index.isOdd
+                        ? PengerItem(
+                            logo: item.poster,
+                            name: item.title,
+                            location: item.location)
+                        : Container();
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+    ];
   }
 
   Widget _buildActions() {
@@ -238,7 +256,7 @@ class _InfoPageState extends State<InfoPage> {
         OutlinedListTile(
           assetName: LOCATION_ICON_PATH,
           title: "Copy location",
-          subTitle: widget.penger.location,
+          subTitle: widget.penger.location.location,
           trailing: Icon(Icons.copy),
           onTap: () {
             debugPrint("Copied");

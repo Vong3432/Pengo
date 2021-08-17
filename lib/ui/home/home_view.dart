@@ -1,14 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:pengo/bloc/pengers/penger_bloc.dart';
 import 'package:pengo/const/icon_const.dart';
 import 'package:pengo/const/space_const.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
+import 'package:pengo/models/penger_model.dart';
 import 'package:pengo/ui/home/widgets/home_h_listview.dart';
 import 'package:pengo/ui/home/widgets/penger_item.dart';
 import 'package:pengo/ui/home/widgets/quick_tap_item.dart';
 import 'package:pengo/ui/home/widgets/self_booking_item.dart';
+import 'package:pengo/ui/penger/info_view.dart';
 import 'package:pengo/ui/widgets/layout/sliver_appbar.dart';
 import 'package:pengo/ui/widgets/layout/sliver_body.dart';
 
@@ -20,10 +24,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late PengerBloc _pengerBloc;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    _pengerBloc = BlocProvider.of<PengerBloc>(context);
+    _pengerBloc.add(const FetchPopularNearestPengers());
+
     _determinePosition();
   }
 
@@ -32,12 +42,6 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement dispose
     super.dispose();
   }
-
-  final List<Widget> pengers = const <Widget>[
-    PengerItem(name: "Durian party night", location: "Sutera, Impian Emas"),
-    PengerItem(name: "Durian party night", location: "Sutera, Impian Emas"),
-    PengerItem(name: "Durian party night", location: "Sutera, Impian Emas"),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -106,54 +110,105 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildPopularList(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        const SizedBox(height: SECTION_GAP_HEIGHT),
-        Text(
-          "Popular",
-          style: PengoStyle.header(context),
-        ),
-        ListView.builder(
-          shrinkWrap: true,
-          padding: const EdgeInsets.all(0),
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: pengers.length,
-          itemBuilder: (BuildContext ctx, int index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: pengers[index],
-            );
-          },
-        ),
-      ],
+    return BlocBuilder<PengerBloc, PengerState>(
+      builder: (BuildContext context, PengerState state) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            const SizedBox(height: SECTION_GAP_HEIGHT),
+            Text(
+              "Popular",
+              style: PengoStyle.header(context),
+            ),
+            if (state is NearestPopularPengersLoading)
+              // Replace with skeleton loading
+              _buildLoading(),
+            if (state is NearestPopularPengersLoaded)
+              _buildPopularPengers(state),
+            if (state is NearestPopularPengersNotLoaded) _buildError()
+          ],
+        );
+      },
     );
   }
 
+  Text _buildError() => const Text("Something went wrong");
+
+  ListView _buildPopularPengers(NearestPopularPengersLoaded state) {
+    return ListView.builder(
+      shrinkWrap: true,
+      padding: const EdgeInsets.all(0),
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: state.poppularPengers.length,
+      itemBuilder: (BuildContext ctx, int index) {
+        final Penger penger = state.poppularPengers[index];
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0),
+          child: PengerItem(
+            onTap: () {
+              Navigator.of(context, rootNavigator: true).push(
+                CupertinoPageRoute(
+                    builder: (context) => InfoPage(penger: penger)),
+              );
+            },
+            logo: penger.logo,
+            name: penger.name,
+            location: penger.location.location,
+          ),
+        );
+      },
+    );
+  }
+
+  CircularProgressIndicator _buildLoading() =>
+      const CircularProgressIndicator();
+
   Widget _buildNearbyList(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        const SizedBox(height: SECTION_GAP_HEIGHT),
-        Text(
-          "Nearby you",
-          style: PengoStyle.header(context),
-        ),
-        ListView.builder(
-          shrinkWrap: true,
-          padding: const EdgeInsets.all(0),
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: pengers.length,
-          itemBuilder: (BuildContext ctx, int index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: pengers[index],
-            );
-          },
-        ),
-      ],
+    return BlocBuilder<PengerBloc, PengerState>(
+      builder: (context, state) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            const SizedBox(height: SECTION_GAP_HEIGHT),
+            Text(
+              "Nearby you",
+              style: PengoStyle.header(context),
+            ),
+            if (state is NearestPopularPengersLoading) _buildLoading(),
+            if (state is NearestPopularPengersNotLoaded) _buildError(),
+            if (state is NearestPopularPengersLoaded)
+              _buildNearestPengers(state)
+          ],
+        );
+      },
+    );
+  }
+
+  ListView _buildNearestPengers(NearestPopularPengersLoaded state) {
+    return ListView.builder(
+      shrinkWrap: true,
+      padding: const EdgeInsets.all(0),
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: state.nearestPengers.length,
+      itemBuilder: (BuildContext ctx, int index) {
+        final Penger penger = state.nearestPengers[index];
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0),
+          child: PengerItem(
+            onTap: () {
+              Navigator.of(context, rootNavigator: true).push(
+                CupertinoPageRoute(
+                    builder: (context) => InfoPage(penger: penger)),
+              );
+            },
+            logo: penger.logo,
+            name: penger.name,
+            location: penger.location.location,
+          ),
+        );
+      },
     );
   }
 
