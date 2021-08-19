@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 
 class ApiHelper {
@@ -11,7 +13,8 @@ class ApiHelper {
   static final _instance = ApiHelper._constructor();
 
   final Dio _dio = Dio(BaseOptions(
-    baseUrl: 'http://10.0.2.2:3333/',
+    baseUrl:
+        Platform.isIOS ? 'http://172.20.10.7:3333/' : 'http://10.0.2.2:3333/',
     connectTimeout: 5000, //5
     receiveTimeout: 3000,
   )); // with default Options

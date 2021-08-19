@@ -6,10 +6,12 @@ import 'package:pengo/config/theme.dart';
 import 'package:pengo/helpers/notification/push_notification_manager.dart';
 import 'package:pengo/providers/multi_bloc_provider.dart';
 import 'package:pengo/splash.dart';
+import 'package:flutter_config/flutter_config.dart';
 
 // ignore: avoid_void_async
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await FlutterConfig.loadEnvVariables();
   // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
   await PushNotificationManager().init();
   runApp(const MyApp());

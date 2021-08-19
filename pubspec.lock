@@ -209,6 +209,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "7.1.0"
+  flutter_config:
+    dependency: "direct main"
+    description:
+      name: flutter_config
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   flutter_local_notifications:
     dependency: "direct main"
     description:
