@@ -46,7 +46,7 @@ class _HomeHListViewState extends State<HomeHListView> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           child: SizedBox(
-            height: mediaQuery(context).size.height * 0.32,
+            height: 250,
             child: HStack(
               gap: 20,
               children: widget.children,

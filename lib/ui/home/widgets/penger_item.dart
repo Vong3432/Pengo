@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pengo/config/color.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
-import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/models/penger_model.dart';
 import 'package:pengo/ui/penger/info_view.dart';
 import 'package:pengo/ui/widgets/list/custom_list_item.dart';
@@ -11,14 +10,14 @@ class PengerItem extends StatelessWidget {
   const PengerItem(
       {Key? key,
       required this.name,
-      required this.location,
+      this.location,
       this.onTap,
       required this.logo})
       : super(key: key);
 
   final String name;
   final String logo;
-  final String location;
+  final String? location;
   final VoidCallback? onTap;
 
   @override
@@ -47,11 +46,15 @@ class PengerItem extends StatelessWidget {
         Text(
           name,
           style: PengoStyle.caption(context),
+          overflow: TextOverflow.ellipsis,
         ),
-        Text(
-          location,
-          style: PengoStyle.smallerText(context),
-        ),
+        location == null
+            ? Container()
+            : Text(
+                location!,
+                style: PengoStyle.smallerText(context),
+                overflow: TextOverflow.ellipsis,
+              ),
       ],
     );
   }

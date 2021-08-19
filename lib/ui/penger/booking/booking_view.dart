@@ -62,10 +62,13 @@ class _BookingViewState extends State<BookingView> {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              Text(
-                widget.bookingItem.location,
-                style: textTheme(context).subtitle2,
-              ),
+              if (widget.bookingItem.location != null)
+                Text(
+                  widget.bookingItem.location.toString(),
+                  style: textTheme(context).subtitle2,
+                )
+              else
+                Container(),
               Text(
                 "RM ${widget.bookingItem.price}",
                 style: textTheme(context).caption,

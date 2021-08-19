@@ -12,6 +12,7 @@ import 'package:pengo/models/booking_item_model.dart';
 import 'package:pengo/models/penger_model.dart';
 import 'package:pengo/ui/home/widgets/penger_item.dart';
 import 'package:pengo/ui/penger/booking/booking_view.dart';
+import 'package:pengo/ui/penger/review/review_view.dart';
 import 'package:pengo/ui/widgets/layout/sliver_appbar.dart';
 import 'package:pengo/ui/widgets/layout/sliver_body.dart';
 import 'package:pengo/ui/widgets/list/custom_list_item.dart';
@@ -191,6 +192,7 @@ class _InfoPageState extends State<InfoPage> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
+                width: 300,
                 height: 50,
                 child: ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
@@ -199,10 +201,10 @@ class _InfoPageState extends State<InfoPage> {
                   itemCount: widget.penger.items.length,
                   itemBuilder: (BuildContext context, int index) {
                     final BookingItem item = widget.penger.items[index];
-                    return index.isEven
+                    return index.isEven && item.isActive == true
                         ? PengerItem(
                             name: item.title,
-                            location: item.location,
+                            location: widget.penger.location.location,
                             logo: item.poster,
                             onTap: () {
                               Navigator.of(context, rootNavigator: true).push(
@@ -222,6 +224,7 @@ class _InfoPageState extends State<InfoPage> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
+                width: 300,
                 height: 50,
                 child: ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
@@ -230,11 +233,12 @@ class _InfoPageState extends State<InfoPage> {
                   itemCount: widget.penger.items.length,
                   itemBuilder: (BuildContext context, int index) {
                     final BookingItem item = widget.penger.items[index];
-                    return index.isOdd
+                    return index.isOdd && item.isActive
                         ? PengerItem(
                             logo: item.poster,
                             name: item.title,
-                            location: item.location)
+                            location: widget.penger.location.location,
+                          )
                         : Container();
                   },
                 ),
@@ -256,7 +260,7 @@ class _InfoPageState extends State<InfoPage> {
         OutlinedListTile(
           assetName: LOCATION_ICON_PATH,
           title: "Copy location",
-          subTitle: widget.penger.location.location,
+          subTitle: widget.penger.location.street,
           trailing: Icon(Icons.copy),
           onTap: () {
             debugPrint("Copied");
@@ -268,7 +272,12 @@ class _InfoPageState extends State<InfoPage> {
           subTitle: "${widget.penger.reviews.length} people reviewed",
           trailing: Icon(Icons.chevron_right),
           onTap: () {
-            debugPrint("Review");
+            Navigator.of(context, rootNavigator: true).push(
+              CupertinoPageRoute(
+                builder: (context) => PengerReviewPage(
+                    reviews: widget.penger.reviews, penger: widget.penger),
+              ),
+            );
           },
         ),
         const OutlinedListTile(

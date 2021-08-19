@@ -15,6 +15,7 @@ class HStack extends StatelessWidget {
     final double dimension = 300;
 
     return ListView.separated(
+      shrinkWrap: true,
       clipBehavior: Clip.none,
       separatorBuilder: (BuildContext ctx, int idx) => SizedBox(
         width: gap ?? 10,

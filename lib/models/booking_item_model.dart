@@ -1,27 +1,35 @@
 class BookingItem {
   const BookingItem({
     required this.poster,
+    required this.isActive,
     required this.title,
+    required this.id,
     this.price,
-    required this.location,
+    this.location,
   });
 
   factory BookingItem.fromJson(dynamic json) {
     return BookingItem(
-      poster: json['poster'].toString(),
+      id: json['id'] as int,
+      isActive: json['is_active'] as bool,
+      poster: json['poster_url'].toString(),
       title: json['name'].toString(),
-      location: json['location'].toString(),
+      location: json['location'] != null ? json['location'].toString() : null,
     );
   }
 
+  final int id;
+  final bool isActive;
   final String title;
   final String poster;
   final double? price;
-  final String location;
+  final String? location;
 }
 
 final List<BookingItem> bookingItemsMockData = <BookingItem>[
   const BookingItem(
+    isActive: true,
+    id: 9999,
     title: 'Durian Party Night',
     location: 'Impian Emas',
     price: 5.00,

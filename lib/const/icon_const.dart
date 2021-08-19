@@ -13,3 +13,4 @@ const String LOCATION_ICON_PATH = PREFIX_PATH + '/location.svg';
 const String PROFILE_ICON_PATH = PREFIX_PATH + '/profile.svg';
 const String SETTING_ICON_PATH = PREFIX_PATH + '/setting.svg';
 const String LOGOUT_ICON_PATH = PREFIX_PATH + '/logout.svg';
+const String COMMENT_TREE_PATH = PREFIX_PATH + '/comment-tree.svg';

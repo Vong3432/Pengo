@@ -31,6 +31,8 @@ class PengerApiProvider {
 
       return pengers;
     } catch (e) {
+      debugPrint(e.toString());
+
       throw Exception(e);
     }
   }
@@ -46,6 +48,21 @@ class PengerApiProvider {
           List<Penger>.from(data.map((i) => Penger.fromJson(i)));
 
       return pengers;
+    } catch (e) {
+      debugPrint(e.toString());
+      throw Exception(e);
+    }
+  }
+
+  Future<Penger> fetchBookingItems(int id, {int? limit, int? pageNum}) async {
+    try {
+      final response = await _apiHelper.get('/core/pengers/{id}?limit=${limit}',
+          queryParameters: {'limit': limit, 'page': pageNum});
+
+      final data = response.data['data'];
+      Penger penger = Penger.fromJson(data);
+
+      return penger;
     } catch (e) {
       debugPrint(e.toString());
       throw Exception(e);
