@@ -1,6 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:pengo/helpers/storage/shared_preferences_helper.dart';
 
 class ApiHelper {
   //https://medium.com/flutter-community/implementing-bloc-pattern-using-flutter-bloc-62a62e0319b5
@@ -9,15 +12,38 @@ class ApiHelper {
     return _instance;
   }
 
-  ApiHelper._constructor();
+  ApiHelper._constructor() {
+    init();
+  }
   static final _instance = ApiHelper._constructor();
+
+  void init() {
+    SharedPreferencesHelper _helper = SharedPreferencesHelper();
+    _dio.interceptors.addAll([
+      InterceptorsWrapper(onError:
+          (DioError error, ErrorInterceptorHandler errorInterceptorHandler) {
+        debugPrint(error.message);
+      }, onRequest:
+          (RequestOptions request, RequestInterceptorHandler handler) async {
+        _dio.interceptors.requestLock.lock();
+        final prefs = await _helper.getKey("user");
+
+        if (prefs != null) {
+          final dynamic auth = jsonDecode(prefs);
+          request.headers["Authorization"] = "Bearer ${auth['token']}";
+        }
+        _dio.interceptors.requestLock.unlock();
+        handler.next(request);
+      })
+    ]);
+  }
 
   final Dio _dio = Dio(BaseOptions(
     baseUrl:
-        Platform.isIOS ? 'http://localhost:3333/' : 'http://10.0.2.2:3333/',
+        Platform.isIOS ? 'http://172.20.10.7:3333/' : 'http://10.0.2.2:3333/',
     connectTimeout: 5000, //5
     receiveTimeout: 3000,
-  )); // with default Options
+  ));
 
   Future<Response> get(String url,
       {Map<String, dynamic>? queryParameters,
@@ -32,14 +58,14 @@ class ApiHelper {
   }
 
   Future<Response<Map<String, dynamic>>> post(String url,
-      {dynamic data,
+      {Map<String, dynamic>? data,
       Map<String, dynamic>? queryParameters,
       Options? options,
       CancelToken? cancelToken,
       void Function(int, int)? onSendProgress,
       void Function(int, int)? onReceiveProgress}) async {
     return _dio.post(url,
-        data: data,
+        data: data != null ? FormData.fromMap(data) : null,
         queryParameters: queryParameters,
         options: options,
         cancelToken: cancelToken,
