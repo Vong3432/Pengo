@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:pengo/bloc/pengers/penger_bloc.dart';
 import 'package:pengo/const/icon_const.dart';
 import 'package:pengo/const/space_const.dart';
+import 'package:pengo/helpers/socket/socket_helper.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/models/penger_model.dart';
 import 'package:pengo/ui/home/widgets/home_h_listview.dart';
@@ -25,11 +26,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late PengerBloc _pengerBloc;
+  final SocketHelper _socketHelper = SocketHelper();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    _socketHelper.init();
 
     _pengerBloc = BlocProvider.of<PengerBloc>(context);
     _pengerBloc.add(const FetchPopularNearestPengers());
@@ -41,6 +45,7 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    _socketHelper.dispose();
   }
 
   @override

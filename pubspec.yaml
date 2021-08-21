@@ -45,6 +45,7 @@ dependencies:
   modal_bottom_sheet: ^2.0.0
   rxdart: ^0.27.1
   shared_preferences: ^2.0.6
+  socket_io_client: ^1.0.1
   syncfusion_flutter_datepicker: ^19.2.49
 
 dev_dependencies:
