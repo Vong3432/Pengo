@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:pengo/helpers/storage/shared_preferences_helper.dart';
 
 class ApiHelper {
@@ -22,7 +23,9 @@ class ApiHelper {
     _dio.interceptors.addAll([
       InterceptorsWrapper(onError:
           (DioError error, ErrorInterceptorHandler errorInterceptorHandler) {
-        debugPrint(error.message);
+        debugPrint("Error dio: ${error.message}");
+
+        errorInterceptorHandler.reject(error);
       }, onRequest:
           (RequestOptions request, RequestInterceptorHandler handler) async {
         _dio.interceptors.requestLock.lock();
@@ -32,6 +35,11 @@ class ApiHelper {
           final dynamic auth = jsonDecode(prefs);
           request.headers["Authorization"] = "Bearer ${auth['token']}";
         }
+        // For hardcode testing
+        final hardcode = "${dotenv.env['HARDCODE_TOKEN']}";
+        request.headers["Authorization"] = "Bearer $hardcode";
+
+        // end
         _dio.interceptors.requestLock.unlock();
         handler.next(request);
       })

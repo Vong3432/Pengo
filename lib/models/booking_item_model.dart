@@ -18,6 +18,17 @@ class BookingItem {
     );
   }
 
+  Map<String, dynamic> toMap() {
+    var map = new Map<String, dynamic>();
+    map["id"] = id;
+    map["title"] = title;
+    map["poster"] = poster;
+    map["price"] = price;
+    map["location"] = location;
+    // Add all other fields
+    return map;
+  }
+
   final int id;
   final bool isActive;
   final String title;

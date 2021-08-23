@@ -2,16 +2,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pengo/bloc/pengers/penger_bloc.dart';
+import 'package:pengo/config/color.dart';
 import 'package:pengo/const/icon_const.dart';
 import 'package:pengo/const/space_const.dart';
 import 'package:pengo/helpers/socket/socket_helper.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
+import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/models/penger_model.dart';
 import 'package:pengo/ui/home/widgets/home_h_listview.dart';
+import 'package:pengo/ui/home/widgets/option_item.dart';
 import 'package:pengo/ui/home/widgets/penger_item.dart';
 import 'package:pengo/ui/home/widgets/quick_tap_item.dart';
+import 'package:pengo/ui/home/widgets/quick_tap_section.dart';
 import 'package:pengo/ui/home/widgets/self_booking_item.dart';
 import 'package:pengo/ui/penger/info_view.dart';
 import 'package:pengo/ui/widgets/layout/sliver_appbar.dart';
@@ -26,14 +32,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late PengerBloc _pengerBloc;
-  final SocketHelper _socketHelper = SocketHelper();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    _socketHelper.init();
 
     _pengerBloc = BlocProvider.of<PengerBloc>(context);
     _pengerBloc.add(const FetchPopularNearestPengers());
@@ -45,7 +48,6 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _socketHelper.dispose();
   }
 
   @override
@@ -102,7 +104,7 @@ class _HomePageState extends State<HomePage> {
                     },
                   ),
                   _buildUserBookingList(textTheme),
-                  _buildQuickTapSection(textTheme),
+                  const QuickTapSection(),
                   _buildPopularList(context),
                   _buildNearbyList(context),
                 ],
@@ -229,31 +231,6 @@ class _HomePageState extends State<HomePage> {
           SelfBookingItem(),
         ],
       ),
-    );
-  }
-
-  Widget _buildQuickTapSection(TextTheme textTheme) {
-    return Column(
-      children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const <QuickTapItem>[
-            QuickTapItem(
-              title: "Scan",
-              assetName: SCAN_ICON_PATH,
-            ),
-            QuickTapItem(
-              title: "FAQ",
-              assetName: INFO_ICON_PATH,
-            ),
-            QuickTapItem(title: "Coupons", assetName: COUPON_ICON_PATH),
-            QuickTapItem(title: "Feedback", assetName: REPORT_ICON_PATH)
-          ],
-        ),
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 10),
-        )
-      ],
     );
   }
 

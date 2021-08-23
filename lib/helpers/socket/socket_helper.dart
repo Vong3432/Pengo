@@ -24,16 +24,18 @@ class SocketHelper {
     }
   }
 
+  Socket get getSocket => socket;
+
   void connectToServer() {
     try {
       // Configure socket transports must be sepecified
       socket = io(uri, <String, dynamic>{
         'transports': ['websocket'],
-        'autoConnect': false,
       });
 
       // Connect to websocket
       socket.connect();
+      debugPrint('connecting');
 
       // Handle socket events
       socket.on('connect', (_) => debugPrint('connect: ${socket.id}'));
@@ -42,7 +44,7 @@ class SocketHelper {
         debugPrint("data: $data");
       });
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("e: ${e.toString()}");
     }
   }
 

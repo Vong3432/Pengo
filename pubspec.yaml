@@ -35,16 +35,21 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^7.1.0
   flutter_config: ^2.0.0
+  flutter_dotenv: ^5.0.2
   flutter_local_notifications: ^6.0.0
   flutter_svg: ^0.22.0
+  fluttertoast: ^8.0.8
   geolocator: ^7.2.0+1
   google_maps_flutter: ^2.0.6
   intl: ^0.17.0
   introduction_screen: ^2.1.0
   lottie: ^1.1.0
   modal_bottom_sheet: ^2.0.0
+  provider: ^5.0.0
+  qr_flutter: ^4.0.0
   rxdart: ^0.27.1
   shared_preferences: ^2.0.6
+  skeleton_animation: ^0.1.4
   socket_io_client: ^1.0.1
   syncfusion_flutter_datepicker: ^19.2.49
 
@@ -72,6 +77,7 @@ flutter:
     - assets/svg/logo/
     - assets/svg/icons/
     - assets/lottie/
+    - .env
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
