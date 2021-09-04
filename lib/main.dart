@@ -6,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:pengo/config/theme.dart';
 import 'package:pengo/helpers/notification/push_notification_manager.dart';
 import 'package:pengo/helpers/socket/socket_helper.dart';
+import 'package:pengo/models/providers/auth_model.dart';
 import 'package:pengo/providers/booking_pass_provider.dart';
 import 'package:pengo/providers/multi_bloc_provider.dart';
 import 'package:pengo/splash.dart';
@@ -19,6 +20,7 @@ void main() async {
   await dotenv.load(fileName: ".env");
   // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
   await PushNotificationManager().init();
+
   runApp(const MyApp());
 }
 
@@ -32,6 +34,7 @@ class MyApp extends StatelessWidget {
       child: MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => BookingPassModel()),
+          ChangeNotifierProvider(create: (_) => AuthModel()),
         ],
         child: MaterialApp(
           title: 'Pengo',

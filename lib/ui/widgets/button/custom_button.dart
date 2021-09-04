@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pengo/config/color.dart';
+import 'package:pengo/helpers/theme/custom_font.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton({
@@ -21,6 +22,8 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
+        textStyle:
+            PengoStyle.body(context).copyWith(fontWeight: FontWeight.w600),
         primary: backgroundColor ?? textColor,
         onPrimary: color ?? Colors.white,
         minimumSize: minimumSize ?? const Size(double.infinity, 48),

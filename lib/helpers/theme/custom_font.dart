@@ -19,6 +19,13 @@ class PengoStyle {
     return Theme.of(context).textTheme.headline5!.copyWith();
   }
 
+  static TextStyle body(BuildContext context) {
+    return Theme.of(context)
+        .textTheme
+        .bodyText1!
+        .copyWith(fontSize: 18, fontWeight: FontWeight.normal);
+  }
+
   static TextStyle navigationTitle(BuildContext context) {
     return Theme.of(context).textTheme.headline1!.copyWith();
   }

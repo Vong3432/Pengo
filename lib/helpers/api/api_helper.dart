@@ -23,7 +23,7 @@ class ApiHelper {
     _dio.interceptors.addAll([
       InterceptorsWrapper(onError:
           (DioError error, ErrorInterceptorHandler errorInterceptorHandler) {
-        debugPrint("Error dio: ${error.message}");
+        // debugPrint("Error dio: ${error.response?.data['msg'].toString()}");
 
         errorInterceptorHandler.reject(error);
       }, onRequest:

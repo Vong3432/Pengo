@@ -11,9 +11,13 @@ class SharedPreferencesHelper {
 
   final Future<SharedPreferences> _sp = SharedPreferences.getInstance();
 
+  Future<void> remove(String key) async {
+    final SharedPreferences prefs = await _sp;
+    prefs.remove(key);
+  }
+
   Future<void> setStr(String key, String value) async {
     final SharedPreferences prefs = await _sp;
-
     prefs.setString(key, value);
   }
 

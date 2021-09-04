@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pengo/config/color.dart';
+import 'package:pengo/helpers/theme/custom_font.dart';
 
 ThemeData themeData = ThemeData(
   primarySwatch: primaryColor,
@@ -8,6 +9,11 @@ ThemeData themeData = ThemeData(
   fontFamily: 'Poppins',
   dividerTheme: DividerThemeData(color: greyBgColor, thickness: 2.5),
   dividerColor: greyBgColor,
+  inputDecorationTheme: InputDecorationTheme(
+    border: OutlineInputBorder(
+        borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+    // fillColor: greyBgColor,
+  ),
   textTheme: const TextTheme(
     headline1: TextStyle(
       fontSize: 28,
@@ -40,10 +46,10 @@ ThemeData themeData = ThemeData(
       fontFamily: 'Poppins',
       fontWeight: FontWeight.w600,
     ),
-    bodyText1: TextStyle(fontFamily: 'Work Sans', height: 1.6),
-    bodyText2: TextStyle(fontFamily: 'Work Sans', height: 1.6),
-    subtitle1: TextStyle(fontFamily: 'Work Sans', fontWeight: FontWeight.w500),
-    subtitle2: TextStyle(fontFamily: 'Work Sans', fontWeight: FontWeight.w500),
+    bodyText1: TextStyle(fontFamily: 'WorkSans', height: 1.6),
+    bodyText2: TextStyle(fontFamily: 'WorkSans', height: 1.6),
+    subtitle1: TextStyle(fontFamily: 'WorkSans', fontWeight: FontWeight.w500),
+    subtitle2: TextStyle(fontFamily: 'WorkSans', fontWeight: FontWeight.w500),
     caption: TextStyle(
         fontFamily: 'Poppins', fontSize: 14, fontWeight: FontWeight.w600),
   ).apply(

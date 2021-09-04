@@ -14,3 +14,12 @@ List<BoxShadow> normalShadow(ThemeData theme) {
     ),
   ];
 }
+
+List<BoxShadow> bottomBarShadow(ThemeData theme) {
+  return <BoxShadow>[
+    BoxShadow(
+        color: textColor.withOpacity(0.05),
+        offset: const Offset(0, -4),
+        blurRadius: 15),
+  ];
+}

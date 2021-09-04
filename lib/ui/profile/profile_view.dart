@@ -5,14 +5,38 @@ import 'package:pengo/config/color.dart';
 import 'package:pengo/const/icon_const.dart';
 import 'package:pengo/const/space_const.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
+import 'package:pengo/models/auth_model.dart';
+import 'package:pengo/models/providers/auth_model.dart';
+import 'package:pengo/ui/auth/login_view.dart';
 import 'package:pengo/ui/profile/profile_info.dart';
 import 'package:pengo/ui/profile/setting_view.dart';
 import 'package:pengo/ui/widgets/layout/sliver_appbar.dart';
 import 'package:pengo/ui/widgets/layout/sliver_body.dart';
 import 'package:pengo/ui/widgets/list/custom_list_item.dart';
+import 'package:provider/provider.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
+
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  Auth? _user;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    // SharedPreferencesHelper().getKey("user").then((value) {
+    //   if (value != null) {
+    //     setState(() {
+    //       _user = Auth.fromJson(_user);
+    //     });
+    //   }
+    // });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +56,11 @@ class ProfilePage extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     _buildProfileInfo(context),
-                    _buildAccountSection(context),
-                    _buildActionSection(context)
+                    Consumer<AuthModel>(builder: (builder, authModel, _) {
+                      return authModel.user == null
+                          ? Container()
+                          : _buildLoggedInView(context);
+                    }),
                   ],
                 ),
               )
@@ -41,6 +68,15 @@ class ProfilePage extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildLoggedInView(BuildContext context) {
+    return Column(
+      children: [
+        _buildAccountSection(context),
+        _buildActionSection(context),
+      ],
     );
   }
 
@@ -59,6 +95,9 @@ class ProfilePage extends StatelessWidget {
           height: SECTION_GAP_HEIGHT,
         ),
         CustomListItem(
+          onTap: () {
+            context.read<AuthModel>().logoutUser();
+          },
           leading: Container(
             width: 42,
             height: 42,
@@ -200,11 +239,16 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget _buildProfileInfo(BuildContext context) {
+    bool isGuest = context.watch<AuthModel>().user == null;
     return GestureDetector(
       onTap: () {
-        Navigator.of(context, rootNavigator: true).push(
-          CupertinoPageRoute(builder: (context) => ProfileInfoView()),
-        );
+        isGuest
+            ? Navigator.of(context, rootNavigator: true).push(
+                CupertinoPageRoute(builder: (context) => LoginPage()),
+              )
+            : Navigator.of(context, rootNavigator: true).push(
+                CupertinoPageRoute(builder: (context) => ProfileInfoView()),
+              );
       },
       child: Container(
         padding: const EdgeInsets.all(18),
@@ -215,23 +259,31 @@ class ProfilePage extends StatelessWidget {
         ),
         child: Row(
           children: <Widget>[
-            const CircleAvatar(
+            CircleAvatar(
               minRadius: 27,
               backgroundImage: NetworkImage(
-                  "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=668&q=80"),
+                context.watch<AuthModel>().user == null
+                    ? "https://res.cloudinary.com/dpjso4bmh/image/upload/v1626867341/pengo/penger/staff/3192c5a13626653bffeb2c1171df716f_wrchju.png"
+                    : context.watch<AuthModel>().user!.avatar,
+              ),
             ),
             const SizedBox(
               width: SECTION_GAP_HEIGHT,
             ),
             Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  "John Doe",
+                  context.watch<AuthModel>().user == null
+                      ? 'Guest user'
+                      : context.watch<AuthModel>().user!.username,
                   style: PengoStyle.header(context),
                 ),
                 Text(
-                  "012-3456789",
+                  context.watch<AuthModel>().user == null
+                      ? "Click to sign in"
+                      : context.watch<AuthModel>().user!.phone,
                   style: PengoStyle.text(context),
                 ),
               ],
