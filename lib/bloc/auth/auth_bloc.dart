@@ -30,6 +30,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
     if (event is RegisterEvent) {
       yield* _mapRegisterToState(
+          age: event.age,
           password: event.password,
           email: event.email,
           username: event.username,
@@ -43,7 +44,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       yield AuthenticatingState();
       final Auth auth = await _authRepo.login(phone, password);
-      String encoded = jsonEncode(auth.toMap());
+      String encoded = jsonEncode(auth.toJson());
       await SharedPreferencesHelper().setStr("user", encoded);
       yield AuthenticatedState(auth);
     } catch (e) {
@@ -57,6 +58,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required String username,
     required String phone,
     required String pin,
+    required int age,
     required XFile avatar,
   }) async* {
     try {
@@ -67,8 +69,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           username: username,
           email: email,
           avatar: avatar,
+          age: age,
           pin: pin);
-      String encoded = jsonEncode(auth.toMap());
+      String encoded = jsonEncode(auth.toJson());
       await SharedPreferencesHelper().setStr("user", encoded);
       yield AuthenticatedState(auth);
     } catch (e) {

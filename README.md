@@ -20,3 +20,8 @@
 
 - IOT GooCard Integration.
 - Open-source API/SDK.
+
+### Commands
+
+1. Generate JSON serializable files
+   `flutter pub run build_runner build`

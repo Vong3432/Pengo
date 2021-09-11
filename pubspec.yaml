@@ -45,6 +45,7 @@ dependencies:
   image_picker: ^0.8.3+3
   intl: ^0.17.0
   introduction_screen: ^2.1.0
+  json_annotation: ^4.0.1
   lottie: ^1.1.0
   modal_bottom_sheet: ^2.0.0
   pin_code_text_field: ^1.8.0
@@ -57,9 +58,10 @@ dependencies:
   syncfusion_flutter_datepicker: ^19.2.49
 
 dev_dependencies:
+  build_runner: ^2.1.2
   flutter_test:
     sdk: flutter
-
+  json_serializable: ^4.1.4
   lint: ^1.0.0
 
 # For information on the generic Dart part of this file, see the

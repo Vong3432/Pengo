@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:pengo/helpers/storage/shared_preferences_helper.dart';
+import 'package:pengo/models/auth_model.dart';
 
 class ApiHelper {
   //https://medium.com/flutter-community/implementing-bloc-pattern-using-flutter-bloc-62a62e0319b5
@@ -32,8 +33,9 @@ class ApiHelper {
         final prefs = await _helper.getKey("user");
 
         if (prefs != null) {
-          final dynamic auth = jsonDecode(prefs);
-          request.headers["Authorization"] = "Bearer ${auth['token']}";
+          final Auth auth =
+              Auth.fromJson(jsonDecode(prefs) as Map<String, dynamic>);
+          request.headers["Authorization"] = "Bearer ${auth.token}";
         }
         // For hardcode testing
         final hardcode = "${dotenv.env['HARDCODE_TOKEN']}";
@@ -70,10 +72,13 @@ class ApiHelper {
       Map<String, dynamic>? queryParameters,
       Options? options,
       CancelToken? cancelToken,
+      bool? isFormData,
       void Function(int, int)? onSendProgress,
       void Function(int, int)? onReceiveProgress}) async {
     return _dio.post(url,
-        data: data != null ? FormData.fromMap(data) : null,
+        data: data != null
+            ? (isFormData == true ? FormData.fromMap(data) : data)
+            : null,
         queryParameters: queryParameters,
         options: options,
         cancelToken: cancelToken,

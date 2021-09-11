@@ -99,14 +99,14 @@ class _BookingSlotPageState extends State<BookingSlotPage>
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: CustomListItem(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => BookingView(
-                  bookingItem: bookingItemsMockData[0],
-                ),
-              ),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => BookingView(
+            //       bookingItem: bookingItemsMockData[0],
+            //     ),
+            //   ),
+            // );
           },
           leading: ClipRRect(
             borderRadius: BorderRadius.circular(8),

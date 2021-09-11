@@ -153,7 +153,7 @@ class _HomePageState extends State<HomePage> {
             },
             logo: penger.logo,
             name: penger.name,
-            location: penger.location.location,
+            location: penger.location.address,
           ),
         );
       },
@@ -204,7 +204,7 @@ class _HomePageState extends State<HomePage> {
             },
             logo: penger.logo,
             name: penger.name,
-            location: penger.location.location,
+            location: penger.location.address,
           ),
         );
       },

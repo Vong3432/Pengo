@@ -28,15 +28,11 @@ class _SplashState extends State<Splash> with AfterLayoutMixin<Splash> {
       final Map<String, dynamic> decoded =
           jsonDecode(_user) as Map<String, dynamic>;
 
-      final Auth u = Auth(
-          username: decoded['username'].toString(),
-          id: decoded['id'] as int,
-          avatar: decoded['avatar'].toString(),
-          phone: decoded['phone'].toString(),
-          token: decoded['token'].toString(),
-          email: decoded['email'].toString());
+      // keep user login.
+      final Auth auth =
+          Auth.fromJson(jsonDecode(_user) as Map<String, dynamic>);
 
-      context.read<AuthModel>().setUser(u);
+      context.read<AuthModel>().setUser(auth);
     }
 
     if (_seen) {

@@ -46,6 +46,7 @@ class _BookingViewState extends State<BookingView> {
         CustomSliverAppBar(
           toolbarHeight: mediaQuery(context).size.height * 0.15,
           title: CustomListItem(
+            width: mediaQuery(context).size.width / 1.6,
             leading: Container(
               decoration: const BoxDecoration(
                 color: Colors.grey,
@@ -62,13 +63,11 @@ class _BookingViewState extends State<BookingView> {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              if (widget.bookingItem.location != null)
-                Text(
-                  widget.bookingItem.location.toString(),
-                  style: textTheme(context).subtitle2,
-                )
-              else
-                Container(),
+              Text(
+                widget.bookingItem.geolocation?.name ??
+                    widget.bookingItem.location.toString(),
+                style: textTheme(context).subtitle2,
+              ),
               Text(
                 "RM ${widget.bookingItem.price}",
                 style: textTheme(context).caption,

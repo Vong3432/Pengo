@@ -12,6 +12,7 @@ class PengerItem extends StatelessWidget {
       required this.name,
       this.location,
       this.onTap,
+      this.width,
       required this.logo})
       : super(key: key);
 
@@ -19,18 +20,21 @@ class PengerItem extends StatelessWidget {
   final String logo;
   final String? location;
   final VoidCallback? onTap;
+  final double? width;
 
   @override
   Widget build(BuildContext context) {
     return CustomListItem(
+      width: width,
       onTap: onTap ??
           () {
-            Navigator.of(context, rootNavigator: true).push(
-              CupertinoPageRoute(
-                  builder: (context) => InfoPage(
-                        penger: pengersMockingData[0],
-                      )),
-            );
+            // Navigator.of(context, rootNavigator: true).push(
+            //   CupertinoPageRoute(
+            //     builder: (context) => InfoPage(
+            //       penger: pengersMockingData[0],
+            //     ),
+            //   ),
+            // );
           },
       leading: Container(
         decoration: BoxDecoration(

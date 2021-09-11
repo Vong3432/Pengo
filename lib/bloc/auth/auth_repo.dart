@@ -29,6 +29,7 @@ class AuthRepo {
     required String username,
     required String email,
     required XFile avatar,
+    required int age,
     required String pin,
   }) async =>
       _authApiProvider.register(
@@ -37,5 +38,6 @@ class AuthRepo {
           username: username,
           email: email,
           pin: pin,
+          age: age,
           avatar: avatar);
 }

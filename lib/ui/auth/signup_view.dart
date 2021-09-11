@@ -54,11 +54,16 @@ class _SignUpViewState extends State<SignUpView> {
     RequiredValidator(errorText: 'Username cannot be empty'),
   ]);
 
+  final _ageValidator = MultiValidator([
+    RequiredValidator(errorText: 'Age cannot be empty'),
+  ]);
+
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _pinController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
 
   final ImagePicker _picker = ImagePicker();
   XFile? _profile;
@@ -199,6 +204,7 @@ class _SignUpViewState extends State<SignUpView> {
   void _register(BuildContext context) {
     BlocProvider.of<AuthBloc>(context).add(
       RegisterEvent(
+          age: int.parse(_ageController.text),
           phone: _phoneController.text,
           password: _passwordController.text,
           username: _usernameController.text,
@@ -275,6 +281,13 @@ class _SignUpViewState extends State<SignUpView> {
             validator: _usernameValidator,
             controller: _usernameController,
             // contentPadding: const EdgeInsets.all(8),
+          ),
+          CustomTextField(
+            label: "Age",
+            hintText: "",
+            validator: _ageValidator,
+            controller: _ageController,
+            inputType: TextInputType.number,
           ),
           const SizedBox(
             height: SECTION_GAP_HEIGHT,

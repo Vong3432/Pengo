@@ -1,21 +1,19 @@
+import 'package:json_annotation/json_annotation.dart';
+import 'package:pengo/models/geolocation_model.dart';
+
+part 'location_model.g.dart';
+
+@JsonSerializable()
 class Location {
-  const Location(
-      {required this.lat,
-      required this.lng,
-      required this.location,
-      required this.street});
+  const Location({
+    required this.geolocation,
+    required this.address,
+  });
 
-  factory Location.fromJson(dynamic json) {
-    return Location(
-      location: json['address'].toString(),
-      street: json['street'].toString(),
-      lat: json['geolocation']['latitude'] as double,
-      lng: json['geolocation']['longitude'] as double,
-    );
-  }
+  factory Location.fromJson(Map<String, dynamic> json) =>
+      _$LocationFromJson(json);
+  Map<String, dynamic> toJson() => _$LocationToJson(this);
 
-  final String location;
-  final String street;
-  final double lat;
-  final double lng;
+  final Geolocation geolocation;
+  final String address;
 }

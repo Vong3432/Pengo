@@ -8,8 +8,10 @@ import 'package:pengo/config/color.dart';
 import 'package:pengo/const/icon_const.dart';
 import 'package:pengo/const/space_const.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
+import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/models/booking_item_model.dart';
 import 'package:pengo/models/penger_model.dart';
+import 'package:pengo/models/review.dart';
 import 'package:pengo/ui/home/widgets/penger_item.dart';
 import 'package:pengo/ui/penger/booking/booking_view.dart';
 import 'package:pengo/ui/penger/review/review_view.dart';
@@ -17,6 +19,7 @@ import 'package:pengo/ui/widgets/layout/sliver_appbar.dart';
 import 'package:pengo/ui/widgets/layout/sliver_body.dart';
 import 'package:pengo/ui/widgets/list/custom_list_item.dart';
 import 'package:pengo/ui/widgets/list/outlined_list_tile.dart';
+import 'package:pengo/ui/widgets/stacks/h_stack.dart';
 
 class InfoPage extends StatefulWidget {
   const InfoPage({Key? key, required this.penger}) : super(key: key);
@@ -37,7 +40,8 @@ class _InfoPageState extends State<InfoPage> {
     // TODO: implement initState
     super.initState();
     _kGooglePlex = CameraPosition(
-      target: LatLng(widget.penger.location.lat, widget.penger.location.lng),
+      target: LatLng(widget.penger.location.geolocation.latitude,
+          widget.penger.location.geolocation.longitude),
       zoom: 14.4746,
     );
   }
@@ -169,84 +173,69 @@ class _InfoPageState extends State<InfoPage> {
           ],
         ),
         const SizedBox(height: SECTION_GAP_HEIGHT),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Column(
-            children: _buildBookingItems,
-          ),
-        )
+        _buildBookingItems,
       ],
     );
   }
 
-  List<Widget> get _buildBookingItems {
-    return <Widget>[
-      if (widget.penger.items.isEmpty)
-        Text(
-          'No items',
-          style: PengoStyle.caption(context).copyWith(color: grayTextColor),
-        )
-      else
-        Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: 300,
-                height: 50,
-                child: ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: widget.penger.items.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final BookingItem item = widget.penger.items[index];
-                    return index.isEven && item.isActive == true
-                        ? PengerItem(
-                            name: item.title,
-                            location: widget.penger.location.location,
-                            logo: item.poster,
-                            onTap: () {
-                              Navigator.of(context, rootNavigator: true).push(
-                                CupertinoPageRoute(
-                                  builder: (context) => BookingView(
-                                    bookingItem: item,
-                                  ),
-                                ),
-                              );
-                            },
-                          )
-                        : Container();
-                  },
+  Widget get _buildBookingItems {
+    if (widget.penger.items.isEmpty) {
+      return Text(
+        'No items',
+        style: PengoStyle.caption(context).copyWith(color: grayTextColor),
+      );
+    }
+    return SizedBox(
+      height: 50,
+      child: HStack(
+        // children: [
+        //   ListView.builder(
+        //     itemBuilder: (BuildContext context, int index) => ListView.builder(
+        //         scrollDirection: Axis.horizontal,
+        //         // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        //         //   crossAxisCount: 2,
+        //         // ),
+        //         itemCount: widget.penger.items.length,
+        //         itemBuilder: (BuildContext context, int index) {
+        //           final BookingItem item = widget.penger.items[index];
+        //           return PengerItem(
+        //             name: item.title,
+        //             location: widget.penger.location.geolocation.name,
+        //             logo: item.poster,
+        //             onTap: () {
+        //               Navigator.of(context, rootNavigator: true).push(
+        //                 CupertinoPageRoute(
+        //                   builder: (context) => BookingView(
+        //                     bookingItem: item,
+        //                   ),
+        //                 ),
+        //               );
+        //             },
+        //           );
+        //         }),
+        //   ),
+        // ]),
+        gap: 5,
+        children: List.generate(widget.penger.items.length, (index) {
+          final BookingItem item = widget.penger.items[index];
+          return PengerItem(
+            width: mediaQuery(context).size.width / 2,
+            name: item.title,
+            location: item.location,
+            logo: item.poster,
+            onTap: () {
+              Navigator.of(context, rootNavigator: true).push(
+                CupertinoPageRoute(
+                  builder: (context) => BookingView(
+                    bookingItem: item,
+                  ),
                 ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: 300,
-                height: 50,
-                child: ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: widget.penger.items.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final BookingItem item = widget.penger.items[index];
-                    return index.isOdd && item.isActive
-                        ? PengerItem(
-                            logo: item.poster,
-                            name: item.title,
-                            location: widget.penger.location.location,
-                          )
-                        : Container();
-                  },
-                ),
-              ),
-            ),
-          ],
-        ),
-    ];
+              );
+            },
+          );
+        }),
+      ),
+    );
   }
 
   Widget _buildActions() {
@@ -260,7 +249,7 @@ class _InfoPageState extends State<InfoPage> {
         OutlinedListTile(
           assetName: LOCATION_ICON_PATH,
           title: "Copy location",
-          subTitle: widget.penger.location.street,
+          subTitle: widget.penger.location.address,
           trailing: Icon(Icons.copy),
           onTap: () {
             debugPrint("Copied");
@@ -269,13 +258,13 @@ class _InfoPageState extends State<InfoPage> {
         OutlinedListTile(
           assetName: REVIEW_ICON_PATH,
           title: "View review",
-          subTitle: "${widget.penger.reviews.length} people reviewed",
+          subTitle: "${fakedReviews.length} people reviewed",
           trailing: Icon(Icons.chevron_right),
           onTap: () {
             Navigator.of(context, rootNavigator: true).push(
               CupertinoPageRoute(
                 builder: (context) => PengerReviewPage(
-                    reviews: widget.penger.reviews, penger: widget.penger),
+                    reviews: fakedReviews, penger: widget.penger),
               ),
             );
           },

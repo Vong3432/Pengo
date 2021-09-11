@@ -19,7 +19,8 @@ class AuthApiProvider {
         "phone": "+6$phone",
         "password": password,
       });
-      final auth = Auth.fromJson(response.data!['data']);
+      final auth =
+          Auth.fromJson(response.data!['data'] as Map<String, dynamic>);
       return auth;
     } on DioError catch (e) {
       throw e.response!.data['msg'].toString();
@@ -50,6 +51,7 @@ class AuthApiProvider {
     required String username,
     required String email,
     required String pin,
+    required int age,
     required XFile avatar,
   }) async {
     try {
@@ -61,11 +63,13 @@ class AuthApiProvider {
         "password_confirmation": password,
         "username": username,
         "email": email,
+        "age": age,
         "avatar": await MultipartFile.fromFile(avatar.path, filename: fileName),
       };
       final Response<Map<String, dynamic>> response =
-          await _apiHelper.post('/auth/register', data: fd);
-      final Auth auth = Auth.fromJson(response.data!['data']);
+          await _apiHelper.post('/auth/register', data: fd, isFormData: true);
+      final Auth auth =
+          Auth.fromJson(response.data!['data'] as Map<String, dynamic>);
       return auth;
     } catch (e) {
       throw Exception(e);

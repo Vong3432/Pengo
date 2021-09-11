@@ -20,6 +20,7 @@ class RegisterEvent extends AuthEvent {
     required this.username,
     required this.email,
     required this.pin,
+    required this.age,
     required this.avatar,
   });
   final String phone;
@@ -27,6 +28,7 @@ class RegisterEvent extends AuthEvent {
   final String username;
   final String email;
   final String pin;
+  final int age;
   final XFile avatar;
 }
 

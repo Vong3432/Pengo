@@ -75,7 +75,11 @@ class _BookingPassViewState extends State<BookingPassView> {
     });
 
     instance.on("verified success", (data) {
-      debugPrint('success');
+      debugPrint('success: ${data.shouldUpdateCredit}');
+
+      if (data.shouldUpdateCredit as bool == true) {
+        // TODO: Add credit poins
+      }
       _showToast(successColor, "Verified");
     });
 
@@ -149,7 +153,7 @@ class _BookingPassViewState extends State<BookingPassView> {
         ),
         QrImage(
           data: jsonEncode({
-            "record": _recordListener.getRecord()!.toMap(),
+            "record": _recordListener.getRecord()!.toJson(),
             "to": _socketHelper.socket.id
           }),
           size: 200.0,

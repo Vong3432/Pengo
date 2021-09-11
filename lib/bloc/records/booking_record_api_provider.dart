@@ -10,7 +10,7 @@ class RecordsApiProvider {
       final response = await _apiHelper.get('/pengoo/booking-records');
       final List<BookingRecord> records = List<BookingRecord>.from(
           (response.data['data']! as List)
-              .map((i) => BookingRecord.fromJson(i)));
+              .map((i) => BookingRecord.fromJson(i as Map<String, dynamic>)));
       return records;
     } catch (e) {
       debugPrint(e.toString());
