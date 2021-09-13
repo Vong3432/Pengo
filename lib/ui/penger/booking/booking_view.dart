@@ -48,13 +48,33 @@ class _BookingViewState extends State<BookingView> {
           title: CustomListItem(
             width: mediaQuery(context).size.width / 1.6,
             leading: Container(
-              decoration: const BoxDecoration(
-                color: Colors.grey,
-                borderRadius: BorderRadius.all(
+              decoration: BoxDecoration(
+                color: whiteColor,
+                borderRadius: const BorderRadius.all(
                   Radius.circular(8),
                 ),
               ),
+              child: Image.network(
+                widget.bookingItem.poster,
+                fit: BoxFit.cover,
+                loadingBuilder: (BuildContext context, Widget child,
+                    ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Container(
+                    color: greyBgColor,
+                  );
+                },
+              ),
             ),
+            // leading: Container(
+            //   decoration: const BoxDecoration(
+            //     // color: Colors.grey,
+            //     borderRadius: BorderRadius.all(
+            //       Radius.circular(8),
+            //     ),
+            //   ),
+            //   child: ,
+            // ),
             content: <Widget>[
               Text(
                 widget.bookingItem.title,

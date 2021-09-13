@@ -14,6 +14,7 @@ import 'package:pengo/models/penger_model.dart';
 import 'package:pengo/models/review.dart';
 import 'package:pengo/ui/home/widgets/penger_item.dart';
 import 'package:pengo/ui/penger/booking/booking_view.dart';
+import 'package:pengo/ui/penger/items/items_view.dart';
 import 'package:pengo/ui/penger/review/review_view.dart';
 import 'package:pengo/ui/widgets/layout/sliver_appbar.dart';
 import 'package:pengo/ui/widgets/layout/sliver_body.dart';
@@ -165,6 +166,13 @@ class _InfoPageState extends State<InfoPage> {
             ),
             const Spacer(),
             GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  CupertinoPageRoute(
+                      builder: (context) =>
+                          ItemsView(pengerId: widget.penger.id)),
+                );
+              },
               child: Text(
                 "See all",
                 style: PengoStyle.caption(context),
