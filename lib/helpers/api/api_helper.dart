@@ -82,4 +82,23 @@ class ApiHelper {
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress);
   }
+
+  Future<Response<Map<String, dynamic>>> put(String url,
+      {Map<String, dynamic>? data,
+      Map<String, dynamic>? queryParameters,
+      Options? options,
+      bool? isFormData,
+      CancelToken? cancelToken,
+      void Function(int, int)? onSendProgress,
+      void Function(int, int)? onReceiveProgress}) async {
+    return _dio.put(url,
+        data: data != null
+            ? (isFormData == true ? FormData.fromMap(data) : data)
+            : null,
+        queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+        onSendProgress: onSendProgress,
+        onReceiveProgress: onReceiveProgress);
+  }
 }

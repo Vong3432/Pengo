@@ -78,6 +78,7 @@ class _BookingPassViewState extends State<BookingPassView> {
     instance.on("verified success", (data) {
       if (data['shouldUpdateCredit'] as bool == true) {
         // TODO: Add credit poins
+        _api.put('/pengoo/booking-records/${record.id}', data: fd);
       }
       _showToast(successColor, (data["msg"] ?? "Verified").toString());
     });
