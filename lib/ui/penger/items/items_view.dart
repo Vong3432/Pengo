@@ -74,9 +74,10 @@ class _ItemsViewState extends State<ItemsView> with TickerProviderStateMixin {
                   bottom: PreferredSize(
                     preferredSize: const Size(double.infinity, 15),
                     child: Container(
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         //This is for bottom border that is needed
-                        border: Border(bottom: BorderSide(color: Colors.grey)),
+                        border: Border(
+                            bottom: BorderSide(color: greyBgColor, width: 2)),
                       ),
                       width: double.infinity,
                       child: TabBar(
@@ -84,7 +85,8 @@ class _ItemsViewState extends State<ItemsView> with TickerProviderStateMixin {
                         isScrollable: true,
                         unselectedLabelColor: secondaryTextColor,
                         labelColor: Colors.black,
-                        indicatorColor: Colors.black,
+                        indicatorColor: primaryColor,
+                        indicatorWeight: 3,
                         tabs: state.categories
                             .map(
                               (BookingCategory cat) => Tab(

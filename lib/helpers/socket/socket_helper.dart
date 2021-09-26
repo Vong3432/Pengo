@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
-class SocketHelper {
+class SocketHelper extends ChangeNotifier {
   factory SocketHelper() {
     return _instance;
   }
@@ -38,7 +38,10 @@ class SocketHelper {
       debugPrint('connecting');
 
       // Handle socket events
-      socket.on('connect', (_) => debugPrint('connect: ${socket.id}'));
+      socket.on('connect', (_) {
+        debugPrint('connect: ${socket.id}');
+        notifyListeners();
+      });
       socket.on('disconnect', (_) => debugPrint('disconnect'));
       socket.on('news', (data) {
         debugPrint("data: $data");

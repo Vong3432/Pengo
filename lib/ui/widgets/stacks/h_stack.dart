@@ -21,7 +21,7 @@ class HStack extends StatelessWidget {
         width: gap ?? 10,
       ),
       scrollDirection: Axis.horizontal,
-      physics: CustomScrollPhysics(itemDimension: dimension),
+      // physics: CustomScrollPhysics(itemDimension: dimension),
       itemCount: children.length,
       itemBuilder: (BuildContext context, int idx) {
         return children[idx];

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pengo/config/color.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/models/booking_item_model.dart';
@@ -43,9 +44,9 @@ class _BookingSlotPageState extends State<BookingSlotPage>
                 child: Column(
                   children: <Widget>[
                     Container(
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         //This is for bottom border that is needed
-                        border: Border(bottom: BorderSide(color: Colors.grey)),
+                        border: Border(bottom: BorderSide(color: greyBgColor)),
                       ),
                       child: TabBar(
                         isScrollable: true,

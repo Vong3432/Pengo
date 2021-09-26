@@ -17,59 +17,83 @@ class SelfBookingItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          DecoratedBox(
+          Container(
             decoration: BoxDecoration(
-              boxShadow: normalShadow(theme),
+              boxShadow: normalShadow(Theme.of(context)),
+              borderRadius: BorderRadius.circular(25),
+              color: whiteColor,
             ),
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.7,
-              child: Stack(
-                children: <Widget>[
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: Image.network(
+            clipBehavior: Clip.hardEdge,
+            width: MediaQuery.of(context).size.width * 0.7,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Stack(
+                  children: <Widget>[
+                    Image.network(
                       "https://img.freepik.com/free-photo/observation-urban-building-business-steel_1127-2397.jpg?size=626&ext=jpg",
-                      fit: BoxFit.fill,
+                      fit: BoxFit.cover,
                       width: double.infinity,
+                      height: 150,
                     ),
-                  ),
-                  Positioned.fill(
-                    child: Align(
+                    Positioned.fill(
+                      right: 5,
+                      child: Align(
                         alignment: Alignment.topRight,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0, vertical: 4.0),
+                              horizontal: 8.0, vertical: 2.0),
                           child: Chip(
-                            backgroundColor: textColor,
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            backgroundColor: primaryColor,
                             label: Text(
-                              "32km",
-                              style: TextStyle(
-                                fontSize: textTheme(context).caption!.fontSize,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                              "32 km",
+                              style: PengoStyle.caption(context).copyWith(
+                                color: whiteColor,
                               ),
                             ),
                           ),
-                        )),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(18),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        "Cat campaign",
+                        style: PengoStyle.title(context),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.location_on,
+                            size: 16,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Text(
+                              "Sutera, Johor",
+                              style: PengoStyle.subtitle(context).copyWith(
+                                color: secondaryTextColor,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            "Cat campaign",
-            style: PengoStyle.title(context),
-          ),
-          Row(
-            children: <Widget>[
-              Icon(
-                Icons.location_on,
-                size: 16,
-                color: Theme.of(context).primaryColor,
-              ),
-              Text("Sutera, Johor", style: PengoStyle.subtitle(context)),
-            ],
           ),
         ],
       ),

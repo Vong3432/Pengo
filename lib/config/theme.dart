@@ -6,7 +6,8 @@ ThemeData themeData = ThemeData(
   primarySwatch: primaryColor,
   primaryColor: primaryColor,
   scaffoldBackgroundColor: Colors.white,
-  fontFamily: 'Poppins',
+  // fontFamily: 'Poppins',
+  appBarTheme: AppBarTheme(iconTheme: IconThemeData(color: textColor)),
   dividerTheme: DividerThemeData(color: greyBgColor, thickness: 2.5),
   dividerColor: greyBgColor,
   inputDecorationTheme: InputDecorationTheme(
@@ -17,28 +18,28 @@ ThemeData themeData = ThemeData(
   textTheme: const TextTheme(
     headline1: TextStyle(
       fontSize: 28,
-      fontFamily: 'Poppins',
+      // fontFamily: 'Poppins',
       letterSpacing: -1,
       fontWeight: FontWeight.bold,
     ),
     headline2: TextStyle(
       fontSize: 26,
-      fontFamily: 'Poppins',
+      // fontFamily: 'Poppins',
       fontWeight: FontWeight.bold,
     ),
     headline3: TextStyle(
       fontSize: 24,
-      fontFamily: 'Poppins',
+      // fontFamily: 'Poppins',
       fontWeight: FontWeight.bold,
     ),
     headline4: TextStyle(
       fontSize: 22,
-      fontFamily: 'Poppins',
+      // fontFamily: 'Poppins',
       fontWeight: FontWeight.bold,
     ),
     headline5: TextStyle(
       fontSize: 20,
-      fontFamily: 'Poppins',
+      // fontFamily: 'Poppins',
       fontWeight: FontWeight.w700,
     ),
     headline6: TextStyle(
@@ -46,12 +47,14 @@ ThemeData themeData = ThemeData(
       fontFamily: 'Poppins',
       fontWeight: FontWeight.w600,
     ),
-    bodyText1: TextStyle(fontFamily: 'WorkSans', height: 1.6),
-    bodyText2: TextStyle(fontFamily: 'WorkSans', height: 1.6),
-    subtitle1: TextStyle(fontFamily: 'WorkSans', fontWeight: FontWeight.w500),
-    subtitle2: TextStyle(fontFamily: 'WorkSans', fontWeight: FontWeight.w500),
+    bodyText1: TextStyle(height: 1.6),
+    bodyText2: TextStyle(height: 1.6),
+    subtitle1: TextStyle(fontWeight: FontWeight.w500),
+    subtitle2: TextStyle(fontWeight: FontWeight.w500),
     caption: TextStyle(
-        fontFamily: 'Poppins', fontSize: 14, fontWeight: FontWeight.w600),
+        // fontFamily: 'Poppins',
+        fontSize: 14,
+        fontWeight: FontWeight.w600),
   ).apply(
     bodyColor: textColor,
     displayColor: textColor,

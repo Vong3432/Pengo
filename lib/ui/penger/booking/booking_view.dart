@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pengo/config/color.dart';
 import 'package:pengo/const/space_const.dart';
+import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/models/booking_item_model.dart';
 import 'package:pengo/ui/penger/booking/booking_result.dart';
@@ -99,9 +100,9 @@ class _BookingViewState extends State<BookingView> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: LinearProgressIndicator(
-                color: textColor,
+                color: primaryColor,
                 minHeight: 6,
-                backgroundColor: textColor.withOpacity(0.2),
+                backgroundColor: greyBgColor,
                 value: 0.2,
                 semanticsLabel: "Booking flow progress",
               ),
@@ -121,10 +122,7 @@ class _BookingViewState extends State<BookingView> {
                   ),
                   subtitle: Text(
                     _date.isEmpty ? "When you want to go?" : _date,
-                    style: TextStyle(
-                      fontSize: textTheme(context).subtitle2!.fontSize,
-                      fontWeight: FontWeight.w100,
-                    ),
+                    style: PengoStyle.text(context),
                   ),
                   trailing: Icon(_isDateModalOpened
                       ? Icons.keyboard_arrow_down_outlined
@@ -140,10 +138,7 @@ class _BookingViewState extends State<BookingView> {
                   ),
                   subtitle: Text(
                     "Choose a time",
-                    style: TextStyle(
-                      fontSize: textTheme(context).subtitle2!.fontSize,
-                      fontWeight: FontWeight.w100,
-                    ),
+                    style: PengoStyle.text(context),
                   ),
                   trailing: Icon(_isTimeModalOpened
                       ? Icons.keyboard_arrow_down_outlined
@@ -159,10 +154,7 @@ class _BookingViewState extends State<BookingView> {
                   ),
                   subtitle: Text(
                     "Waiting for payment",
-                    style: TextStyle(
-                      fontSize: textTheme(context).subtitle2!.fontSize,
-                      fontWeight: FontWeight.w100,
-                    ),
+                    style: PengoStyle.text(context),
                   ),
                   trailing: Icon(_isPayModalOpened
                       ? Icons.keyboard_arrow_down_outlined
@@ -258,7 +250,7 @@ class _BookingViewState extends State<BookingView> {
             children: <Widget>[
               Text(
                 "Available time",
-                style: textTheme(context).headline6,
+                style: PengoStyle.header(context),
               ),
               const SizedBox(
                 height: SECTION_GAP_HEIGHT,
@@ -270,10 +262,14 @@ class _BookingViewState extends State<BookingView> {
                   itemBuilder: (context, index) {
                     return Material(
                       child: ListTile(
+                        contentPadding: const EdgeInsets.all(0),
                         tileColor: whiteColor,
-                        title: Text(timeslots[index]),
+                        title: Text(
+                          timeslots[index],
+                          style: PengoStyle.title2(context),
+                        ),
                         trailing: Chip(
-                          backgroundColor: textColor,
+                          backgroundColor: primaryColor,
                           label: GestureDetector(
                             onTap: () {
                               debugPrint("Book");

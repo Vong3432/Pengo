@@ -38,25 +38,32 @@ class PengerItem extends StatelessWidget {
           },
       leading: Container(
         decoration: BoxDecoration(
-          border: Border.all(width: 2.5, color: greyBgColor),
+          // border: Border.all(width: 2.5, color: greyBgColor),
           color: Colors.white,
           borderRadius: const BorderRadius.all(
             Radius.circular(8),
           ),
         ),
-        child: Image.network(logo),
+        child: Image.network(
+          logo,
+          width: 52,
+          height: 52,
+          fit: BoxFit.cover,
+        ),
       ),
       content: <Widget>[
         Text(
           name,
-          style: PengoStyle.caption(context),
+          style: PengoStyle.title2(context),
           overflow: TextOverflow.ellipsis,
         ),
         location == null
             ? Container()
             : Text(
                 location!,
-                style: PengoStyle.smallerText(context),
+                style: PengoStyle.captionNormal(context).copyWith(
+                  color: secondaryTextColor,
+                ),
                 overflow: TextOverflow.ellipsis,
               ),
       ],

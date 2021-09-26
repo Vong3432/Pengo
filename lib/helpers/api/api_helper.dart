@@ -37,9 +37,6 @@ class ApiHelper {
               Auth.fromJson(jsonDecode(prefs) as Map<String, dynamic>);
           request.headers["Authorization"] = "Bearer ${auth.token}";
         }
-        // For hardcode testing
-        final hardcode = "${dotenv.env['HARDCODE_TOKEN']}";
-        request.headers["Authorization"] = "Bearer $hardcode";
 
         // end
         _dio.interceptors.requestLock.unlock();

@@ -63,7 +63,10 @@ class _ItemListingTabViewContentState extends State<ItemListingTabViewContent> {
                               builder: (BuildContext context) =>
                                   BookingView(bookingItem: item)));
                         },
-                        leading: Image.network(item.poster),
+                        leading: Image.network(
+                          item.poster,
+                          width: 58,
+                        ),
                         title: Text(item.title),
                         subtitle: Text(
                           item.geolocation?.name ?? '',

@@ -45,6 +45,8 @@ class PengerBloc extends Bloc<PengerEvent, PengerState> {
           await _pengerRepo.fetchNearestPengers(limit: limit, pageNum: pageNum);
       final List<Penger> popularPengers =
           await _pengerRepo.fetchPopularPengers(limit: limit, pageNum: pageNum);
+
+      await Future.delayed(const Duration(seconds: 1));
       yield NearestPopularPengersLoaded(nearestPengers, popularPengers);
     } catch (_) {
       yield NearestPopularPengersNotLoaded();

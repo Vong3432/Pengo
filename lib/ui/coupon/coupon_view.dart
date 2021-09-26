@@ -37,16 +37,19 @@ class _CouponPageState extends State<CouponPage>
           bottom: PreferredSize(
             preferredSize: const Size(double.infinity, 15),
             child: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 //This is for bottom border that is needed
-                border: Border(bottom: BorderSide(color: Colors.grey)),
+                border: Border(
+                  bottom: BorderSide(color: greyBgColor, width: 2),
+                ),
               ),
               width: double.infinity,
               child: TabBar(
                 controller: _tabController,
                 unselectedLabelColor: secondaryTextColor,
-                labelColor: Colors.black,
-                indicatorColor: Colors.black,
+                labelColor: textColor,
+                indicatorColor: primaryColor,
+                indicatorWeight: 3,
                 tabs: _generateTabBar,
               ),
             ),

@@ -15,6 +15,7 @@ import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/models/booking_record_model.dart';
 import 'package:pengo/providers/booking_pass_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 import 'package:socket_io_client/src/socket.dart';
@@ -58,12 +59,12 @@ class _BookingPassViewState extends State<BookingPassView> {
       "pin": '343234',
     };
 
-    await _api.post('socket-join',
+    await _api.post('verify-pass',
         data: fd, options: Options(contentType: 'multipart/form-data'));
 
     final Socket instance = _socketHelper.getSocket;
     instance.on("rest-join", (data) {
-      instance.emit("join", data);
+      instance.emit("join-pass", data);
     });
 
     instance.on("joined room", (data) {
@@ -75,17 +76,15 @@ class _BookingPassViewState extends State<BookingPassView> {
     });
 
     instance.on("verified success", (data) {
-      debugPrint('success: ${data.shouldUpdateCredit}');
-
-      if (data.shouldUpdateCredit as bool == true) {
+      if (data['shouldUpdateCredit'] as bool == true) {
         // TODO: Add credit poins
       }
-      _showToast(successColor, "Verified");
+      _showToast(successColor, (data["msg"] ?? "Verified").toString());
     });
 
     instance.on("verified failed", (data) {
       debugPrint('failed');
-      _showToast(successColor, "Verified failed");
+      _showToast(successColor, (data["msg"] ?? "Verified failed").toString());
     });
 
     instance.on("unauthorized", (data) {
@@ -111,28 +110,31 @@ class _BookingPassViewState extends State<BookingPassView> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Container(
-        padding: const EdgeInsets.all(18),
-        height: mediaQuery(context).size.height * 0.7,
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              AnimatedBuilder(
-                  animation: _recordListener,
-                  builder: (context, child) {
-                    return _recordListener.getRecord() == null
-                        ? _buildSelectPassView(context)
-                        : _buildGetScanView();
-                  })
-            ],
+    return ChangeNotifierProvider(
+      create: (context) => SocketHelper(),
+      child: Material(
+        child: Container(
+          padding: const EdgeInsets.all(18),
+          height: mediaQuery(context).size.height * 0.7,
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                AnimatedBuilder(
+                    animation: _recordListener,
+                    builder: (context, child) {
+                      return _recordListener.getRecord() == null
+                          ? _buildSelectPassView(context)
+                          : _buildGetScanView(context);
+                    })
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildGetScanView() {
+  Widget _buildGetScanView(BuildContext context) {
     return Column(
       children: <Widget>[
         Row(
@@ -151,14 +153,17 @@ class _BookingPassViewState extends State<BookingPassView> {
             const Spacer(),
           ],
         ),
-        QrImage(
-          data: jsonEncode({
-            "record": _recordListener.getRecord()!.toJson(),
-            "to": _socketHelper.socket.id
-          }),
-          size: 200.0,
-        ),
-        Text(_socketHelper.getSocket.id ?? 'null'),
+        if (context.watch<SocketHelper>().getSocket.id == null)
+          Container()
+        else
+          QrImage(
+            data: jsonEncode({
+              "record": _recordListener.getRecord()!.toJson(),
+              "to": _socketHelper.socket.id
+            }),
+            size: 200.0,
+          ),
+        Text(context.watch<SocketHelper>().getSocket.id ?? 'null'),
       ],
     );
   }

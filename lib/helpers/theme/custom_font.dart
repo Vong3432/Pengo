@@ -12,11 +12,13 @@ class PengoStyle {
     return Theme.of(context)
         .textTheme
         .headline6!
-        .copyWith(fontWeight: FontWeight.w600, fontSize: 16);
+        .copyWith(fontWeight: FontWeight.w500, fontSize: 16);
   }
 
   static TextStyle header(BuildContext context) {
-    return Theme.of(context).textTheme.headline5!.copyWith();
+    return Theme.of(context).textTheme.headline5!.copyWith(
+          fontWeight: FontWeight.w700,
+        );
   }
 
   static TextStyle body(BuildContext context) {
@@ -27,7 +29,10 @@ class PengoStyle {
   }
 
   static TextStyle navigationTitle(BuildContext context) {
-    return Theme.of(context).textTheme.headline1!.copyWith();
+    return Theme.of(context)
+        .textTheme
+        .headline1!
+        .copyWith(fontWeight: FontWeight.w800);
   }
 
   static TextStyle subtitle(BuildContext context) {
