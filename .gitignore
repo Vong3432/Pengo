@@ -111,3 +111,4 @@ lib/generated_plugin_registrant.dart
 
 .env
 /ios/Runner/GoogleService-Info.plist
+/ios/GoogleService-Info.plist
