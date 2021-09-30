@@ -1,16 +1,15 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_config/flutter_config.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:pengo/config/theme.dart';
 import 'package:pengo/helpers/notification/push_notification_manager.dart';
-import 'package:pengo/helpers/socket/socket_helper.dart';
 import 'package:pengo/models/providers/auth_model.dart';
 import 'package:pengo/providers/booking_pass_provider.dart';
 import 'package:pengo/providers/multi_bloc_provider.dart';
 import 'package:pengo/splash.dart';
-import 'package:flutter_config/flutter_config.dart';
 import 'package:provider/provider.dart';
 
 // ignore: avoid_void_async

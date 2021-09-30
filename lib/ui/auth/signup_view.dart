@@ -19,7 +19,6 @@ import 'package:pengo/ui/goocard/widgets/pincode.dart';
 import 'package:pengo/ui/widgets/button/custom_button.dart';
 import 'package:pengo/ui/widgets/input/custom_textfield.dart';
 import 'package:pengo/ui/widgets/layout/sliver_body.dart';
-import 'package:pin_code_text_field/pin_code_text_field.dart';
 
 class SignUpView extends StatefulWidget {
   const SignUpView({Key? key}) : super(key: key);

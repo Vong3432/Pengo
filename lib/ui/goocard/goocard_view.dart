@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pengo/config/color.dart';
@@ -39,9 +40,8 @@ class GooCardPage extends StatelessWidget {
                           title: "Coupons",
                           assetName: COUPON_ICON_PATH,
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
+                            Navigator.of(context, rootNavigator: true).push(
+                              CupertinoPageRoute(
                                   builder: (context) => CouponPage()),
                             );
                           }),

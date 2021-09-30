@@ -50,67 +50,70 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    return CustomScrollView(
-      slivers: <Widget>[
-        CustomSliverAppBar(
-          title: Text(
-            "Home",
-            style: PengoStyle.navigationTitle(context),
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: <Widget>[
+          CustomSliverAppBar(
+            title: Text(
+              "Home",
+              style: PengoStyle.navigationTitle(context),
+            ),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const Icon(Icons.location_on_outlined),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const <Widget>[
+                        Text(
+                          "Current location",
+                          style: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          "Gelang Patah, Johor",
+                          style: TextStyle(color: Colors.black, fontSize: 12),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ],
           ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const Icon(Icons.location_on_outlined),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: const <Widget>[
-                      Text(
-                        "Current location",
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        "Gelang Patah, Johor",
-                        style: TextStyle(color: Colors.black, fontSize: 12),
-                      )
-                    ],
-                  )
-                ],
+          CustomSliverBody(
+            content: <Widget>[
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  // ignore: prefer_const_literals_to_create_immutables
+                  children: <Widget>[
+                    CupertinoSearchTextField(
+                      onChanged: (String value) {
+                        debugPrint('The text has changed to: $value');
+                      },
+                      onSubmitted: (String value) {
+                        debugPrint('Submitted text: $value');
+                      },
+                    ),
+                    _buildUserBookingList(textTheme),
+                    const QuickTapSection(),
+                    _buildPopularList(context),
+                    _buildNearbyList(context),
+                    _buildMightInterestedList(context),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
-        CustomSliverBody(
-          content: <Widget>[
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                // ignore: prefer_const_literals_to_create_immutables
-                children: <Widget>[
-                  CupertinoSearchTextField(
-                    onChanged: (String value) {
-                      debugPrint('The text has changed to: $value');
-                    },
-                    onSubmitted: (String value) {
-                      debugPrint('Submitted text: $value');
-                    },
-                  ),
-                  _buildUserBookingList(textTheme),
-                  const QuickTapSection(),
-                  _buildPopularList(context),
-                  _buildNearbyList(context),
-                  _buildMightInterestedList(context),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        ],
+      ),
     );
   }
 

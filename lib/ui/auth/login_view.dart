@@ -35,7 +35,7 @@ class LoginPageState extends State<LoginPage> {
   ]);
 
   final TextEditingController _phoneController =
-      TextEditingController(text: '0149250544');
+      TextEditingController(text: '0149257542');
   final TextEditingController _passwordController =
       TextEditingController(text: '12345678');
 

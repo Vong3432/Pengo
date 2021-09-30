@@ -1,20 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:pengo/config/color.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
-import 'package:pengo/models/penger_model.dart';
-import 'package:pengo/ui/penger/info_view.dart';
 import 'package:pengo/ui/widgets/list/custom_list_item.dart';
 
 class PengerItem extends StatelessWidget {
-  const PengerItem(
-      {Key? key,
-      required this.name,
-      this.location,
-      this.onTap,
-      this.width,
-      required this.logo})
-      : super(key: key);
+  const PengerItem({
+    Key? key,
+    required this.name,
+    this.location,
+    this.onTap,
+    this.width,
+    required this.logo,
+  }) : super(key: key);
 
   final String name;
   final String logo;
@@ -37,6 +36,7 @@ class PengerItem extends StatelessWidget {
             // );
           },
       leading: Container(
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           // border: Border.all(width: 2.5, color: greyBgColor),
           color: Colors.white,
@@ -44,12 +44,19 @@ class PengerItem extends StatelessWidget {
             Radius.circular(8),
           ),
         ),
-        child: Image.network(
-          logo,
-          width: 52,
-          height: 52,
-          fit: BoxFit.cover,
-        ),
+        child: logo.contains("dicebear")
+            ? SvgPicture.network(
+                logo,
+                width: 52,
+                height: 52,
+                fit: BoxFit.cover,
+              )
+            : Image.network(
+                logo,
+                width: 52,
+                height: 52,
+                fit: BoxFit.cover,
+              ),
       ),
       content: <Widget>[
         Text(

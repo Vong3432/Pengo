@@ -259,14 +259,30 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         child: Row(
           children: <Widget>[
-            CircleAvatar(
-              minRadius: 27,
-              backgroundImage: NetworkImage(
-                context.watch<AuthModel>().user == null
-                    ? "https://res.cloudinary.com/dpjso4bmh/image/upload/v1626867341/pengo/penger/staff/3192c5a13626653bffeb2c1171df716f_wrchju.png"
-                    : context.watch<AuthModel>().user!.avatar,
+            if (context.watch<AuthModel>().user != null &&
+                context.watch<AuthModel>().user!.avatar.contains("dicebear"))
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: const BoxDecoration(
+                  // border: Border.all(width: 2.5, color: greyBgColor),
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+                child: SvgPicture.network(
+                  context.watch<AuthModel>().user!.avatar,
+                  width: 27,
+                  fit: BoxFit.cover,
+                ),
+              )
+            else
+              CircleAvatar(
+                minRadius: 27,
+                backgroundImage: NetworkImage(
+                  context.watch<AuthModel>().user == null
+                      ? "https://res.cloudinary.com/dpjso4bmh/image/upload/v1626867341/pengo/penger/staff/3192c5a13626653bffeb2c1171df716f_wrchju.png"
+                      : context.watch<AuthModel>().user!.avatar,
+                ),
               ),
-            ),
             const SizedBox(
               width: SECTION_GAP_HEIGHT,
             ),
