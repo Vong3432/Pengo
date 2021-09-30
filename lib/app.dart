@@ -20,11 +20,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   final _navigatorKey = GlobalKey<NavigatorState>();
-  final PageStorageBucket bucket = PageStorageBucket();
-  Widget currentScreen = const HomePage();
 
   void _onBottomNavItemTapped(int idx) {
-    Widget screen;
     switch (idx) {
       case 0:
         // home
@@ -39,22 +36,18 @@ class _MyHomePageState extends State<MyHomePage> {
         break;
       case 2:
         // history
-        screen = const HomePage();
-        // _navigatorKey.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
+        _navigatorKey.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
         break;
       case 3:
         // profile
-        screen = const ProfilePage();
         _navigatorKey.currentState!
             .pushNamedAndRemoveUntil('/profile', (_) => false);
         break;
       default:
-        screen = const HomePage();
-      // _navigatorKey.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
+        _navigatorKey.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
     }
 
     setState(() {
-      currentScreen = screens[idx];
       _selectedIndex = idx;
     });
   }
@@ -66,7 +59,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if (widget.idx != null) {
       setState(() {
-        currentScreen = screens[widget.idx!];
         _selectedIndex = widget.idx!;
       });
     }
@@ -90,7 +82,6 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       extendBody: true,
-      // body: PageStorage(bucket: bucket, child: currentScreen),
       body: WillPopScope(
         onWillPop: () async {
           if (_navigatorKey.currentState!.canPop()) {
