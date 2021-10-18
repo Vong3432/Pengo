@@ -1,9 +1,14 @@
-import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
+import 'package:dot_navigation_bar/dot_navigation_bar.dart';
+import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:pengo/config/color.dart';
+import 'package:pengo/config/shadow.dart';
+import 'package:pengo/const/icon_const.dart';
 import 'package:pengo/helpers/notification/push_notification_manager.dart';
 import 'package:pengo/helpers/routes/route.dart';
+import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/ui/goocard/goocard_view.dart';
 import 'package:pengo/ui/home/home_view.dart';
 import 'package:pengo/ui/profile/profile_view.dart';
@@ -39,6 +44,10 @@ class _MyHomePageState extends State<MyHomePage> {
         _navigatorKey.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
         break;
       case 3:
+        // history
+        _navigatorKey.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
+        break;
+      case 4:
         // profile
         _navigatorKey.currentState!
             .pushNamedAndRemoveUntil('/profile', (_) => false);
@@ -118,27 +127,36 @@ class _MyHomePageState extends State<MyHomePage> {
           },
         ),
       ),
-      bottomNavigationBar: FloatingNavbar(
-        backgroundColor: textColor,
+      bottomNavigationBar: DotNavigationBar(
+        backgroundColor: whiteColor,
         currentIndex: _selectedIndex,
-        selectedBackgroundColor: Colors.transparent,
         borderRadius: 50,
-        iconSize: 27,
-        selectedItemColor: Colors.white,
+        paddingR: const EdgeInsets.all(8),
+        itemPadding: const EdgeInsets.all(8),
+        dotIndicatorColor: Colors.transparent,
+        boxShadow: normalShadow(Theme.of(context)),
+        marginR: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
         onTap: _onBottomNavItemTapped,
-        items: <FloatingNavbarItem>[
-          FloatingNavbarItem(
-            customWidget: navIcon(_selectedIndex == 0, Icons.home_outlined),
+        items: <DotNavigationBarItem>[
+          DotNavigationBarItem(
+            selectedColor: primaryColor,
+            icon: navIcon(_selectedIndex == 0, HOME_ICON_PATH),
           ),
-          FloatingNavbarItem(
-            customWidget: navIcon(_selectedIndex == 1, Icons.credit_card),
+          DotNavigationBarItem(
+            selectedColor: primaryColor,
+            icon: navIcon(_selectedIndex == 1, CARD_ICON_PATH),
           ),
-          FloatingNavbarItem(
-            customWidget:
-                navIcon(_selectedIndex == 2, Icons.calendar_today_outlined),
+          DotNavigationBarItem(
+            selectedColor: primaryColor,
+            icon: navIcon(_selectedIndex == 2, SCAN_ICON_PATH),
           ),
-          FloatingNavbarItem(
-            customWidget: navIcon(_selectedIndex == 3, Icons.person_outlined),
+          DotNavigationBarItem(
+            selectedColor: primaryColor,
+            icon: navIcon(_selectedIndex == 3, CALENDAR_ICON_PATH),
+          ),
+          DotNavigationBarItem(
+            selectedColor: primaryColor,
+            icon: navIcon(_selectedIndex == 4, PROFILE_ICON_PATH),
           ),
         ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
@@ -146,7 +164,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   // ignore: avoid_positional_boolean_parameters
-  Stack navIcon(bool show, IconData icon) {
+  Stack navIcon(bool show, String icon) {
     return Stack(
       children: [
         Positioned.fill(
@@ -164,11 +182,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         Padding(
           padding: const EdgeInsets.all(3.0),
-          child: Icon(
-            icon,
-            size: 27,
-            color: Colors.white,
-          ),
+          child: SvgPicture.asset(icon, width: 27, color: textColor),
         ),
       ],
     );

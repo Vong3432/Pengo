@@ -7,12 +7,12 @@ import 'package:pengo/ui/penger/booking/booking_view.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 
 class ItemListingTabViewContent extends StatefulWidget {
-  const ItemListingTabViewContent({
-    Key? key,
-    required this.catId,
-  }) : super(key: key);
+  const ItemListingTabViewContent(
+      {Key? key, required this.catId, required this.pengerId})
+      : super(key: key);
 
   final int catId;
+  final int pengerId;
 
   @override
   _ItemListingTabViewContentState createState() =>
@@ -59,9 +59,14 @@ class _ItemListingTabViewContentState extends State<ItemListingTabViewContent> {
                       final BookingItem item = state.items[index];
                       return ListTile(
                         onTap: () {
-                          Navigator.of(context).push(CupertinoPageRoute(
-                              builder: (BuildContext context) =>
-                                  BookingView(bookingItem: item)));
+                          Navigator.of(context).push(
+                            CupertinoPageRoute(
+                              builder: (BuildContext context) => BookingView(
+                                bookingItem: item,
+                                pengerId: widget.pengerId,
+                              ),
+                            ),
+                          );
                         },
                         leading: Image.network(
                           item.poster,

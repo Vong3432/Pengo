@@ -23,7 +23,7 @@ class ItemsView extends StatefulWidget {
 }
 
 class _ItemsViewState extends State<ItemsView> with TickerProviderStateMixin {
-  late TabController _tabController;
+  // late TabController _tabController;
 
   @override
   void initState() {
@@ -63,52 +63,57 @@ class _ItemsViewState extends State<ItemsView> with TickerProviderStateMixin {
           return DefaultTabController(
             length: state.categories.length,
             child: Scaffold(
-                body: CustomScrollView(
-              slivers: [
-                CustomSliverAppBar(
-                  toolbarHeight: mediaQuery(context).size.height * 0.15,
-                  title: Text(
-                    "Items",
-                    style: PengoStyle.navigationTitle(context),
-                  ),
-                  bottom: PreferredSize(
-                    preferredSize: const Size(double.infinity, 15),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        //This is for bottom border that is needed
-                        border: Border(
-                            bottom: BorderSide(color: greyBgColor, width: 2)),
-                      ),
-                      width: double.infinity,
-                      child: TabBar(
-                        // controller: _tabController,
-                        isScrollable: true,
-                        unselectedLabelColor: secondaryTextColor,
-                        labelColor: Colors.black,
-                        indicatorColor: primaryColor,
-                        indicatorWeight: 3,
-                        tabs: state.categories
-                            .map(
-                              (BookingCategory cat) => Tab(
-                                text: cat.name,
-                              ),
-                            )
-                            .toList(),
+              body: CustomScrollView(
+                slivers: [
+                  CustomSliverAppBar(
+                    toolbarHeight: mediaQuery(context).size.height * 0.15,
+                    title: Text(
+                      "Items",
+                      style: PengoStyle.navigationTitle(context),
+                    ),
+                    bottom: PreferredSize(
+                      preferredSize: const Size(double.infinity, 15),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          //This is for bottom border that is needed
+                          border: Border(
+                              bottom: BorderSide(color: greyBgColor, width: 2)),
+                        ),
+                        width: double.infinity,
+                        child: TabBar(
+                          // controller: _tabController,
+                          isScrollable: true,
+                          unselectedLabelColor: secondaryTextColor,
+                          labelColor: Colors.black,
+                          indicatorColor: primaryColor,
+                          indicatorWeight: 3,
+                          tabs: state.categories
+                              .map(
+                                (BookingCategory cat) => Tab(
+                                  text: cat.name,
+                                ),
+                              )
+                              .toList(),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                SliverFillRemaining(
-                  child: TabBarView(
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: state.categories
-                        .map((BookingCategory cat) =>
-                            ItemListingTabViewContent(catId: cat.id))
-                        .toList(),
-                  ),
-                )
-              ],
-            )),
+                  SliverFillRemaining(
+                    child: TabBarView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: state.categories
+                          .map(
+                            (BookingCategory cat) => ItemListingTabViewContent(
+                              catId: cat.id,
+                              pengerId: widget.pengerId,
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  )
+                ],
+              ),
+            ),
           );
         }
         return Container();
@@ -124,7 +129,7 @@ class _ItemsViewState extends State<ItemsView> with TickerProviderStateMixin {
   @override
   void dispose() {
     // TODO: implement dispose
-    _tabController.dispose();
+    // _tabController.dispose();
     super.dispose();
   }
 }

@@ -236,6 +236,7 @@ class _InfoPageState extends State<InfoPage> {
                 CupertinoPageRoute(
                   builder: (context) => BookingView(
                     bookingItem: item,
+                    pengerId: widget.penger.id,
                   ),
                 ),
               );

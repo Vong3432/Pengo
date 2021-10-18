@@ -22,6 +22,7 @@ class QuickTapSection extends StatelessWidget {
               assetName: SCAN_ICON_PATH,
               onTap: () {
                 showCupertinoModalBottomSheet(
+                    useRootNavigator: true,
                     context: context,
                     builder: (BuildContext context) {
                       return Container(

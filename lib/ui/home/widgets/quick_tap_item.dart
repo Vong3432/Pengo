@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pengo/config/color.dart';
-import 'package:pengo/config/shadow.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
-import 'package:pengo/helpers/theme/theme_helper.dart';
-import 'package:pengo/ui/penger/info_view.dart';
 
 class QuickTapItem extends StatelessWidget {
   const QuickTapItem(

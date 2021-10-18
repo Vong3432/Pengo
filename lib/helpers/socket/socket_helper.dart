@@ -43,15 +43,12 @@ class SocketHelper extends ChangeNotifier {
         notifyListeners();
       });
       socket.on('disconnect', (_) => debugPrint('disconnect'));
-      socket.on('news', (data) {
-        debugPrint("data: $data");
-      });
     } catch (e) {
       debugPrint("e: ${e.toString()}");
     }
   }
 
   void dispose() {
-    socket.dispose();
+    // socket.dispose();
   }
 }

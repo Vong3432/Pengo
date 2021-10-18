@@ -47,7 +47,7 @@ class ApiHelper {
 
   final Dio _dio = Dio(BaseOptions(
     baseUrl:
-        Platform.isIOS ? 'http://172.20.10.7:3333/' : 'http://10.0.2.2:3333/',
+        Platform.isIOS ? 'http://localhost:3333/' : 'http://10.0.2.2:3333/',
     connectTimeout: 5000, //5
     receiveTimeout: 3000,
   ));
