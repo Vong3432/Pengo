@@ -5,7 +5,7 @@ import 'package:pengo/helpers/theme/custom_font.dart';
 ThemeData themeData = ThemeData(
   primarySwatch: primaryColor,
   primaryColor: primaryColor,
-  scaffoldBackgroundColor: Colors.white,
+  scaffoldBackgroundColor: whiteColor,
   // fontFamily: 'Poppins',
   appBarTheme: AppBarTheme(iconTheme: IconThemeData(color: textColor)),
   dividerTheme: DividerThemeData(color: greyBgColor, thickness: 2.5),
