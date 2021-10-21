@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:pengo/bloc/pengers/penger_bloc.dart';
 import 'package:pengo/config/color.dart';
 import 'package:pengo/config/shadow.dart';
+import 'package:pengo/const/icon_const.dart';
 import 'package:pengo/const/space_const.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/models/penger_model.dart';
@@ -64,8 +66,14 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    const Icon(Icons.location_on_outlined),
+                    SvgPicture.asset(
+                      LOCATION_ICON_PATH,
+                      width: 24,
+                      color: primaryColor,
+                    ),
+                    const SizedBox(width: 8),
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: const <Widget>[
                         Text(

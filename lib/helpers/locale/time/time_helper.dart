@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pengo/const/locale_const.dart';
 
 class TimeHelper {
   factory TimeHelper() {
@@ -29,7 +30,10 @@ class TimeHelper {
 
     do {
       yield TimeOfDay(hour: hour, minute: minute);
+
       minute += step.inMinutes;
+      debugPrint("min: $minute");
+
       while (minute >= 60) {
         minute -= 60;
         hour++;
@@ -44,7 +48,12 @@ class TimeHelper {
   ///
   /// Usage:
   /// ```
-  /// getTimeSlots(context, {start: "2021-10-01T00:00:00.000+08:00", end: "2021-12-31T23:59:59.000+08:00"})
+  /// getTimeSlots(context, {
+  ///   start: "2021-10-01T00:00:00.000+08:00",
+  ///   end: "2021-12-31T23:59:59.000+08:00",
+  ///   gap: 5,
+  ///   units: TIME_GAP_UNITS.minutes
+  /// })
   /// ```
   ///
   /// Result:
@@ -56,15 +65,23 @@ class TimeHelper {
     required DateTime start,
     required DateTime end,
     int gap = 5,
+    TIME_GAP_UNITS units = TIME_GAP_UNITS.minutes,
   }) {
-    final DateTime gmtStartDT = start.add(const Duration(hours: 8));
-    final DateTime gmtEndDT = end.add(const Duration(hours: 8));
+    final DateTime gmtStartDT = start.toLocal();
+    final DateTime gmtEndDT = end.toLocal();
 
     final TimeOfDay startTime =
         TimeOfDay(hour: gmtStartDT.hour, minute: gmtStartDT.minute);
     final TimeOfDay endTime =
         TimeOfDay(hour: gmtEndDT.hour, minute: gmtEndDT.minute);
-    final Duration step = Duration(minutes: gap);
+
+    final bool shouldGapByMin = units == TIME_GAP_UNITS.minutes;
+    final bool shouldGapByHrs = units == TIME_GAP_UNITS.hours;
+
+    final Duration step = Duration(
+      minutes: shouldGapByMin ? gap : 0,
+      hours: shouldGapByHrs ? gap : 0,
+    );
 
     final List<String> times = _getTimes(startTime, endTime, step)
         .map((TimeOfDay tod) => tod.format(context))

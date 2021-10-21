@@ -13,8 +13,8 @@ BookingItem _$BookingItemFromJson(Map<String, dynamic> json) {
     title: json['name'] as String,
     id: json['id'] as int,
     price: (json['price'] as num?)?.toDouble(),
-    availableFrom: json['available_from'] as String?,
-    availableTo: json['available_to'] as String?,
+    availableFrom: json['available_from_time'] as String?,
+    availableTo: json['available_to_time'] as String?,
     startFrom: json['start_from'] == null
         ? null
         : DateTime.parse(json['start_from'] as String),
@@ -36,6 +36,18 @@ BookingItem _$BookingItemFromJson(Map<String, dynamic> json) {
     geolocation: json['geolocation'] == null
         ? null
         : Geolocation.fromJson(json['geolocation'] as Map<String, dynamic>),
+    bookingRecords: (json['records'] as List<dynamic>?)
+        ?.map((e) => BookingRecord.fromJson(e as Map<String, dynamic>))
+        .toList(),
+    priorityOption: json['priority_option'] == null
+        ? null
+        : PriorityOption.fromJson(
+            json['priority_option'] as Map<String, dynamic>),
+    timeGapUnits: _$enumDecode(_$TIME_GAP_UNITSEnumMap, json['time_gap_units']),
+    timeGapValue: json['time_gap_value'] as int,
+    bookingCategory: json['category'] == null
+        ? null
+        : BookingCategory.fromJson(json['category'] as Map<String, dynamic>),
   );
 }
 
@@ -54,8 +66,8 @@ Map<String, dynamic> _$BookingItemToJson(BookingItem instance) {
     }
   }
 
-  writeNotNull('available_from', instance.availableFrom);
-  writeNotNull('available_to', instance.availableTo);
+  writeNotNull('available_from_time', instance.availableFrom);
+  writeNotNull('available_to_time', instance.availableTo);
   writeNotNull('start_from', instance.startFrom?.toIso8601String());
   writeNotNull('end_at', instance.endAt?.toIso8601String());
   val['is_preservable'] = instance.isPreserveable;
@@ -71,5 +83,42 @@ Map<String, dynamic> _$BookingItemToJson(BookingItem instance) {
   val['booking_category_id'] = instance.categoryId;
   writeNotNull('description', instance.description);
   writeNotNull('geolocation', instance.geolocation);
+  val['records'] = instance.bookingRecords;
+  val['time_gap_units'] = _$TIME_GAP_UNITSEnumMap[instance.timeGapUnits];
+  val['time_gap_value'] = instance.timeGapValue;
+  val['priority_option'] = instance.priorityOption;
+  val['category'] = instance.bookingCategory;
   return val;
 }
+
+K _$enumDecode<K, V>(
+  Map<K, V> enumValues,
+  Object? source, {
+  K? unknownValue,
+}) {
+  if (source == null) {
+    throw ArgumentError(
+      'A value must be provided. Supported values: '
+      '${enumValues.values.join(', ')}',
+    );
+  }
+
+  return enumValues.entries.singleWhere(
+    (e) => e.value == source,
+    orElse: () {
+      if (unknownValue == null) {
+        throw ArgumentError(
+          '`$source` is not one of the supported values: '
+          '${enumValues.values.join(', ')}',
+        );
+      }
+      return MapEntry(unknownValue, enumValues.values.first);
+    },
+  ).key;
+}
+
+const _$TIME_GAP_UNITSEnumMap = {
+  TIME_GAP_UNITS.hours: 'hours',
+  TIME_GAP_UNITS.seconds: 'seconds',
+  TIME_GAP_UNITS.minutes: 'minutes',
+};

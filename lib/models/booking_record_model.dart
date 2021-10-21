@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pengo/models/booking_item_model.dart';
+import 'package:pengo/models/goocard_log_model.dart';
 
 part 'booking_record_model.g.dart';
 
@@ -12,6 +13,7 @@ class BookingRecord {
     required this.item,
     required this.goocardID,
     required this.pengerID,
+    this.log,
   });
 
   factory BookingRecord.fromJson(Map<String, dynamic> json) =>
@@ -53,7 +55,28 @@ class BookingRecord {
   final String bookTime;
 
   @JsonKey(name: 'book_date')
-  final String bookDate;
+  final BookDate? bookDate;
 
-  final BookingItem item;
+  @JsonKey(name: 'item')
+  final BookingItem? item;
+
+  @JsonKey(name: 'log')
+  final GoocardLog? log;
+}
+
+@JsonSerializable()
+class BookDate {
+  const BookDate({
+    required this.startDate,
+    required this.endDate,
+  });
+
+  factory BookDate.fromJson(Map<String, dynamic> json) =>
+      _$BookDateFromJson(json);
+  Map<String, dynamic> toJson() => _$BookDateToJson(this);
+
+  @JsonKey(name: "start_date")
+  final DateTime? startDate;
+  @JsonKey(name: "end_date")
+  final DateTime? endDate;
 }

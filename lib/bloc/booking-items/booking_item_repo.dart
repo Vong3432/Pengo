@@ -1,5 +1,6 @@
 import 'package:pengo/bloc/booking-items/booking_item_api_provider.dart';
 import 'package:pengo/models/booking_item_model.dart';
+import 'package:pengo/models/item_validation_model.dart';
 import 'package:pengo/models/response_model.dart';
 
 class BookingItemRepo {
@@ -18,4 +19,9 @@ class BookingItemRepo {
 
   Future<BookingItem> fetchBookingItem({required int id}) async =>
       _bookingItemApiProvider.fetchBookingItem(id: id);
+
+  Future<BookingItemValidateStatus> getItemStatusMsg({
+    required int id,
+  }) async =>
+      _bookingItemApiProvider.validateItemStatus(id: id);
 }

@@ -1,23 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pengo/app.dart';
-import 'package:pengo/config/color.dart';
-import 'package:pengo/const/icon_const.dart';
 import 'package:pengo/const/lottie_const.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
-import 'package:pengo/models/booking_item_model.dart';
+import 'package:pengo/models/booking_record_model.dart';
 import 'package:pengo/ui/widgets/button/custom_button.dart';
 import 'package:pengo/ui/widgets/layout/sliver_appbar.dart';
 import 'package:pengo/ui/widgets/layout/sliver_body.dart';
-import 'package:pengo/ui/widgets/list/custom_list_item.dart';
 import 'package:pengo/ui/widgets/list/outlined_list_tile.dart';
 
 class BookingResultPage extends StatelessWidget {
-  const BookingResultPage({Key? key, required this.bookingItem})
-      : super(key: key);
+  const BookingResultPage({Key? key, required this.record}) : super(key: key);
 
-  final BookingItem bookingItem;
+  final BookingRecord record;
 
   @override
   Widget build(BuildContext context) {
@@ -92,9 +89,9 @@ class BookingResultPage extends StatelessWidget {
           style: PengoStyle.caption(context),
           textAlign: TextAlign.center,
         ),
-        const OutlinedListTile(
-          title: "10 June 2021",
-          subTitle: "10:00PM-11:00PM",
+        OutlinedListTile(
+          title: record.log!.title,
+          subTitle: record.log!.body,
         ),
       ],
     );

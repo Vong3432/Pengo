@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pengo/bloc/booking-items/view_booking_item_bloc.dart';
 import 'package:pengo/models/booking_item_model.dart';
 import 'package:pengo/ui/penger/booking/booking_view.dart';
+import 'package:pengo/ui/penger/items/items_view.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 
 class ItemListingTabViewContent extends StatefulWidget {
@@ -24,8 +25,7 @@ class _ItemListingTabViewContentState extends State<ItemListingTabViewContent> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    BlocProvider.of<ViewItemBloc>(context)
-        .add(FetchBookingItemsByCategoryEvent(widget.catId));
+    _fetchItems();
   }
 
   @override
@@ -52,6 +52,7 @@ class _ItemListingTabViewContentState extends State<ItemListingTabViewContent> {
             child: Column(
               children: [
                 ListView.builder(
+                    padding: const EdgeInsets.symmetric(vertical: 18),
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: state.items.length,
@@ -59,14 +60,12 @@ class _ItemListingTabViewContentState extends State<ItemListingTabViewContent> {
                       final BookingItem item = state.items[index];
                       return ListTile(
                         onTap: () {
-                          Navigator.of(context).push(
-                            CupertinoPageRoute(
-                              builder: (BuildContext context) => BookingView(
-                                bookingItem: item,
-                                pengerId: widget.pengerId,
-                              ),
-                            ),
-                          );
+                          Navigator.of(context).pushNamed(
+                            "/booking-item",
+                            arguments: {
+                              "id": item.id,
+                            },
+                          ).then((_) => _fetchItems());
                         },
                         leading: Image.network(
                           item.poster,
@@ -86,6 +85,11 @@ class _ItemListingTabViewContentState extends State<ItemListingTabViewContent> {
         return Container();
       },
     );
+  }
+
+  void _fetchItems() {
+    BlocProvider.of<ViewItemBloc>(context)
+        .add(FetchBookingItemsByCategoryEvent(widget.catId));
   }
 
   @override

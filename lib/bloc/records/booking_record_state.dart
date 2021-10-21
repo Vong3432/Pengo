@@ -28,3 +28,15 @@ class BookingRecordLoaded extends BookingRecordState {
 }
 
 class BookingRecordNotLoaded extends BookingRecordState {}
+
+class BookingRecordAdding extends BookingRecordState {}
+
+class BookingRecordAdded extends BookingRecordState {
+  const BookingRecordAdded(this.response);
+  final ResponseModel response;
+}
+
+class BookingRecordNotAdded extends BookingRecordState {
+  const BookingRecordNotAdded(this.e);
+  final Object? e;
+}

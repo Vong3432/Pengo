@@ -70,7 +70,7 @@ class _InfoPageState extends State<InfoPage> {
                 padding: const EdgeInsets.all(18),
                 child: Column(
                   children: [
-                    _buildMap(),
+                    // _buildMap(),
                     const SizedBox(
                       height: SECTION_GAP_HEIGHT * 1.5,
                     ),
@@ -114,6 +114,7 @@ class _InfoPageState extends State<InfoPage> {
           ],
         ),
         ListView.separated(
+            padding: const EdgeInsets.symmetric(vertical: 18),
             separatorBuilder: (BuildContext context, int index) {
               return const SizedBox(
                 height: SECTION_GAP_HEIGHT,
@@ -187,7 +188,7 @@ class _InfoPageState extends State<InfoPage> {
   }
 
   Widget get _buildBookingItems {
-    if (widget.penger.items.isEmpty) {
+    if (widget.penger.items == null) {
       return Text(
         'No items',
         style: PengoStyle.caption(context).copyWith(color: grayTextColor),
@@ -196,49 +197,20 @@ class _InfoPageState extends State<InfoPage> {
     return SizedBox(
       height: 50,
       child: HStack(
-        // children: [
-        //   ListView.builder(
-        //     itemBuilder: (BuildContext context, int index) => ListView.builder(
-        //         scrollDirection: Axis.horizontal,
-        //         // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        //         //   crossAxisCount: 2,
-        //         // ),
-        //         itemCount: widget.penger.items.length,
-        //         itemBuilder: (BuildContext context, int index) {
-        //           final BookingItem item = widget.penger.items[index];
-        //           return PengerItem(
-        //             name: item.title,
-        //             location: widget.penger.location.geolocation.name,
-        //             logo: item.poster,
-        //             onTap: () {
-        //               Navigator.of(context, rootNavigator: true).push(
-        //                 CupertinoPageRoute(
-        //                   builder: (context) => BookingView(
-        //                     bookingItem: item,
-        //                   ),
-        //                 ),
-        //               );
-        //             },
-        //           );
-        //         }),
-        //   ),
-        // ]),
         gap: 5,
-        children: List.generate(widget.penger.items.length, (index) {
-          final BookingItem item = widget.penger.items[index];
+        children: List.generate(widget.penger.items!.length, (index) {
+          final BookingItem item = widget.penger.items![index];
           return PengerItem(
             width: mediaQuery(context).size.width / 2,
             name: item.title,
             location: item.location,
             logo: item.poster,
             onTap: () {
-              Navigator.of(context, rootNavigator: true).push(
-                CupertinoPageRoute(
-                  builder: (context) => BookingView(
-                    bookingItem: item,
-                    pengerId: widget.penger.id,
-                  ),
-                ),
+              Navigator.of(context).pushNamed(
+                "/booking-item",
+                arguments: {
+                  "id": item.id,
+                },
               );
             },
           );

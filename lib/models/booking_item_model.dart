@@ -1,11 +1,10 @@
-import 'dart:convert';
-
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
-import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:pengo/const/locale_const.dart';
+import 'package:pengo/models/booking_category_model.dart';
+import 'package:pengo/models/booking_record_model.dart';
 import 'package:pengo/models/geolocation_model.dart';
-import 'package:pengo/models/geolocation_model.dart';
+import 'package:pengo/models/priority_option_model.dart';
 
 part 'booking_item_model.g.dart';
 
@@ -34,6 +33,11 @@ class BookingItem extends Equatable {
     this.categoryId,
     this.description,
     this.geolocation,
+    this.bookingRecords,
+    this.priorityOption,
+    required this.timeGapUnits,
+    required this.timeGapValue,
+    this.bookingCategory,
   });
 
   factory BookingItem.fromJson(Map<String, dynamic> json) {
@@ -61,10 +65,10 @@ class BookingItem extends Equatable {
   @JsonKey(ignore: true, fromJson: null, toJson: null)
   String? location;
 
-  @JsonKey(name: 'available_from', includeIfNull: false)
+  @JsonKey(name: 'available_from_time', includeIfNull: false)
   final String? availableFrom;
 
-  @JsonKey(name: 'available_to', includeIfNull: false)
+  @JsonKey(name: 'available_to_time', includeIfNull: false)
   final String? availableTo;
 
   @JsonKey(name: 'start_from', includeIfNull: false)
@@ -111,7 +115,50 @@ class BookingItem extends Equatable {
   @JsonKey(name: 'geolocation', includeIfNull: false)
   final Geolocation? geolocation;
 
+  @JsonKey(name: 'records')
+  final List<BookingRecord>? bookingRecords;
+
+  @JsonKey(name: 'time_gap_units')
+  final TIME_GAP_UNITS timeGapUnits;
+
+  @JsonKey(name: 'time_gap_value')
+  final int timeGapValue;
+
+  @JsonKey(name: 'priority_option')
+  final PriorityOption? priorityOption;
+
+  @JsonKey(name: 'category')
+  final BookingCategory? bookingCategory;
+
   @override
   // TODO: implement props
-  List<Object> get props => [id];
+  List<Object?> get props => [
+        poster,
+        isActive,
+        title,
+        id,
+        price,
+        availableFrom,
+        availableTo,
+        startFrom,
+        endAt,
+        isPreserveable,
+        isTransferable,
+        isCountable,
+        isDiscountable,
+        maxTransfer,
+        maxBook,
+        preservedBook,
+        creditPoints,
+        quantity,
+        discountAmount,
+        categoryId,
+        description,
+        geolocation,
+        bookingRecords,
+        priorityOption,
+        timeGapUnits,
+        timeGapValue,
+        bookingCategory,
+      ];
 }

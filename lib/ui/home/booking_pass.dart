@@ -226,7 +226,7 @@ class _BookingPassViewState extends State<BookingPassView> {
                         color: greyBgColor,
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Text(state.records[0].bookDate),
+                      child: Text("${state.records[0].bookDate?.startDate}"),
                     ),
                   ),
                   const SizedBox(

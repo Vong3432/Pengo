@@ -44,11 +44,10 @@ ThemeData themeData = ThemeData(
     ),
     headline6: TextStyle(
       fontSize: 18,
-      fontFamily: 'Poppins',
       fontWeight: FontWeight.w600,
     ),
     bodyText1: TextStyle(height: 1.6),
-    bodyText2: TextStyle(height: 1.6),
+    bodyText2: TextStyle(height: 1.6, fontSize: 16),
     subtitle1: TextStyle(fontWeight: FontWeight.w500),
     subtitle2: TextStyle(fontWeight: FontWeight.w500),
     caption: TextStyle(

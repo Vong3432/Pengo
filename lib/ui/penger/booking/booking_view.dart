@@ -1,230 +1,350 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:pengo/bloc/records/booking_record_bloc.dart';
 import 'package:pengo/config/color.dart';
 import 'package:pengo/const/space_const.dart';
+import 'package:pengo/cubit/booking/booking_form_cubit.dart';
+import 'package:pengo/helpers/locale/time/time_helper.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
+import 'package:pengo/helpers/toast/toast_helper.dart';
 import 'package:pengo/models/booking_item_model.dart';
+import 'package:pengo/models/booking_record_model.dart';
+import 'package:pengo/models/system_function_model.dart';
+import 'package:pengo/ui/goocard/widgets/goocard_request_modal.dart';
 import 'package:pengo/ui/penger/booking/booking_result.dart';
+import 'package:pengo/ui/penger/booking/widgets/book_date_modal.dart';
 import 'package:pengo/ui/widgets/button/custom_button.dart';
 import 'package:pengo/ui/widgets/layout/sliver_appbar.dart';
-import 'package:pengo/ui/widgets/layout/sliver_body.dart';
 import 'package:pengo/ui/widgets/list/custom_list_item.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:collection/collection.dart';
 
 class BookingView extends StatefulWidget {
-  const BookingView({Key? key, required this.bookingItem}) : super(key: key);
+  const BookingView({
+    Key? key,
+    required this.bookingItem,
+    required this.pengerId,
+  }) : super(key: key);
 
   final BookingItem bookingItem;
+  final int pengerId;
 
   @override
   _BookingViewState createState() => _BookingViewState();
 }
 
 class _BookingViewState extends State<BookingView> {
-  late List<String> timeslots;
+  List<String> timeslots = const <String>[];
   bool _isDateModalOpened = false;
   bool _isTimeModalOpened = false;
   bool _isPayModalOpened = false;
 
-  late String _date = "";
-  late String _time = "";
+  final BookingFormStateCubit _formStateCubit = BookingFormStateCubit();
+  String? _extractTimeFromStartDt;
+  String? _extractTimeFromEndDt;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    load();
+    if (widget.bookingItem.startFrom != null) {
+      _extractTimeFromStartDt = DateFormat("HH:mm:ss")
+          .format(widget.bookingItem.startFrom!.toLocal());
+    }
+    if (widget.bookingItem.endAt != null) {
+      _extractTimeFromEndDt =
+          DateFormat("HH:mm:ss").format(widget.bookingItem.endAt!.toLocal());
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: CustomScrollView(
-      slivers: <Widget>[
-        CustomSliverAppBar(
-          toolbarHeight: mediaQuery(context).size.height * 0.15,
-          title: CustomListItem(
-            width: mediaQuery(context).size.width / 1.6,
-            leading: Container(
-              decoration: BoxDecoration(
-                color: whiteColor,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(8),
+    return BlocProvider<BookingFormStateCubit>(
+      create: (BuildContext context) => _formStateCubit,
+      child: Scaffold(
+        body: BlocBuilder<BookingFormStateCubit, BookingFormState>(
+          builder: (BuildContext context, BookingFormState state) {
+            // Check if this category has no time limit configuration enabled
+            final SystemFunction? noTimeFunc = widget
+                .bookingItem.bookingCategory?.bookingOptions
+                ?.firstWhereOrNull(
+              (SystemFunction element) => element.name == "No time limit",
+            );
+
+            // TODO: More configuration checking ...
+            // ...
+
+            _formStateCubit.updateFormState(
+              hasPayment: widget.bookingItem.price != null,
+              pengerId: widget.pengerId,
+              bookingItemId: widget.bookingItem.id,
+              hasStartDate: widget.bookingItem.startFrom != null,
+              hasEndDate: widget.bookingItem.endAt != null,
+              hasTime: (widget.bookingItem.availableFrom != null ||
+                      widget.bookingItem.availableTo != null ||
+                      _extractTimeFromEndDt != null ||
+                      _extractTimeFromStartDt != null) &&
+                  noTimeFunc == null,
+            );
+
+            return CustomScrollView(
+              slivers: <Widget>[
+                CustomSliverAppBar(
+                  toolbarHeight: mediaQuery(context).size.height * 0.15,
+                  title: CustomListItem(
+                    width: mediaQuery(context).size.width / 1.6,
+                    leading: Container(
+                      decoration: BoxDecoration(
+                        color: whiteColor,
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(8),
+                        ),
+                      ),
+                      child: Image.network(
+                        widget.bookingItem.poster,
+                        fit: BoxFit.cover,
+                        loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent? loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Container(
+                            color: greyBgColor,
+                          );
+                        },
+                      ),
+                    ),
+                    content: <Widget>[
+                      Text(
+                        widget.bookingItem.title,
+                        style: TextStyle(
+                          fontSize: textTheme(context).subtitle1!.fontSize,
+                          fontWeight: FontWeight.w700,
+                          color: textColor,
+                        ),
+                      ),
+                      Text(
+                        widget.bookingItem.geolocation?.name ??
+                            widget.bookingItem.location.toString(),
+                        style: textTheme(context).subtitle2,
+                      ),
+                      Visibility(
+                        visible: widget.bookingItem.price != null,
+                        child: Text(
+                          "RM ${widget.bookingItem.price}",
+                          style: textTheme(context).caption,
+                        ),
+                      ),
+                    ],
+                  ),
+                  bottom: PreferredSize(
+                    preferredSize: const Size.fromHeight(0),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: LinearProgressIndicator(
+                        color: primaryColor,
+                        minHeight: 6,
+                        backgroundColor: greyBgColor,
+                        value: context
+                            .watch<BookingFormStateCubit>()
+                            .state
+                            .progress,
+                        semanticsLabel: "Booking flow progress",
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-              child: Image.network(
-                widget.bookingItem.poster,
-                fit: BoxFit.cover,
-                loadingBuilder: (BuildContext context, Widget child,
-                    ImageChunkEvent? loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return Container(
-                    color: greyBgColor,
-                  );
-                },
-              ),
-            ),
-            // leading: Container(
-            //   decoration: const BoxDecoration(
-            //     // color: Colors.grey,
-            //     borderRadius: BorderRadius.all(
-            //       Radius.circular(8),
-            //     ),
-            //   ),
-            //   child: ,
-            // ),
-            content: <Widget>[
-              Text(
-                widget.bookingItem.title,
-                style: TextStyle(
-                  fontSize: textTheme(context).subtitle1!.fontSize,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              Text(
-                widget.bookingItem.geolocation?.name ??
-                    widget.bookingItem.location.toString(),
-                style: textTheme(context).subtitle2,
-              ),
-              Text(
-                "RM ${widget.bookingItem.price}",
-                style: textTheme(context).caption,
-              ),
-            ],
-          ),
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(0),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: LinearProgressIndicator(
-                color: primaryColor,
-                minHeight: 6,
-                backgroundColor: greyBgColor,
-                value: 0.2,
-                semanticsLabel: "Booking flow progress",
-              ),
-            ),
-          ),
-        ),
-        CustomSliverBody(content: <Widget>[
-          SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                ListTile(
-                  onTap: () => _onDateTapped(context),
-                  contentPadding: EdgeInsets.all(18),
-                  title: Text(
-                    "1. Pick a date",
-                    style: textTheme(context).headline5,
+                SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Container(
+                    padding: const EdgeInsets.all(18.0),
+                    child: Column(
+                      children: <Widget>[
+                        Visibility(
+                          visible: context.select<BookingFormStateCubit, bool>(
+                            (BookingFormStateCubit form) =>
+                                form.state.hasStartDate ||
+                                form.state.hasEndDate,
+                          ),
+                          child: ListTile(
+                            onTap: () => _onDateTapped(),
+                            contentPadding: const EdgeInsets.all(18),
+                            title: Text(
+                              "1. Pick a date",
+                              style: textTheme(context).headline5,
+                            ),
+                            // ewwwwww
+                            subtitle: Text(
+                              (state.startDate != null || state.endDate != null)
+                                  ? "${state.startDate != null && state.startDate!.isNotEmpty ? state.startDate : ""}${(state.startDate != null && state.startDate!.isNotEmpty && state.endDate != null && state.endDate!.isNotEmpty) ? " to " : ""}${state.endDate != null && state.endDate!.isNotEmpty ? "${state.endDate}" : ""}"
+                                  : "Choose which date you want to book",
+                              style: PengoStyle.text(context),
+                            ),
+                            trailing: Icon(
+                              _isDateModalOpened
+                                  ? Icons.keyboard_arrow_down_outlined
+                                  : Icons.keyboard_arrow_up_outlined,
+                            ),
+                          ),
+                        ),
+                        Visibility(
+                          visible: context.select<BookingFormStateCubit, bool>(
+                            (BookingFormStateCubit form) => form.state.hasTime,
+                          ),
+                          child: const Divider(),
+                        ),
+                        Visibility(
+                          visible: context.select<BookingFormStateCubit, bool>(
+                            (BookingFormStateCubit form) => form.state.hasTime,
+                          ),
+                          child: ListTile(
+                            onTap: () => _onTimeTapped(context, state),
+                            contentPadding: const EdgeInsets.all(18),
+                            title: Text(
+                              "2. Pick a time",
+                              style: textTheme(context).headline5,
+                            ),
+                            subtitle: Text(
+                              state.bookTime ?? "Choose a time",
+                              style: PengoStyle.text(context),
+                            ),
+                            trailing: Icon(
+                              _isTimeModalOpened
+                                  ? Icons.keyboard_arrow_down_outlined
+                                  : Icons.keyboard_arrow_up_outlined,
+                            ),
+                          ),
+                        ),
+                        Visibility(
+                          visible: context.select<BookingFormStateCubit, bool>(
+                            (BookingFormStateCubit form) =>
+                                form.state.hasPayment,
+                          ),
+                          child: const Divider(),
+                        ),
+                        Visibility(
+                          visible: context.select<BookingFormStateCubit, bool>(
+                            (BookingFormStateCubit form) =>
+                                form.state.hasPayment,
+                          ),
+                          child: ListTile(
+                            onTap: () => _onPayTapped(context, state),
+                            contentPadding: const EdgeInsets.all(18),
+                            title: Text(
+                              "3. Pay",
+                              style: textTheme(context).headline5,
+                            ),
+                            subtitle: Text(
+                              "Waiting for payment",
+                              style: PengoStyle.text(context),
+                            ),
+                            trailing: Icon(
+                              _isPayModalOpened
+                                  ? Icons.keyboard_arrow_down_outlined
+                                  : Icons.keyboard_arrow_up_outlined,
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
+                        Visibility(
+                          visible:
+                              context.select<BookingFormStateCubit, double>(
+                                    (BookingFormStateCubit form) =>
+                                        form.state.progress,
+                                  ) ==
+                                  1,
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 28.0),
+                            child: BlocConsumer<BookingRecordBloc,
+                                BookingRecordState>(
+                              listener: (
+                                BuildContext context,
+                                BookingRecordState state,
+                              ) {
+                                // TODO: implement listener
+                                if (state is BookingRecordNotAdded) {
+                                  showToast(
+                                    msg: state.e.toString(),
+                                    backgroundColor: dangerColor,
+                                    textColor: whiteColor,
+                                  );
+                                } else if (state is BookingRecordAdded) {
+                                  showToast(
+                                    msg: state.response.msg ??
+                                        "Added successfully",
+                                    backgroundColor: successColor,
+                                    textColor: whiteColor,
+                                  );
+                                  final BookingRecord returnedRecord =
+                                      BookingRecord.fromJson(state.response.data
+                                          as Map<String, dynamic>);
+                                  _redirectToResultPage(returnedRecord);
+                                }
+                              },
+                              builder: (
+                                BuildContext context,
+                                BookingRecordState recordState,
+                              ) {
+                                return CustomButton(
+                                  isLoading: recordState is BookingRecordAdding,
+                                  text: const Text("Book"),
+                                  onPressed: () {
+                                    _confirmBooked(state);
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  subtitle: Text(
-                    _date.isEmpty ? "When you want to go?" : _date,
-                    style: PengoStyle.text(context),
-                  ),
-                  trailing: Icon(_isDateModalOpened
-                      ? Icons.keyboard_arrow_down_outlined
-                      : Icons.keyboard_arrow_up_outlined),
-                ),
-                const Divider(),
-                ListTile(
-                  onTap: () => _onTimeTapped(context),
-                  contentPadding: const EdgeInsets.all(18),
-                  title: Text(
-                    "2. Pick a time",
-                    style: textTheme(context).headline5,
-                  ),
-                  subtitle: Text(
-                    "Choose a time",
-                    style: PengoStyle.text(context),
-                  ),
-                  trailing: Icon(_isTimeModalOpened
-                      ? Icons.keyboard_arrow_down_outlined
-                      : Icons.keyboard_arrow_up_outlined),
-                ),
-                const Divider(),
-                ListTile(
-                  onTap: () => _onPayTapped(context),
-                  contentPadding: const EdgeInsets.all(18),
-                  title: Text(
-                    "3. Pay",
-                    style: textTheme(context).headline5,
-                  ),
-                  subtitle: Text(
-                    "Waiting for payment",
-                    style: PengoStyle.text(context),
-                  ),
-                  trailing: Icon(_isPayModalOpened
-                      ? Icons.keyboard_arrow_down_outlined
-                      : Icons.keyboard_arrow_up_outlined),
                 ),
               ],
-            ),
-          ),
-        ])
-      ],
-    ));
+            );
+          },
+        ),
+      ),
+    );
   }
 
-  Future<dynamic> _onDateTapped(BuildContext context) {
+  Future<dynamic> _onDateTapped() {
     setState(() {
       _isDateModalOpened = true;
     });
+
+    // current date
+    DateTime _minDate = DateTime.now();
+
+    if (widget.bookingItem.startFrom != null) {
+      // check startFrom is greater than current
+      // if is greater, pick the startFrom from item and set to _minDate.
+      if (widget.bookingItem.startFrom!.isAfter(_minDate)) {
+        _minDate = widget.bookingItem.startFrom!.toLocal();
+      }
+    }
+
+    // DateRangePickerSelectionMode? pickerMode;
+
+    // (!) Can be improved
+    // range picker mode if
+    // - item does not have start time or end time.
+    // if (widget.bookingItem.availableFrom == null &&
+    //     widget.bookingItem.availableTo == null) {
+    //   pickerMode = DateRangePickerSelectionMode.range;
+    // }
+
     return showCupertinoModalBottomSheet(
       context: context,
       builder: (BuildContext context) => SingleChildScrollView(
         controller: ModalScrollController.of(context),
-        child: Container(
-          padding: const EdgeInsets.all(18),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                "Date",
-                style: textTheme(context).headline6,
-              ),
-              const SizedBox(
-                height: SECTION_GAP_HEIGHT,
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: SfDateRangePicker(
-                  onSelectionChanged:
-                      (DateRangePickerSelectionChangedArgs args) {
-                    final String formattedDate = DateFormat('dd/MM/yyyy')
-                        .format(DateTime.parse(args.value.toString()));
-                    setState(() {
-                      _date = formattedDate;
-                    });
-                  },
-                  selectionColor: textColor,
-                  rangeSelectionColor: textColor,
-                  todayHighlightColor: textColor,
-                  minDate: DateTime.now(),
-                  headerStyle: DateRangePickerHeaderStyle(
-                    textStyle: TextStyle(
-                        fontSize: 20,
-                        fontStyle: FontStyle.normal,
-                        color: textColor),
-                  ),
-                  monthViewSettings: DateRangePickerMonthViewSettings(
-                    viewHeaderStyle: DateRangePickerViewHeaderStyle(
-                      textStyle: TextStyle(color: textColor),
-                    ),
-                  ),
-                  monthCellStyle: DateRangePickerMonthCellStyle(
-                    todayTextStyle: TextStyle(color: textColor),
-                    weekendTextStyle: TextStyle(color: textColor),
-                  ),
-                ),
-              ),
-            ],
-          ),
+        child: BookDateModal(
+          cubit: _formStateCubit,
+          minDate: _minDate,
+          maxDate: widget.bookingItem.endAt?.toLocal(),
+          selectionMode: DateRangePickerSelectionMode.range,
         ),
       ),
     ).whenComplete(() {
@@ -234,17 +354,23 @@ class _BookingViewState extends State<BookingView> {
     });
   }
 
-  Future<dynamic> _onTimeTapped(BuildContext context) {
+  Future<void> _onTimeTapped(
+    BuildContext context,
+    BookingFormState state,
+  ) async {
+    load();
+
     setState(() {
       _isTimeModalOpened = true;
     });
+
     return showCupertinoModalBottomSheet(
       context: context,
       builder: (BuildContext context) => SingleChildScrollView(
         controller: ModalScrollController.of(context),
         child: Container(
           padding: const EdgeInsets.all(18),
-          height: mediaQuery(context).size.height * 0.4,
+          height: mediaQuery(context).size.height * 0.85,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -259,24 +385,34 @@ class _BookingViewState extends State<BookingView> {
                 child: ListView.builder(
                   shrinkWrap: true,
                   itemCount: timeslots.length,
-                  itemBuilder: (context, index) {
+                  itemBuilder: (BuildContext context, int index) {
+                    final String currentTimeSlot = timeslots[index];
+                    final bool isSelected = state.bookTime == currentTimeSlot;
                     return Material(
                       child: ListTile(
-                        contentPadding: const EdgeInsets.all(0),
+                        contentPadding: EdgeInsets.zero,
                         tileColor: whiteColor,
                         title: Text(
                           timeslots[index],
                           style: PengoStyle.title2(context),
                         ),
                         trailing: Chip(
-                          backgroundColor: primaryColor,
+                          backgroundColor:
+                              isSelected ? primaryColor : greyBgColor,
                           label: GestureDetector(
                             onTap: () {
-                              debugPrint("Book");
+                              _formStateCubit.updateFormState(
+                                bookTime: currentTimeSlot,
+                              );
+                              Navigator.of(context).pop();
                             },
                             child: Text(
-                              "Book",
-                              style: TextStyle(color: Colors.white),
+                              isSelected ? "Booked" : "Select",
+                              style: TextStyle(
+                                color: isSelected
+                                    ? whiteColor
+                                    : secondaryTextColor,
+                              ),
                             ),
                           ),
                         ),
@@ -296,7 +432,7 @@ class _BookingViewState extends State<BookingView> {
     });
   }
 
-  Future<dynamic> _onPayTapped(BuildContext context) {
+  Future<dynamic> _onPayTapped(BuildContext context, BookingFormState state) {
     setState(() {
       _isPayModalOpened = true;
     });
@@ -321,7 +457,7 @@ class _BookingViewState extends State<BookingView> {
                 onPressed: () async {
                   Navigator.of(context).pop();
                   await Future.delayed(Duration(seconds: 1));
-                  redirectToResultPage();
+                  _confirmBooked(state);
                 },
               ),
             ],
@@ -336,27 +472,57 @@ class _BookingViewState extends State<BookingView> {
   }
 
   Future<void> load() async {
-    Future.delayed(const Duration(seconds: 3));
-    setState(() {
-      timeslots = <String>[
-        "10:00 PM - 11:00 PM",
-        "11:00 PM - 12:00 PM",
-        "12:00 PM - 13:00 PM",
-        "12:00 PM - 13:00 PM",
-        "12:00 PM - 13:00 PM",
-        "12:00 PM - 13:00 PM",
-        "12:00 PM - 13:00 PM",
-        "12:00 PM - 13:00 PM",
-      ];
+    Future.delayed(Duration.zero, () {
+      if ((widget.bookingItem.startFrom == null ||
+              widget.bookingItem.endAt == null) &&
+          (widget.bookingItem.availableFrom == null ||
+              widget.bookingItem.availableTo == null)) {
+        return;
+      }
+
+      final List<String> generatedSlots = TimeHelper.getTimeSlots(
+        context,
+        // will look for time from "availableFrom", otherwise look for time from "startFrom"
+        start: widget.bookingItem.availableFrom != null
+            ? DateTime.parse(widget.bookingItem.availableFrom!)
+            : widget.bookingItem.startFrom!,
+        // will look for time from "availableTo", otherwise look for time from "endAt"
+        end: widget.bookingItem.availableTo != null
+            ? DateTime.parse(widget.bookingItem.availableTo!)
+            : widget.bookingItem.endAt!,
+        gap: widget.bookingItem.timeGapValue,
+        units: widget.bookingItem.timeGapUnits,
+      );
+
+      setState(() {
+        timeslots = generatedSlots;
+      });
     });
   }
 
-  void redirectToResultPage() {
+  void _confirmBooked(BookingFormState state) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return GoocardRequestModal(
+          onVerifySuccess: (String pin) {
+            debugPrint("pin $pin");
+            BlocProvider.of<BookingRecordBloc>(context).add(
+              BookRecordEvent(state.copyWith(pin: pin)),
+            );
+          },
+          onVerifyFailed: () => debugPrint("Not booking"),
+        );
+      },
+    );
+  }
+
+  Future<void> _redirectToResultPage(BookingRecord record) async {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
         builder: (BuildContext context) => BookingResultPage(
-          bookingItem: widget.bookingItem,
+          record: record,
         ),
       ),
       (_) => false,

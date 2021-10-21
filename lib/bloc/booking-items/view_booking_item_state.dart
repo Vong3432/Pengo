@@ -11,8 +11,9 @@ class BookingItemInitial extends ViewBookingItemState {}
 class BookingItemLoading extends ViewBookingItemState {}
 
 class BookingItemLoaded extends ViewBookingItemState {
-  const BookingItemLoaded(this.item);
+  const BookingItemLoaded(this.item, this.status);
   final BookingItem item;
+  final BookingItemValidateStatus status;
 }
 
 class BookingItemNotLoaded extends ViewBookingItemState {}

@@ -2,15 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pengo/bloc/auth/auth_repo.dart';
 import 'package:pengo/helpers/storage/shared_preferences_helper.dart';
 import 'package:pengo/models/auth_model.dart';
-import 'package:pengo/models/providers/auth_model.dart';
-import 'package:provider/provider.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';

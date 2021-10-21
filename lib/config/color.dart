@@ -42,22 +42,22 @@ Map<int, Color> danger = <int, Color>{
 };
 
 Map<int, Color> success = <int, Color>{
-  50: const Color.fromRGBO(24, 91, 64, .1),
-  100: const Color.fromRGBO(24, 91, 64, .2),
-  200: const Color.fromRGBO(24, 91, 64, .3),
-  300: const Color.fromRGBO(24, 91, 64, .4),
-  400: const Color.fromRGBO(24, 91, 64, .5),
-  500: const Color.fromRGBO(24, 91, 64, .6),
-  600: const Color.fromRGBO(24, 91, 64, .7),
-  700: const Color.fromRGBO(24, 91, 64, .8),
-  800: const Color.fromRGBO(24, 91, 64, .9),
-  900: const Color.fromRGBO(24, 91, 64, 1),
+  50: const Color.fromRGBO(20, 152, 73, .1),
+  100: const Color.fromRGBO(20, 152, 73, .2),
+  200: const Color.fromRGBO(20, 152, 73, .3),
+  300: const Color.fromRGBO(20, 152, 73, .4),
+  400: const Color.fromRGBO(20, 152, 73, .5),
+  500: const Color.fromRGBO(20, 152, 73, .6),
+  600: const Color.fromRGBO(20, 152, 73, .7),
+  700: const Color.fromRGBO(20, 152, 73, .8),
+  800: const Color.fromRGBO(20, 152, 73, .9),
+  900: const Color.fromRGBO(20, 152, 73, 1),
 };
 
 // Colors
 MaterialColor primaryColor = MaterialColor(0xFF1AB260, color);
 MaterialColor dangerColor = MaterialColor(0xFFFA627D, color);
-MaterialColor successColor = MaterialColor(0xFF185B40, color);
+MaterialColor successColor = MaterialColor(0xFF149849, color);
 MaterialColor textColor = MaterialColor(0xFF161616, text);
 Color primaryLightColor = const Color(0xFFE1FEF0);
 Color grayTextColor = const Color(0xFF4B5656);

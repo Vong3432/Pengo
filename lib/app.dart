@@ -11,6 +11,7 @@ import 'package:pengo/helpers/routes/route.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/ui/goocard/goocard_view.dart';
 import 'package:pengo/ui/home/home_view.dart';
+import 'package:pengo/ui/penger/items/item_info_view.dart';
 import 'package:pengo/ui/profile/profile_view.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -103,6 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
           key: _navigatorKey,
           initialRoute: '/',
           onGenerateRoute: (RouteSettings settings) {
+            debugPrint("Generating ${settings.name}");
             WidgetBuilder builder;
             // Manage your route names here
             switch (settings.name) {

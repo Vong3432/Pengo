@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pengo/bloc/booking-items/booking_item_repo.dart';
 import 'package:pengo/models/booking_item_model.dart';
+import 'package:pengo/models/item_validation_model.dart';
 
 part 'view_booking_item_event.dart';
 part 'view_booking_item_state.dart';
@@ -56,9 +57,10 @@ class ViewItemBloc extends Bloc<ViewBookingItemEvent, ViewBookingItemState> {
     try {
       yield BookingItemLoading();
       final BookingItem item = await _repo.fetchBookingItem(id: itemId);
-      Future.delayed(Duration(seconds: 2));
-      debugPrint("fet: ${item.toJson()}");
-      yield BookingItemLoaded(item);
+      final BookingItemValidateStatus status =
+          await _repo.getItemStatusMsg(id: itemId);
+      Future.delayed(Duration(seconds: 1));
+      yield BookingItemLoaded(item, status);
     } catch (_) {
       yield BookingItemNotLoaded();
     }

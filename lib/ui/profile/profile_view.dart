@@ -102,10 +102,15 @@ class _ProfilePageState extends State<ProfilePage> {
             width: 42,
             height: 42,
             decoration: BoxDecoration(
-                color: primaryLightColor,
-                borderRadius: BorderRadius.circular(5)),
+              color: primaryLightColor,
+              borderRadius: BorderRadius.circular(5),
+            ),
             padding: const EdgeInsets.all(8),
-            child: SvgPicture.asset(PROFILE_ICON_PATH, fit: BoxFit.scaleDown),
+            child: SvgPicture.asset(
+              LOGOUT_ICON_PATH,
+              fit: BoxFit.scaleDown,
+              color: primaryColor,
+            ),
           ),
           content: <Widget>[
             Text(
@@ -137,10 +142,15 @@ class _ProfilePageState extends State<ProfilePage> {
             width: 42,
             height: 42,
             decoration: BoxDecoration(
-                color: primaryLightColor,
-                borderRadius: BorderRadius.circular(5)),
+              color: primaryLightColor,
+              borderRadius: BorderRadius.circular(5),
+            ),
             padding: const EdgeInsets.all(8),
-            child: SvgPicture.asset(PROFILE_ICON_PATH, fit: BoxFit.scaleDown),
+            child: SvgPicture.asset(
+              PROFILE_ICON_PATH,
+              fit: BoxFit.scaleDown,
+              color: primaryColor,
+            ),
           ),
           content: <Widget>[
             Text(
@@ -165,7 +175,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 color: primaryLightColor,
                 borderRadius: BorderRadius.circular(5)),
             padding: const EdgeInsets.all(8),
-            child: SvgPicture.asset(COUPON_ICON_PATH, fit: BoxFit.scaleDown),
+            child: SvgPicture.asset(
+              COUPON_ICON_PATH,
+              fit: BoxFit.scaleDown,
+              color: primaryColor,
+            ),
           ),
           content: <Widget>[
             Text(
@@ -190,7 +204,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 color: primaryLightColor,
                 borderRadius: BorderRadius.circular(5)),
             padding: const EdgeInsets.all(8),
-            child: SvgPicture.asset(REPORT_ICON_PATH, fit: BoxFit.scaleDown),
+            child: SvgPicture.asset(
+              REPORT_ICON_PATH,
+              fit: BoxFit.scaleDown,
+              color: primaryColor,
+            ),
           ),
           content: <Widget>[
             Text(
@@ -220,7 +238,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 color: primaryLightColor,
                 borderRadius: BorderRadius.circular(5)),
             padding: const EdgeInsets.all(8),
-            child: SvgPicture.asset(SETTING_ICON_PATH, fit: BoxFit.scaleDown),
+            child: SvgPicture.asset(
+              SETTING_ICON_PATH,
+              fit: BoxFit.scaleDown,
+              color: primaryColor,
+            ),
           ),
           content: <Widget>[
             Text(

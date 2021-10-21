@@ -8,3 +8,9 @@ abstract class BookingRecordEvent extends Equatable {
 }
 
 class FetchRecordsEvent extends BookingRecordEvent {}
+
+class BookRecordEvent extends BookingRecordEvent {
+  const BookRecordEvent(this.state);
+
+  final BookingFormState state;
+}

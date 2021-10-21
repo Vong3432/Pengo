@@ -10,6 +10,7 @@ import 'package:pengo/models/providers/auth_model.dart';
 import 'package:pengo/providers/booking_pass_provider.dart';
 import 'package:pengo/providers/multi_bloc_provider.dart';
 import 'package:pengo/splash.dart';
+import 'package:pengo/ui/penger/items/item_info_view.dart';
 import 'package:provider/provider.dart';
 
 // ignore: avoid_void_async
@@ -38,6 +39,9 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           title: 'Pengo',
           theme: themeData,
+          routes: {
+            "/booking-item": (context) => ItemInfoView(),
+          },
           home: const Splash(),
         ),
       ),

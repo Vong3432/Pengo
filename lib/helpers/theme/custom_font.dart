@@ -5,14 +5,14 @@ class PengoStyle {
     return Theme.of(context)
         .textTheme
         .headline6!
-        .copyWith(fontWeight: FontWeight.w600);
+        .copyWith(fontWeight: FontWeight.w800);
   }
 
   static TextStyle title2(BuildContext context) {
     return Theme.of(context)
         .textTheme
         .headline6!
-        .copyWith(fontWeight: FontWeight.w500, fontSize: 16);
+        .copyWith(fontWeight: FontWeight.bold, fontSize: 16);
   }
 
   static TextStyle header(BuildContext context) {
@@ -43,7 +43,9 @@ class PengoStyle {
   }
 
   static TextStyle text(BuildContext context) {
-    return Theme.of(context).textTheme.bodyText2!.copyWith();
+    return Theme.of(context).textTheme.bodyText2!.copyWith(
+          height: 1.4,
+        );
   }
 
   static TextStyle smallerText(BuildContext context) {

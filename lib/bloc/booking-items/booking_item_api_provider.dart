@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:pengo/helpers/api/api_helper.dart';
 import 'package:pengo/models/booking_item_model.dart';
+import 'package:pengo/models/item_validation_model.dart';
 
 class BookingItemApiProvider {
   final ApiHelper _apiHelper = ApiHelper();
@@ -26,12 +27,26 @@ class BookingItemApiProvider {
 
   Future<BookingItem> fetchBookingItem({required int id}) async {
     try {
-      final response = await _apiHelper.get('/core/booking-items/${id}');
+      final response = await _apiHelper.get('/core/booking-items/$id');
       final BookingItem data =
           BookingItem.fromJson(response.data['data'] as Map<String, dynamic>);
       return data;
     } catch (e) {
       debugPrint(e.toString());
+      throw Exception((e as DioError).error);
+    }
+  }
+
+  Future<BookingItemValidateStatus> validateItemStatus({
+    required int id,
+  }) async {
+    try {
+      final response = await _apiHelper.get('/core/validate-item-status/$id');
+      final BookingItemValidateStatus status =
+          BookingItemValidateStatus.fromJson(
+              response.data['data'] as Map<String, dynamic>);
+      return status;
+    } catch (e) {
       throw Exception((e as DioError).error);
     }
   }
