@@ -9,7 +9,7 @@ class BookingRecord {
   const BookingRecord({
     required this.id,
     required this.bookDate,
-    required this.bookTime,
+    this.bookTime,
     required this.item,
     required this.goocardID,
     required this.pengerID,
@@ -20,29 +20,6 @@ class BookingRecord {
       _$BookingRecordFromJson(json);
   Map<String, dynamic> toJson() => _$BookingRecordToJson(this);
 
-  // {
-  //   return BookingRecord(
-  //     id: json['id'] as int,
-  //     goocardID: json['penger_id'] as int,
-  //     pengerID: json['goo_card_id'] as int,
-  //     item: BookingItem.fromJson(json['item']),
-  //     bookDate: json['book_date'].toString(),
-  //     bookTime: json['book_time'].toString(),
-  //   );
-  // }
-
-  // Map<String, dynamic> toMap() {
-  //   final map = Map<String, dynamic>();
-  //   map["id"] = id;
-  //   map["goocard_id"] = goocardID;
-  //   map["penger_id"] = pengerID;
-  //   map["book_time"] = bookTime;
-  //   map["book_date"] = bookDate;
-  //   map["item"] = item.toMap();
-  //   // Add all other fields
-  //   return map;
-  // }
-
   final int id;
 
   @JsonKey(name: 'goo_card_id')
@@ -52,7 +29,7 @@ class BookingRecord {
   final int pengerID;
 
   @JsonKey(name: 'book_time')
-  final String bookTime;
+  final String? bookTime;
 
   @JsonKey(name: 'book_date')
   final BookDate? bookDate;

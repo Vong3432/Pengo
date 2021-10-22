@@ -43,11 +43,9 @@ class _ItemInfoViewState extends State<ItemInfoView> {
         builder: (BuildContext context, ViewBookingItemState state) {
           if (state is BookingItemLoaded) {
             // hide book button if:
-            // - user booked this item before
             // - `bookable` property status is FALSE.
-            final bool showBookBtn =
-                state.item.bookingRecords?.isEmpty == true &&
-                    state.status.bookable;
+            final bool showBookBtn = state.status.bookable;
+            // && state.item.bookingRecords?.isEmpty == true
 
             return CustomScrollView(
               slivers: <Widget>[
@@ -167,7 +165,7 @@ class _ItemInfoViewState extends State<ItemInfoView> {
                               ),
                               const Spacer(),
                               Text(
-                                "${state.item.price ?? "FREE"}",
+                                "RM ${state.item.price ?? "FREE"}",
                                 style: PengoStyle.title2(context),
                               ),
                             ],
@@ -199,14 +197,14 @@ class _ItemInfoViewState extends State<ItemInfoView> {
                             ],
                           ),
                           const SizedBox(height: SECTION_GAP_HEIGHT * 2),
-                          Visibility(
-                            visible:
-                                state.item.bookingRecords?.isEmpty == false,
-                            child: CustomButton(
-                              text: const Text("Booked"),
-                              backgroundColor: secondaryTextColor,
-                            ),
-                          ),
+                          // Visibility(
+                          //   visible:
+                          //       state.item.bookingRecords?.isEmpty == false,
+                          //   child: CustomButton(
+                          //     text: const Text("Booked"),
+                          //     backgroundColor: secondaryTextColor,
+                          //   ),
+                          // ),
                           Visibility(
                             visible: showBookBtn,
                             child: CustomButton(

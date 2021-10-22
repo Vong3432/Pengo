@@ -15,8 +15,10 @@ import 'package:pengo/models/booking_item_model.dart';
 import 'package:pengo/models/booking_record_model.dart';
 import 'package:pengo/models/system_function_model.dart';
 import 'package:pengo/ui/goocard/widgets/goocard_request_modal.dart';
+import 'package:pengo/ui/payment/payment_view.dart';
 import 'package:pengo/ui/penger/booking/booking_result.dart';
 import 'package:pengo/ui/penger/booking/widgets/book_date_modal.dart';
+import 'package:pengo/ui/penger/booking/widgets/pay_modal.dart';
 import 'package:pengo/ui/widgets/button/custom_button.dart';
 import 'package:pengo/ui/widgets/layout/sliver_appbar.dart';
 import 'package:pengo/ui/widgets/list/custom_list_item.dart';
@@ -172,7 +174,7 @@ class _BookingViewState extends State<BookingView> {
                             onTap: () => _onDateTapped(),
                             contentPadding: const EdgeInsets.all(18),
                             title: Text(
-                              "1. Pick a date",
+                              "Pick a date",
                               style: textTheme(context).headline5,
                             ),
                             // ewwwwww
@@ -191,7 +193,9 @@ class _BookingViewState extends State<BookingView> {
                         ),
                         Visibility(
                           visible: context.select<BookingFormStateCubit, bool>(
-                            (BookingFormStateCubit form) => form.state.hasTime,
+                            (BookingFormStateCubit form) =>
+                                form.state.hasEndDate ||
+                                form.state.hasStartDate,
                           ),
                           child: const Divider(),
                         ),
@@ -203,7 +207,7 @@ class _BookingViewState extends State<BookingView> {
                             onTap: () => _onTimeTapped(context, state),
                             contentPadding: const EdgeInsets.all(18),
                             title: Text(
-                              "2. Pick a time",
+                              "Pick a time",
                               style: textTheme(context).headline5,
                             ),
                             subtitle: Text(
@@ -219,8 +223,7 @@ class _BookingViewState extends State<BookingView> {
                         ),
                         Visibility(
                           visible: context.select<BookingFormStateCubit, bool>(
-                            (BookingFormStateCubit form) =>
-                                form.state.hasPayment,
+                            (BookingFormStateCubit form) => form.state.hasTime,
                           ),
                           child: const Divider(),
                         ),
@@ -230,10 +233,10 @@ class _BookingViewState extends State<BookingView> {
                                 form.state.hasPayment,
                           ),
                           child: ListTile(
-                            onTap: () => _onPayTapped(context, state),
+                            onTap: () => _onPayTapped(context, _formStateCubit),
                             contentPadding: const EdgeInsets.all(18),
                             title: Text(
-                              "3. Pay",
+                              "Pay",
                               style: textTheme(context).headline5,
                             ),
                             subtitle: Text(
@@ -249,7 +252,7 @@ class _BookingViewState extends State<BookingView> {
                         ),
                         const Spacer(),
                         Visibility(
-                          visible:
+                          visible: widget.bookingItem.price == null &&
                               context.select<BookingFormStateCubit, double>(
                                     (BookingFormStateCubit form) =>
                                         form.state.progress,
@@ -432,7 +435,10 @@ class _BookingViewState extends State<BookingView> {
     });
   }
 
-  Future<dynamic> _onPayTapped(BuildContext context, BookingFormState state) {
+  Future<dynamic> _onPayTapped(
+    BuildContext context,
+    BookingFormStateCubit form,
+  ) {
     setState(() {
       _isPayModalOpened = true;
     });
@@ -453,11 +459,16 @@ class _BookingViewState extends State<BookingView> {
                 height: SECTION_GAP_HEIGHT,
               ),
               CustomButton(
-                text: Text("Pay"),
+                text: const Text("Pay"),
                 onPressed: () async {
-                  Navigator.of(context).pop();
-                  await Future.delayed(Duration(seconds: 1));
-                  _confirmBooked(state);
+                  showCupertinoModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext payContext) => PayModal(
+                      bookingItemId: widget.bookingItem.id,
+                      pengerId: widget.pengerId,
+                      formState: form.state,
+                    ),
+                  );
                 },
               ),
             ],
@@ -506,7 +517,6 @@ class _BookingViewState extends State<BookingView> {
       builder: (BuildContext context) {
         return GoocardRequestModal(
           onVerifySuccess: (String pin) {
-            debugPrint("pin $pin");
             BlocProvider.of<BookingRecordBloc>(context).add(
               BookRecordEvent(state.copyWith(pin: pin)),
             );

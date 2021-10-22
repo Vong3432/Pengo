@@ -12,7 +12,7 @@ BookingRecord _$BookingRecordFromJson(Map<String, dynamic> json) {
     bookDate: json['book_date'] == null
         ? null
         : BookDate.fromJson(json['book_date'] as Map<String, dynamic>),
-    bookTime: json['book_time'] as String,
+    bookTime: json['book_time'] as String?,
     item: json['item'] == null
         ? null
         : BookingItem.fromJson(json['item'] as Map<String, dynamic>),
