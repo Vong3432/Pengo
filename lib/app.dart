@@ -1,5 +1,4 @@
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
-import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -7,8 +6,6 @@ import 'package:pengo/config/color.dart';
 import 'package:pengo/config/shadow.dart';
 import 'package:pengo/const/icon_const.dart';
 import 'package:pengo/helpers/notification/push_notification_manager.dart';
-import 'package:pengo/helpers/routes/route.dart';
-import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/ui/goocard/goocard_view.dart';
 import 'package:pengo/ui/home/home_view.dart';
 import 'package:pengo/ui/penger/items/item_info_view.dart';
@@ -28,6 +25,9 @@ class _MyHomePageState extends State<MyHomePage> {
   final _navigatorKey = GlobalKey<NavigatorState>();
 
   void _onBottomNavItemTapped(int idx) {
+    // same path
+    if (idx == _selectedIndex) return;
+
     switch (idx) {
       case 0:
         // home
@@ -116,6 +116,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 break;
               case '/profile':
                 builder = (BuildContext context) => ProfilePage();
+                break;
+              case "/booking-item":
+                builder = (BuildContext context) => ItemInfoView();
                 break;
               default:
                 throw Exception('Invalid route: ${settings.name}');

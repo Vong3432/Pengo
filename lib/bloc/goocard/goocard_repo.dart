@@ -2,6 +2,7 @@ import 'package:pengo/bloc/goocard/goocard_api_provider.dart';
 import 'package:pengo/bloc/records/booking_record_api_provider.dart';
 import 'package:pengo/cubit/booking/booking_form_cubit.dart';
 import 'package:pengo/models/booking_record_model.dart';
+import 'package:pengo/models/goocard_model.dart';
 import 'package:pengo/models/response_model.dart';
 
 class GoocardRepo {
@@ -16,4 +17,18 @@ class GoocardRepo {
 
   Future<ResponseModel> verify(String pin) async =>
       _goocardApiProvider.verify(pin);
+  Future<Goocard> load({
+    int? logs,
+    int? logLimit,
+    int? records,
+    int? recordLimit,
+    int? creditPoints,
+  }) async =>
+      _goocardApiProvider.load(
+        logs: logs,
+        logLimit: logLimit,
+        recordLimit: recordLimit,
+        records: records,
+        creditPoints: creditPoints,
+      );
 }

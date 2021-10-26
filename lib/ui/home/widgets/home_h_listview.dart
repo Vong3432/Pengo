@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pengo/config/color.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/ui/widgets/stacks/h_stack.dart';
@@ -6,13 +7,13 @@ import 'package:pengo/ui/widgets/stacks/h_stack.dart';
 class HomeHListView extends StatefulWidget {
   const HomeHListView({
     Key? key,
-    required this.textTheme,
     required this.children,
     required this.title,
+    this.onTapSeeAll,
   }) : super(key: key);
 
-  final TextTheme textTheme;
   final String title;
+  final VoidCallback? onTapSeeAll;
   final List<Widget> children;
 
   @override
@@ -35,10 +36,13 @@ class _HomeHListViewState extends State<HomeHListView> {
           children: <Widget>[
             Text(widget.title, style: PengoStyle.header(context)),
             const Spacer(),
-            const Text(
-              "See all",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
+            GestureDetector(
+              onTap: widget.onTapSeeAll,
+              child: Text(
+                "See all",
+                style: PengoStyle.caption(context).copyWith(
+                  color: primaryColor,
+                ),
               ),
             ),
           ],

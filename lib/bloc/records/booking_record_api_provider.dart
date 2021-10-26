@@ -8,9 +8,18 @@ import 'package:pengo/models/response_model.dart';
 class RecordsApiProvider {
   final ApiHelper _apiHelper = ApiHelper();
 
-  Future<List<BookingRecord>> fetchRecords() async {
+  Future<List<BookingRecord>> fetchRecords({
+    int? limit,
+    int? category,
+    DateTime? date,
+  }) async {
     try {
-      final response = await _apiHelper.get('/pengoo/booking-records');
+      final response =
+          await _apiHelper.get('/pengoo/booking-records', queryParameters: {
+        "limit": limit,
+        "category": category,
+        "date": date?.toIso8601String(),
+      });
       final List<BookingRecord> records = List<BookingRecord>.from(
           (response.data['data']! as List)
               .map((i) => BookingRecord.fromJson(i as Map<String, dynamic>)));

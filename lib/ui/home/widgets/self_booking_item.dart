@@ -2,18 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:pengo/config/color.dart';
 import 'package:pengo/config/shadow.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
-import 'package:pengo/helpers/theme/theme_helper.dart';
+import 'package:pengo/models/booking_record_model.dart';
 
-class SelfBookingItem extends StatelessWidget {
+class SelfBookingItem extends StatefulWidget {
   const SelfBookingItem({
     Key? key,
+    required this.record,
   }) : super(key: key);
 
+  final BookingRecord record;
+
+  @override
+  State<SelfBookingItem> createState() => _SelfBookingItemState();
+}
+
+class _SelfBookingItemState extends State<SelfBookingItem> {
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        if (widget.record.item == null) return;
+        Navigator.of(context, rootNavigator: true).pushNamed(
+          "/booking-item",
+          arguments: {
+            "id": widget.record.item!.id,
+          },
+        );
+      },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -31,7 +46,7 @@ class SelfBookingItem extends StatelessWidget {
                 Stack(
                   children: <Widget>[
                     Image.network(
-                      "https://img.freepik.com/free-photo/observation-urban-building-business-steel_1127-2397.jpg?size=626&ext=jpg",
+                      widget.record.item!.poster,
                       fit: BoxFit.cover,
                       width: double.infinity,
                       height: 150,
@@ -64,7 +79,7 @@ class SelfBookingItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        "Cat campaign",
+                        widget.record.item?.title ?? "",
                         style: PengoStyle.title(context),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -76,10 +91,11 @@ class SelfBookingItem extends StatelessWidget {
                             size: 16,
                             color: Theme.of(context).primaryColor,
                           ),
-                          Padding(
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.5,
                             padding: const EdgeInsets.only(left: 8.0),
                             child: Text(
-                              "Sutera, Johor",
+                              widget.record.item?.geolocation?.name ?? "",
                               style: PengoStyle.subtitle(context).copyWith(
                                 color: secondaryTextColor,
                               ),

@@ -16,6 +16,7 @@ import 'package:pengo/ui/home/widgets/home_h_listview.dart';
 import 'package:pengo/ui/home/widgets/penger_item.dart';
 import 'package:pengo/ui/home/widgets/quick_tap_section.dart';
 import 'package:pengo/ui/home/widgets/self_booking_item.dart';
+import 'package:pengo/ui/home/widgets/self_booking_list.dart';
 import 'package:pengo/ui/penger/info_view.dart';
 import 'package:pengo/ui/widgets/feedback/penger_loading_skeleton.dart';
 import 'package:pengo/ui/widgets/layout/sliver_appbar.dart';
@@ -110,7 +111,7 @@ class _HomePageState extends State<HomePage> {
                         debugPrint('Submitted text: $value');
                       },
                     ),
-                    _buildUserBookingList(textTheme),
+                    const SelfBookingList(),
                     const QuickTapSection(),
                     _buildPopularList(context),
                     _buildNearbyList(context),
@@ -326,21 +327,6 @@ class _HomePageState extends State<HomePage> {
           location: penger.location.address,
         );
       },
-    );
-  }
-
-  Widget _buildUserBookingList(TextTheme textTheme) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 18.0),
-      child: HomeHListView(
-        textTheme: textTheme,
-        title: "My Booking",
-        children: <Widget>[
-          SelfBookingItem(),
-          SelfBookingItem(),
-          SelfBookingItem(),
-        ],
-      ),
     );
   }
 

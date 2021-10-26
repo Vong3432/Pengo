@@ -83,7 +83,7 @@ class _BookDateModalState extends State<BookDateModal> {
                   );
                 }
               },
-              selectionColor: textColor,
+              selectionColor: primaryColor,
               rangeSelectionColor: primaryLightColor,
               todayHighlightColor: primaryColor,
               minDate: widget.minDate,

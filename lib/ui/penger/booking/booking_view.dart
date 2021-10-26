@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,7 +16,6 @@ import 'package:pengo/models/booking_item_model.dart';
 import 'package:pengo/models/booking_record_model.dart';
 import 'package:pengo/models/system_function_model.dart';
 import 'package:pengo/ui/goocard/widgets/goocard_request_modal.dart';
-import 'package:pengo/ui/payment/payment_view.dart';
 import 'package:pengo/ui/penger/booking/booking_result.dart';
 import 'package:pengo/ui/penger/booking/widgets/book_date_modal.dart';
 import 'package:pengo/ui/penger/booking/widgets/pay_modal.dart';
@@ -23,7 +23,6 @@ import 'package:pengo/ui/widgets/button/custom_button.dart';
 import 'package:pengo/ui/widgets/layout/sliver_appbar.dart';
 import 'package:pengo/ui/widgets/list/custom_list_item.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import 'package:collection/collection.dart';
 
 class BookingView extends StatefulWidget {
   const BookingView({
@@ -390,7 +389,11 @@ class _BookingViewState extends State<BookingView> {
                   itemCount: timeslots.length,
                   itemBuilder: (BuildContext context, int index) {
                     final String currentTimeSlot = timeslots[index];
+                    // Compare current user records for current item through date & time.
+                    // If current endDate + currentTimeslot is found in the bookingItems.records list,
+                    // set isSelected to false.
                     final bool isSelected = state.bookTime == currentTimeSlot;
+
                     return Material(
                       child: ListTile(
                         contentPadding: EdgeInsets.zero,
@@ -463,10 +466,15 @@ class _BookingViewState extends State<BookingView> {
                 onPressed: () async {
                   showCupertinoModalBottomSheet(
                     context: context,
-                    builder: (BuildContext payContext) => PayModal(
-                      bookingItemId: widget.bookingItem.id,
-                      pengerId: widget.pengerId,
-                      formState: form.state,
+                    builder: (BuildContext payContext) => Padding(
+                      padding: EdgeInsets.only(
+                        bottom: mediaQuery(context).viewInsets.bottom,
+                      ),
+                      child: PayModal(
+                        bookingItemId: widget.bookingItem.id,
+                        pengerId: widget.pengerId,
+                        formState: form.state,
+                      ),
                     ),
                   );
                 },

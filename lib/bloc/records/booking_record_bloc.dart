@@ -11,41 +11,39 @@ part 'booking_record_event.dart';
 part 'booking_record_state.dart';
 
 class BookingRecordBloc extends Bloc<BookingRecordEvent, BookingRecordState> {
-  BookingRecordBloc() : super(BookingRecordInitial());
-
+  BookingRecordBloc() : super(BookingRecordInitial()) {
+    on<FetchRecordsEvent>(_fetchRecords);
+    on<BookRecordEvent>(_book);
+  }
   final RecordRepo _repo = RecordRepo();
 
-  @override
-  Stream<BookingRecordState> mapEventToState(
-    BookingRecordEvent event,
-  ) async* {
-    // TODO: implement mapEventToState
-    if (event is FetchRecordsEvent) {
-      yield* _mapFetchRecordsToState();
-    } else if (event is BookRecordEvent) {
-      yield* _mapBookRecordToState(event.state);
-    }
-  }
-
-  Stream<BookingRecordState> _mapFetchRecordsToState() async* {
+  Future<void> _fetchRecords(
+    FetchRecordsEvent event,
+    Emitter<BookingRecordState> emit,
+  ) async {
     try {
-      yield BookingRecordsLoading();
-      final List<BookingRecord> records = await _repo.fetchRecords();
-      yield BookingRecordsLoaded(records);
+      emit(BookingRecordsLoading());
+      final List<BookingRecord> records = await _repo.fetchRecords(
+        limit: event.limit,
+        category: event.category,
+        date: event.date,
+      );
+      emit(BookingRecordsLoaded(records));
     } catch (_) {
-      yield BookingRecordsNotLoaded();
+      emit(BookingRecordsNotLoaded());
     }
   }
 
-  Stream<BookingRecordState> _mapBookRecordToState(
-    BookingFormState state,
-  ) async* {
+  Future<void> _book(
+    BookRecordEvent event,
+    Emitter<BookingRecordState> emit,
+  ) async {
     try {
-      yield BookingRecordAdding();
-      final ResponseModel response = await _repo.book(state);
-      yield BookingRecordAdded(response);
+      emit(BookingRecordAdding());
+      final ResponseModel response = await _repo.book(event.state);
+      emit(BookingRecordAdded(response));
     } catch (e) {
-      yield BookingRecordNotAdded(e);
+      emit(BookingRecordNotAdded(e));
     }
   }
 }

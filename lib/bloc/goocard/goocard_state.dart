@@ -22,3 +22,19 @@ class GoocardVeriyFailed extends GoocardState {
 
   final Object e;
 }
+
+class GoocardLoadInitial extends GoocardState {}
+
+class GoocardLoading extends GoocardState {}
+
+class GoocardLoadSuccess extends GoocardState {
+  const GoocardLoadSuccess(this.goocard);
+
+  final Goocard goocard;
+}
+
+class GoocardLoadFailed extends GoocardState {
+  const GoocardLoadFailed(this.e);
+
+  final Object e;
+}

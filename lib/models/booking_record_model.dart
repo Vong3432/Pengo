@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pengo/models/booking_item_model.dart';
 import 'package:pengo/models/goocard_log_model.dart';

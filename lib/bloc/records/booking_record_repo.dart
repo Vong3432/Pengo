@@ -13,8 +13,13 @@ class RecordRepo {
   static final RecordRepo _instance = RecordRepo._constructor();
   final RecordsApiProvider _recordsApiProvider = RecordsApiProvider();
 
-  Future<List<BookingRecord>> fetchRecords() async =>
-      _recordsApiProvider.fetchRecords();
+  Future<List<BookingRecord>> fetchRecords(
+          {int? limit, int? category, DateTime? date}) async =>
+      _recordsApiProvider.fetchRecords(
+        limit: limit,
+        category: category,
+        date: date,
+      );
   Future<ResponseModel> book(BookingFormState state) async =>
       _recordsApiProvider.book(state);
 }
