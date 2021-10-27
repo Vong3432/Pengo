@@ -71,14 +71,26 @@ class GooCard extends StatelessWidget {
                         height: 20.0,
                       );
                     } else if (state is GoocardLoadSuccess) {
-                      return Text(
-                        "${state.goocard.creditPoints}",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize:
-                              PengoStyle.navigationTitle(context).fontSize,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "${state.goocard.creditPoints}",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize:
+                                  PengoStyle.navigationTitle(context).fontSize,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            "* Calculated with all pengers",
+                            style: PengoStyle.caption(context).copyWith(
+                              color: whiteColor,
+                              fontSize: 12,
+                            ),
+                          )
+                        ],
                       );
                     }
                     return Container();

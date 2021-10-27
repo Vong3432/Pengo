@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pengo/config/color.dart';
-import 'package:pengo/helpers/theme/theme_helper.dart';
 
 class CustomListItem extends StatelessWidget {
   const CustomListItem({

@@ -12,6 +12,7 @@ class PengerItem extends StatelessWidget {
     this.location,
     this.onTap,
     this.width,
+    this.price,
     required this.logo,
   }) : super(key: key);
 
@@ -20,6 +21,7 @@ class PengerItem extends StatelessWidget {
   final String? location;
   final VoidCallback? onTap;
   final double? width;
+  final double? price;
 
   @override
   Widget build(BuildContext context) {
@@ -36,14 +38,14 @@ class PengerItem extends StatelessWidget {
             // );
           },
       leading: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           // border: Border.all(width: 2.5, color: greyBgColor),
           color: Colors.white,
-          borderRadius: const BorderRadius.all(
+          borderRadius: BorderRadius.all(
             Radius.circular(8),
           ),
         ),
+        clipBehavior: Clip.hardEdge,
         child: logo.contains("dicebear")
             ? SvgPicture.network(
                 logo,
@@ -64,15 +66,26 @@ class PengerItem extends StatelessWidget {
           style: PengoStyle.title2(context),
           overflow: TextOverflow.ellipsis,
         ),
-        location == null
-            ? Container()
-            : Text(
-                location!,
-                style: PengoStyle.captionNormal(context).copyWith(
-                  color: secondaryTextColor,
-                ),
-                overflow: TextOverflow.ellipsis,
-              ),
+        Visibility(
+          visible: location != null,
+          child: Text(
+            location!,
+            style: PengoStyle.captionNormal(context).copyWith(
+              color: secondaryTextColor,
+            ),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        Visibility(
+          visible: price != null,
+          child: Text(
+            "RM ${price ?? 0}",
+            style: PengoStyle.caption(context).copyWith(
+              color: textColor,
+            ),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
       ],
     );
   }

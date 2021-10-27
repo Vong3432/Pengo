@@ -51,6 +51,7 @@ class _GooCardPageState extends State<GooCardPage> {
                   Expanded(
                     child: GooCardLogList(
                       bloc: _goocardBloc,
+                      reload: _loadCard,
                     ),
                   ),
                 ],

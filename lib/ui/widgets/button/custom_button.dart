@@ -13,6 +13,7 @@ class CustomButton extends StatelessWidget {
     this.color,
     this.minimumSize,
     this.isLoading,
+    this.padding,
   }) : super(key: key);
 
   final VoidCallback? onPressed;
@@ -21,6 +22,7 @@ class CustomButton extends StatelessWidget {
   final Color? color;
   final Size? minimumSize;
   final bool? isLoading;
+  final EdgeInsets? padding;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class CustomButton extends StatelessWidget {
             onTap: onPressed,
             child: Container(
               width: minimumSize?.width ?? double.infinity,
-              padding: const EdgeInsets.all(12),
+              padding: padding ?? const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 color: backgroundColor ?? primaryColor,

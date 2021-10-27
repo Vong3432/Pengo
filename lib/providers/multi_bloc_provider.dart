@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pengo/bloc/auth/auth_bloc.dart';
 import 'package:pengo/bloc/booking-categories/booking_category_bloc.dart';
 import 'package:pengo/bloc/booking-items/view_booking_item_bloc.dart';
+import 'package:pengo/bloc/coupons/list/coupons_bloc.dart';
 import 'package:pengo/bloc/pengers/penger_bloc.dart';
 import 'package:pengo/bloc/records/booking_record_bloc.dart';
 
@@ -22,6 +23,9 @@ List<BlocProvider<dynamic>> multiBlocProviders(BuildContext context) {
     ),
     BlocProvider<ViewItemBloc>(
       create: (BuildContext context) => ViewItemBloc(),
+    ),
+    BlocProvider<CouponsBloc>(
+      create: (BuildContext context) => CouponsBloc(),
     ),
   ];
 }

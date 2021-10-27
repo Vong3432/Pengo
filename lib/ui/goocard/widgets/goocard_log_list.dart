@@ -11,13 +11,15 @@ import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/models/goocard_log_model.dart';
 import 'package:pengo/ui/booking-records/booking_record_listing_view.dart';
-import 'package:pengo/ui/coupon/coupon_view.dart';
+import 'package:pengo/ui/coupon/coupon_listing_view.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 
 class GooCardLogList extends StatelessWidget {
-  const GooCardLogList({Key? key, required this.bloc}) : super(key: key);
+  const GooCardLogList({Key? key, required this.bloc, required this.reload})
+      : super(key: key);
 
   final GoocardBloc bloc;
+  final VoidCallback reload;
 
   @override
   Widget build(BuildContext context) {
@@ -40,22 +42,26 @@ class GooCardLogList extends StatelessWidget {
               children: <Widget>[
                 ActionButton(
                   onPressed: () {
-                    Navigator.of(context, rootNavigator: true).push(
-                      CupertinoPageRoute(
-                          builder: (context) => const CouponPage()),
-                    );
+                    Navigator.of(context, rootNavigator: true)
+                        .push(
+                          CupertinoPageRoute(
+                              builder: (context) => const CouponPage()),
+                        )
+                        .then((_) => reload());
                   },
                   name: "My coupons",
                   icon: COUPON_ICON_PATH,
                 ),
                 ActionButton(
                   onPressed: () {
-                    Navigator.of(context, rootNavigator: true).push(
-                      CupertinoPageRoute(
-                        builder: (BuildContext context) =>
-                            const BookingRecordList(),
-                      ),
-                    );
+                    Navigator.of(context, rootNavigator: true)
+                        .push(
+                          CupertinoPageRoute(
+                            builder: (BuildContext context) =>
+                                const BookingRecordList(),
+                          ),
+                        )
+                        .then((_) => reload());
                   },
                   name: "My booking",
                   icon: TICKET_ICON_PATH,

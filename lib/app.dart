@@ -2,12 +2,17 @@ import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pengo/config/color.dart';
 import 'package:pengo/config/shadow.dart';
 import 'package:pengo/const/icon_const.dart';
 import 'package:pengo/helpers/notification/push_notification_manager.dart';
+import 'package:pengo/helpers/theme/custom_font.dart';
+import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/ui/goocard/goocard_view.dart';
+import 'package:pengo/ui/home/booking_pass.dart';
 import 'package:pengo/ui/home/home_view.dart';
+import 'package:pengo/ui/home/widgets/option_item.dart';
 import 'package:pengo/ui/penger/items/item_info_view.dart';
 import 'package:pengo/ui/profile/profile_view.dart';
 
@@ -26,7 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _onBottomNavItemTapped(int idx) {
     // same path
-    if (idx == _selectedIndex) return;
+    if (idx == _selectedIndex && idx != 2) return;
 
     switch (idx) {
       case 0:
@@ -41,8 +46,50 @@ class _MyHomePageState extends State<MyHomePage> {
             .pushNamedAndRemoveUntil('/goocard', (_) => false);
         break;
       case 2:
-        // history
-        _navigatorKey.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
+        // scan
+        showCupertinoModalBottomSheet(
+            useRootNavigator: true,
+            context: context,
+            builder: (BuildContext context) {
+              return Container(
+                padding: const EdgeInsets.all(18),
+                height: mediaQuery(context).size.height * 0.3,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      "Use",
+                      style: PengoStyle.header(context),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        OptionItem(
+                          assetName: GOOCARD_ICON_PATH,
+                          title: 'Booking Pass',
+                          onTap: () {
+                            showCupertinoModalBottomSheet(
+                                context: context,
+                                bounce: false,
+                                expand: false,
+                                builder: (BuildContext context) {
+                                  return const BookingPassView();
+                                });
+                          },
+                        ),
+                        const SizedBox(width: 10),
+                        OptionItem(
+                            assetName: COUPON_ICON_PATH,
+                            title: 'Coupon',
+                            onTap: () {}),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            });
+        // _navigatorKey.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
         break;
       case 3:
         // history
@@ -153,7 +200,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           DotNavigationBarItem(
             selectedColor: primaryColor,
-            icon: navIcon(_selectedIndex == 2, SCAN_ICON_PATH),
+            icon: navIcon(false, SCAN_ICON_PATH), // always
           ),
           DotNavigationBarItem(
             selectedColor: primaryColor,
