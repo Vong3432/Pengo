@@ -1,11 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:pengo/bloc/goocard/goocard_bloc.dart';
 import 'package:pengo/config/color.dart';
+import 'package:pengo/const/lottie_const.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
+import 'package:pengo/helpers/theme/theme_helper.dart';
+import 'package:pengo/models/providers/auth_model.dart';
 import 'package:pengo/ui/goocard/widgets/goocard.dart';
 import 'package:pengo/ui/goocard/widgets/goocard_log_list.dart';
+import 'package:pengo/ui/widgets/auth/login_user_only.dart';
 import 'package:pengo/ui/widgets/layout/sliver_appbar.dart';
 
 class GooCardPage extends StatefulWidget {
@@ -40,22 +45,31 @@ class _GooCardPageState extends State<GooCardPage> {
               ),
             ),
             SliverFillRemaining(
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(18.0),
-                    child: GooCard(
-                      bloc: _goocardBloc,
+              child: context.watch<AuthModel>().user == null
+                  ? Container(
+                      padding: EdgeInsets.only(
+                        bottom: mediaQuery(context).size.height * 0.2,
+                      ),
+                      child: const LoginUserOnly(
+                        text: "Login to unlock Goocard feature",
+                      ),
+                    )
+                  : Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(18.0),
+                          child: GooCard(
+                            bloc: _goocardBloc,
+                          ),
+                        ),
+                        Expanded(
+                          child: GooCardLogList(
+                            bloc: _goocardBloc,
+                            reload: _loadCard,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  Expanded(
-                    child: GooCardLogList(
-                      bloc: _goocardBloc,
-                      reload: _loadCard,
-                    ),
-                  ),
-                ],
-              ),
             ),
           ],
         ),

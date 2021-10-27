@@ -3,8 +3,11 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pengo/bloc/coupons/view/coupon_bloc.dart';
 import 'package:pengo/config/color.dart';
+import 'package:pengo/const/lottie_const.dart';
 import 'package:pengo/const/space_const.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
@@ -46,7 +49,16 @@ class _CouponInfoViewState extends State<CouponInfoView> {
             title: Container(),
           ),
           SliverFillRemaining(
-            child: BlocBuilder<CouponBloc, CouponState>(
+            child: BlocConsumer<CouponBloc, CouponState>(
+              listener: (BuildContext context, CouponState state) {
+                switch (state.redeemCouponStatus) {
+                  case RedeemCouponStatus.success:
+                    _showRedeemSuccessAnimation();
+                    break;
+                  default:
+                    break;
+                }
+              },
               builder: (BuildContext context, CouponState state) {
                 switch (state.status) {
                   case CouponStatus.loading:
@@ -95,6 +107,36 @@ class _CouponInfoViewState extends State<CouponInfoView> {
         ],
       )),
     );
+  }
+
+  void _showRedeemSuccessAnimation() {
+    showCupertinoModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          Future.delayed(Duration(seconds: 3)).then(
+            (value) => Navigator.pop(context),
+          );
+          return Container(
+            height: mediaQuery(context).size.height * 0.4,
+            padding: const EdgeInsets.symmetric(horizontal: 18),
+            child: Center(
+              child: Column(
+                children: [
+                  LottieBuilder.asset(
+                    REDEEM_SUCCESS_LOTTIE,
+                    fit: BoxFit.cover,
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    "Redeem successfully",
+                    style: PengoStyle.header(context),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 
   void _load() {

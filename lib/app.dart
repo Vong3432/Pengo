@@ -9,12 +9,15 @@ import 'package:pengo/const/icon_const.dart';
 import 'package:pengo/helpers/notification/push_notification_manager.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
+import 'package:pengo/models/providers/auth_model.dart';
 import 'package:pengo/ui/goocard/goocard_view.dart';
 import 'package:pengo/ui/home/booking_pass.dart';
 import 'package:pengo/ui/home/home_view.dart';
 import 'package:pengo/ui/home/widgets/option_item.dart';
 import 'package:pengo/ui/penger/items/item_info_view.dart';
 import 'package:pengo/ui/profile/profile_view.dart';
+import 'package:pengo/ui/widgets/auth/login_user_only.dart';
+import 'package:provider/src/provider.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, this.idx}) : super(key: key);
@@ -51,43 +54,51 @@ class _MyHomePageState extends State<MyHomePage> {
             useRootNavigator: true,
             context: context,
             builder: (BuildContext context) {
-              return Container(
-                padding: const EdgeInsets.all(18),
-                height: mediaQuery(context).size.height * 0.3,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Text(
-                      "Use",
-                      style: PengoStyle.header(context),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        OptionItem(
-                          assetName: GOOCARD_ICON_PATH,
-                          title: 'Booking Pass',
-                          onTap: () {
-                            showCupertinoModalBottomSheet(
-                                context: context,
-                                bounce: false,
-                                expand: false,
-                                builder: (BuildContext context) {
-                                  return const BookingPassView();
-                                });
-                          },
-                        ),
-                        const SizedBox(width: 10),
-                        OptionItem(
-                            assetName: COUPON_ICON_PATH,
-                            title: 'Coupon',
-                            onTap: () {}),
-                      ],
-                    ),
-                  ],
-                ),
-              );
+              return context.watch<AuthModel>().user == null
+                  ? SizedBox(
+                      height: mediaQuery(context).size.height * 0.5,
+                      child: const LoginUserOnly(
+                        text:
+                            "Login to unlock pass and coupon scanning feature.",
+                      ),
+                    )
+                  : Container(
+                      padding: const EdgeInsets.all(18),
+                      height: mediaQuery(context).size.height * 0.3,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            "Use",
+                            style: PengoStyle.header(context),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              OptionItem(
+                                assetName: GOOCARD_ICON_PATH,
+                                title: 'Booking Pass',
+                                onTap: () {
+                                  showCupertinoModalBottomSheet(
+                                      context: context,
+                                      bounce: false,
+                                      expand: false,
+                                      builder: (BuildContext context) {
+                                        return const BookingPassView();
+                                      });
+                                },
+                              ),
+                              const SizedBox(width: 10),
+                              OptionItem(
+                                  assetName: COUPON_ICON_PATH,
+                                  title: 'Coupon',
+                                  onTap: () {}),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
             });
         // _navigatorKey.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
         break;
