@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:pengo/config/theme.dart';
+import 'package:pengo/helpers/geo/geo_helper.dart';
 import 'package:pengo/helpers/notification/push_notification_manager.dart';
 import 'package:pengo/models/providers/auth_model.dart';
 import 'package:pengo/providers/booking_pass_provider.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         providers: [
           ChangeNotifierProvider(create: (_) => BookingPassModel()),
           ChangeNotifierProvider(create: (_) => AuthModel()),
+          ChangeNotifierProvider(create: (_) => GeoHelper()),
         ],
         child: MaterialApp(
           title: 'Pengo',

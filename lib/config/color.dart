@@ -65,6 +65,8 @@ Color secondaryTextColor = const Color(0xFF727373);
 Color greyBgColor = const Color(0xFFF2F4F6);
 Color whiteColor = Colors.white;
 Color blueColor = const Color(0xFF6283FA);
+Color yellowColor = const Color(0xFF9B902B);
+Color pinkColor = const Color(0xFFCE3B95);
 
 // Gradient
 LinearGradient primaryLinear = const LinearGradient(

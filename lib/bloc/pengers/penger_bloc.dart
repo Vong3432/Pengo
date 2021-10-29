@@ -2,10 +2,9 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:pengo/bloc/pengers/penger_repo.dart';
 import 'package:pengo/models/penger_model.dart';
-import 'package:rxdart/rxdart.dart';
 
 part 'penger_event.dart';
 part 'penger_state.dart';
@@ -21,16 +20,39 @@ class PengerBloc extends Bloc<PengerEvent, PengerState> {
   ) async* {
     // TODO: implement mapEventToState
     if (event is FetchPengers) {
-      yield* _mapFetchPengersToState();
+      yield* _mapFetchPengersToState(
+        sortDate: event.sortDate,
+        km: event.km,
+        name: event.name,
+        sortDistance: event.sortDistance,
+        limit: event.limit,
+        searchKeywordOnly: event.searchKeywordOnly,
+      );
     }
     if (event is FetchPopularNearestPengers) {
       yield* _mapFetchPopularNearestPengersToState();
     }
   }
 
-  Stream<PengerState> _mapFetchPengersToState() async* {
+  Stream<PengerState> _mapFetchPengersToState({
+    int? sortDate,
+    int? sortDistance,
+    int? km,
+    int? limit,
+    String? name,
+    bool? searchKeywordOnly,
+  }) async* {
     try {
-      final List<Penger> pengers = await _pengerRepo.fetchPengers();
+      yield PengersLoading();
+      final List<Penger> pengers = await _pengerRepo.fetchPengers(
+        sortDate: sortDate,
+        sortDistance: sortDistance,
+        km: km,
+        name: name,
+        limit: limit,
+        searchKeywordOnly: searchKeywordOnly,
+      );
+      await Future.delayed(const Duration(seconds: 1));
       yield PengersLoaded(pengers);
     } catch (_) {
       yield PengersNotLoaded();

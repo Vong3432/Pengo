@@ -31,7 +31,7 @@ class BookingCategoryBloc
       yield BookingCategoriesLoading();
       final List<BookingCategory> categories =
           await _repo.fetchBookingCategories();
-      await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 1));
       yield BookingCategoriesLoaded(categories);
     } catch (_) {
       yield BookingCategoriesNotLoaded();

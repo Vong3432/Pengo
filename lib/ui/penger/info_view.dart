@@ -41,8 +41,10 @@ class _InfoPageState extends State<InfoPage> {
     // TODO: implement initState
     super.initState();
     _kGooglePlex = CameraPosition(
-      target: LatLng(widget.penger.location.geolocation.latitude,
-          widget.penger.location.geolocation.longitude),
+      target: LatLng(
+        widget.penger.location?.geolocation.latitude ?? 0,
+        widget.penger.location?.geolocation.longitude ?? 0,
+      ),
       zoom: 14.4746,
     );
   }
@@ -230,7 +232,7 @@ class _InfoPageState extends State<InfoPage> {
         OutlinedListTile(
           assetName: LOCATION_ICON_PATH,
           title: "Copy location",
-          subTitle: widget.penger.location.address,
+          subTitle: widget.penger.location?.address,
           trailing: Icon(Icons.copy),
           onTap: () {
             debugPrint("Copied");

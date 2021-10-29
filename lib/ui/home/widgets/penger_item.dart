@@ -14,6 +14,7 @@ class PengerItem extends StatelessWidget {
     this.width,
     this.price,
     required this.logo,
+    this.trailing,
   }) : super(key: key);
 
   final String name;
@@ -22,6 +23,7 @@ class PengerItem extends StatelessWidget {
   final VoidCallback? onTap;
   final double? width;
   final double? price;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +71,7 @@ class PengerItem extends StatelessWidget {
         Visibility(
           visible: location != null,
           child: Text(
-            location!,
+            location ?? "",
             style: PengoStyle.captionNormal(context).copyWith(
               color: secondaryTextColor,
             ),
@@ -87,6 +89,7 @@ class PengerItem extends StatelessWidget {
           ),
         ),
       ],
+      trailing: trailing,
     );
   }
 }

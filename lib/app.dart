@@ -6,10 +6,13 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pengo/config/color.dart';
 import 'package:pengo/config/shadow.dart';
 import 'package:pengo/const/icon_const.dart';
+import 'package:pengo/helpers/geo/geo_helper.dart';
 import 'package:pengo/helpers/notification/push_notification_manager.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
+import 'package:pengo/helpers/toast/toast_helper.dart';
 import 'package:pengo/models/providers/auth_model.dart';
+import 'package:pengo/ui/explore/explore_view.dart';
 import 'package:pengo/ui/goocard/goocard_view.dart';
 import 'package:pengo/ui/home/booking_pass.dart';
 import 'package:pengo/ui/home/home_view.dart';
@@ -177,6 +180,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 break;
               case "/booking-item":
                 builder = (BuildContext context) => ItemInfoView();
+                break;
+              case "/explore":
+                builder = (BuildContext context) => ExploreView();
+                setState(() {
+                  _selectedIndex = -1;
+                });
                 break;
               default:
                 throw Exception('Invalid route: ${settings.name}');

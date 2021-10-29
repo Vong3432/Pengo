@@ -1,15 +1,18 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:pengo/models/geolocation_model.dart';
 
 part 'user_model.g.dart';
 
 @JsonSerializable()
 class User {
-  const User(
-      {required this.username,
-      required this.avatar,
-      required this.id,
-      required this.email,
-      required this.phone});
+  const User({
+    required this.username,
+    required this.avatar,
+    required this.id,
+    required this.email,
+    required this.phone,
+    this.locations,
+  });
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
   Map<String, dynamic> toJson() => _$UserToJson(this);
@@ -19,6 +22,26 @@ class User {
   final String email;
   final String phone;
   final String avatar;
+  final List<UserLocation>? locations;
+}
+
+@JsonSerializable()
+class UserLocation {
+  UserLocation({
+    this.address,
+    this.street,
+    this.geolocation,
+    required this.isFav,
+  });
+
+  factory UserLocation.fromJson(Map<String, dynamic> json) =>
+      _$UserLocationFromJson(json);
+  Map<String, dynamic> toJson() => _$UserLocationToJson(this);
+
+  final String? address;
+  final String? street;
+  final Geolocation? geolocation;
+  final bool isFav;
 }
 
 final List<User> userMockDataList = <User>[

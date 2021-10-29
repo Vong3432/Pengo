@@ -27,3 +27,7 @@ const String NEARBY_ICON_PATH = '$PREFIX_PATH/nearby.svg';
 const String MONEY_ICON_PATH = '$PREFIX_PATH/money.svg';
 const String VALID_ICON_PATH = '$PREFIX_PATH/valid.svg';
 const String INVALID_ICON_PATH = '$PREFIX_PATH/invalid.svg';
+const String FILTER_ICON_PATH = '$PREFIX_PATH/filter.svg';
+const String SEARCH_ICON_PATH = '$PREFIX_PATH/search.svg';
+const String G1_ICON_PATH = '$PREFIX_PATH/g1.svg';
+const String DISTANCE_ICON_PATH = '$PREFIX_PATH/distance.svg';

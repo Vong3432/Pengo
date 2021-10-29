@@ -17,7 +17,7 @@ class Penger {
     required this.logo,
     this.items,
     this.description,
-    required this.location,
+    this.location,
     // required this.reviews,
   });
 
@@ -28,7 +28,7 @@ class Penger {
   final String name;
   final String logo;
   final String? description;
-  final Location location;
+  final Location? location;
   // final List<Review> reviews;
 
   @JsonKey(name: 'booking_items')

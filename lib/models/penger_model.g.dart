@@ -15,7 +15,9 @@ Penger _$PengerFromJson(Map<String, dynamic> json) {
         ?.map((e) => BookingItem.fromJson(e as Map<String, dynamic>))
         .toList(),
     description: json['description'] as String?,
-    location: Location.fromJson(json['location'] as Map<String, dynamic>),
+    location: json['location'] == null
+        ? null
+        : Location.fromJson(json['location'] as Map<String, dynamic>),
   );
 }
 

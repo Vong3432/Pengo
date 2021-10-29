@@ -13,6 +13,9 @@ User _$UserFromJson(Map<String, dynamic> json) {
     id: json['id'] as int,
     email: json['email'] as String,
     phone: json['phone'] as String,
+    locations: (json['locations'] as List<dynamic>?)
+        ?.map((e) => UserLocation.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 
@@ -22,4 +25,24 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'email': instance.email,
       'phone': instance.phone,
       'avatar': instance.avatar,
+      'locations': instance.locations,
+    };
+
+UserLocation _$UserLocationFromJson(Map<String, dynamic> json) {
+  return UserLocation(
+    address: json['address'] as String?,
+    street: json['street'] as String?,
+    geolocation: json['geolocation'] == null
+        ? null
+        : Geolocation.fromJson(json['geolocation'] as Map<String, dynamic>),
+    isFav: json['isFav'] as bool,
+  );
+}
+
+Map<String, dynamic> _$UserLocationToJson(UserLocation instance) =>
+    <String, dynamic>{
+      'address': instance.address,
+      'street': instance.street,
+      'geolocation': instance.geolocation,
+      'isFav': instance.isFav,
     };

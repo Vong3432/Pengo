@@ -8,9 +8,11 @@ class CustomListItem extends StatelessWidget {
     required this.content,
     this.width,
     this.onTap,
+    this.trailing,
   }) : super(key: key);
 
   final Widget leading;
+  final Widget? trailing;
   final List<Widget> content;
   final VoidCallback? onTap;
   final double? width;
@@ -23,8 +25,8 @@ class CustomListItem extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Container(
-            width: 52,
-            height: 52,
+            width: 32,
+            height: 32,
             decoration: BoxDecoration(
               color: primaryLightColor,
               borderRadius: const BorderRadius.all(
@@ -45,8 +47,14 @@ class CustomListItem extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 18),
               child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: content),
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: content,
+              ),
+            ),
+          if (trailing != null) const Spacer(),
+          if (trailing != null)
+            Container(
+              child: trailing,
             ),
         ],
       ),

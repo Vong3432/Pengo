@@ -14,15 +14,23 @@ class CustomButton extends StatelessWidget {
     this.minimumSize,
     this.isLoading,
     this.padding,
+    this.border,
+    this.boxShadow,
+    this.fullWidth = true,
+    this.radius,
   }) : super(key: key);
 
   final VoidCallback? onPressed;
   final Widget text;
   final Color? backgroundColor;
   final Color? color;
-  final Size? minimumSize;
+  final double? minimumSize;
   final bool? isLoading;
   final EdgeInsets? padding;
+  final List<BoxShadow>? boxShadow;
+  final BoxBorder? border;
+  final bool? fullWidth;
+  final double? radius;
 
   @override
   Widget build(BuildContext context) {
@@ -31,12 +39,13 @@ class CustomButton extends StatelessWidget {
         : GestureDetector(
             onTap: onPressed,
             child: Container(
-              width: minimumSize?.width ?? double.infinity,
+              width: fullWidth == true ? double.infinity : null,
               padding: padding ?? const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
+                border: border,
+                borderRadius: BorderRadius.circular(radius ?? 15),
                 color: backgroundColor ?? primaryColor,
-                boxShadow: normalShadow(Theme.of(context)),
+                boxShadow: boxShadow ?? normalShadow(Theme.of(context)),
               ),
               child: DefaultTextStyle(
                 textAlign: TextAlign.center,

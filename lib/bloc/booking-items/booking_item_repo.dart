@@ -14,8 +14,26 @@ class BookingItemRepo {
   final BookingItemApiProvider _bookingItemApiProvider =
       BookingItemApiProvider();
 
-  Future<List<BookingItem>> fetchBookingItems({int? catId}) async =>
-      _bookingItemApiProvider.fetchBookingItems(catId: catId);
+  Future<List<BookingItem>> fetchBookingItems({
+    int? catId,
+    int? sortDate,
+    int? sortDistance,
+    int? km,
+    String? name,
+    int? price,
+    int? limit,
+    bool? searchKeywordOnly,
+  }) async =>
+      _bookingItemApiProvider.fetchBookingItems(
+        catId: catId,
+        sortDate: sortDate,
+        sortDistance: sortDistance,
+        km: km,
+        name: name,
+        price: price,
+        limit: limit,
+        searchKeywordOnly: searchKeywordOnly,
+      );
 
   Future<BookingItem> fetchBookingItem({required int id}) async =>
       _bookingItemApiProvider.fetchBookingItem(id: id);

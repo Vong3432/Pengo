@@ -21,7 +21,16 @@ class ViewItemBloc extends Bloc<ViewBookingItemEvent, ViewBookingItemState> {
   ) async* {
     // TODO: implement mapEventToState
     if (event is FetchBookingItemsEvent) {
-      yield* _mapFetchItemsToState();
+      yield* _mapFetchItemsToState(
+        catId: event.catId,
+        sortDate: event.sortDate,
+        sortDistance: event.sortDistance,
+        km: event.km,
+        name: event.name,
+        price: event.price,
+        limit: event.limit,
+        searchKeywordOnly: event.searchKeywordOnly,
+      );
     }
     if (event is FetchBookingItemEvent) {
       yield* _mapFetchItem(event.itemId);
@@ -31,10 +40,33 @@ class ViewItemBloc extends Bloc<ViewBookingItemEvent, ViewBookingItemState> {
     }
   }
 
-  Stream<ViewBookingItemState> _mapFetchItemsToState() async* {
+  Stream<ViewBookingItemState> _mapClearItemsToState() async* {
+    yield BookingItemsInitial();
+    yield const BookingItemsLoaded(<BookingItem>[]);
+  }
+
+  Stream<ViewBookingItemState> _mapFetchItemsToState({
+    int? catId,
+    int? sortDate,
+    int? sortDistance,
+    int? km,
+    String? name,
+    int? price,
+    int? limit,
+    bool? searchKeywordOnly,
+  }) async* {
     try {
       yield BookingItemsLoading();
-      final List<BookingItem> items = await _repo.fetchBookingItems();
+      final List<BookingItem> items = await _repo.fetchBookingItems(
+        catId: catId,
+        sortDistance: sortDistance,
+        sortDate: sortDate,
+        km: km,
+        name: name,
+        price: price,
+        limit: limit,
+        searchKeywordOnly: searchKeywordOnly,
+      );
       await Future.delayed(const Duration(seconds: 1));
       yield BookingItemsLoaded(items);
     } catch (_) {

@@ -4,7 +4,9 @@ import 'package:after_layout/after_layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pengo/app.dart';
+import 'package:pengo/helpers/geo/geo_helper.dart';
 import 'package:pengo/helpers/storage/shared_preferences_helper.dart';
+import 'package:pengo/helpers/toast/toast_helper.dart';
 import 'package:pengo/models/auth_model.dart';
 import 'package:pengo/models/providers/auth_model.dart';
 import 'package:pengo/onboarding.dart';
@@ -33,6 +35,17 @@ class _SplashState extends State<Splash> with AfterLayoutMixin<Splash> {
           Auth.fromJson(jsonDecode(_user) as Map<String, dynamic>);
 
       context.read<AuthModel>().setUser(auth);
+      try {
+        await context.read<GeoHelper>().determinePosition(auth: auth);
+      } catch (e) {
+        showToast(msg: "GPS error: $e");
+      }
+    } else {
+      try {
+        await context.read<GeoHelper>().determinePosition();
+      } catch (e) {
+        showToast(msg: "GPS error: $e");
+      }
     }
 
     if (_seen) {
