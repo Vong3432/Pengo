@@ -35,18 +35,9 @@ class _SplashState extends State<Splash> with AfterLayoutMixin<Splash> {
           Auth.fromJson(jsonDecode(_user) as Map<String, dynamic>);
 
       context.read<AuthModel>().setUser(auth);
-      try {
-        await context.read<GeoHelper>().determinePosition(auth: auth);
-      } catch (e) {
-        showToast(msg: "GPS error: $e");
-      }
-    } else {
-      try {
-        await context.read<GeoHelper>().determinePosition();
-      } catch (e) {
-        showToast(msg: "GPS error: $e");
-      }
     }
+
+    await context.read<GeoHelper>().determinePosition();
 
     if (_seen) {
       Navigator.of(context).pushReplacement(CupertinoPageRoute(

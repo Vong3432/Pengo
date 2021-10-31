@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pengo/config/color.dart';
 import 'package:pengo/config/shadow.dart';
+import 'package:pengo/extensions/double_extension.dart';
+import 'package:pengo/helpers/geo/geo_helper.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/models/booking_record_model.dart';
 
@@ -51,26 +53,44 @@ class _SelfBookingItemState extends State<SelfBookingItem> {
                       width: double.infinity,
                       height: 150,
                     ),
-                    Positioned.fill(
-                      right: 5,
-                      child: Align(
-                        alignment: Alignment.topRight,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0, vertical: 2.0),
-                          child: Chip(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            backgroundColor: primaryColor,
-                            label: Text(
-                              "32 km",
-                              style: PengoStyle.caption(context).copyWith(
-                                color: whiteColor,
-                              ),
-                            ),
-                          ),
+                    FutureBuilder(
+                        future: GeoHelper().distanceBetween(
+                          widget.record.item!.geolocation!.latitude,
+                          widget.record.item!.geolocation!.longitude,
                         ),
-                      ),
-                    ),
+                        builder: (
+                          BuildContext context,
+                          AsyncSnapshot<double?> snapshot,
+                        ) {
+                          if (snapshot.hasData) {
+                            return Positioned.fill(
+                              right: 5,
+                              child: Align(
+                                alignment: Alignment.topRight,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8.0,
+                                    vertical: 2.0,
+                                  ),
+                                  child: Chip(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                    ),
+                                    backgroundColor: primaryColor,
+                                    label: Text(
+                                      "${snapshot.data!.metersToKm().toStringAsFixed(1)} km",
+                                      style:
+                                          PengoStyle.caption(context).copyWith(
+                                        color: whiteColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                          return Container();
+                        }),
                   ],
                 ),
                 Padding(

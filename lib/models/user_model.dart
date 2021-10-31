@@ -32,15 +32,19 @@ class UserLocation {
     this.street,
     this.geolocation,
     required this.isFav,
+    required this.name,
   });
 
   factory UserLocation.fromJson(Map<String, dynamic> json) =>
       _$UserLocationFromJson(json);
   Map<String, dynamic> toJson() => _$UserLocationToJson(this);
 
+  final String name;
   final String? address;
   final String? street;
   final Geolocation? geolocation;
+
+  @JsonKey(name: 'is_fav')
   final bool isFav;
 }
 

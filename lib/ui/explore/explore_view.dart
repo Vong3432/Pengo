@@ -142,34 +142,34 @@ class _ExploreViewState extends State<ExploreView>
                     name: item.title,
                     logo: item.poster,
                     location: item.geolocation?.name,
-                    trailing: Row(
-                      children: <Widget>[
-                        SvgPicture.asset(
-                          DISTANCE_ICON_PATH,
-                          width: 16,
+                    trailing: FutureBuilder(
+                        future: GeoHelper().distanceBetween(
+                          item.geolocation!.latitude,
+                          item.geolocation!.longitude,
                         ),
-                        FutureBuilder(
-                            future: GeoHelper().distanceBetween(
-                              item.geolocation!.latitude,
-                              item.geolocation!.longitude,
-                            ),
-                            builder: (
-                              BuildContext context,
-                              AsyncSnapshot<double?> snapshot,
-                            ) {
-                              if (snapshot.hasData) {
-                                return Text(
+                        builder: (
+                          BuildContext context,
+                          AsyncSnapshot<double?> snapshot,
+                        ) {
+                          if (snapshot.hasData) {
+                            return Row(
+                              children: [
+                                SvgPicture.asset(
+                                  DISTANCE_ICON_PATH,
+                                  width: 16,
+                                ),
+                                Text(
                                   "${snapshot.data!.metersToKm().toStringAsFixed(1)} km",
                                   style: PengoStyle.caption(context).copyWith(
                                     color: secondaryTextColor,
                                     fontSize: 12,
                                   ),
-                                );
-                              }
-                              return Container();
-                            }),
-                      ],
-                    ),
+                                ),
+                              ],
+                            );
+                          }
+                          return Container();
+                        }),
                   );
                 });
           }

@@ -13,6 +13,7 @@ import 'package:pengo/helpers/geo/geo_helper.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/models/penger_model.dart';
+import 'package:pengo/ui/home/widgets/current_location.dart';
 import 'package:pengo/ui/home/widgets/guide_card.dart';
 import 'package:pengo/ui/home/widgets/home_h_listview.dart';
 import 'package:pengo/ui/home/widgets/penger_item.dart';
@@ -63,48 +64,8 @@ class _HomePageState extends State<HomePage> {
               "Home",
               style: PengoStyle.navigationTitle(context),
             ),
-            actions: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    SvgPicture.asset(
-                      LOCATION_ICON_PATH,
-                      width: 24,
-                      color: primaryColor,
-                    ),
-                    const SizedBox(width: 8),
-                    SizedBox(
-                      width: mediaQuery(context).size.width * 0.4,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text(
-                            "Current location",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            (context
-                                        .watch<GeoHelper>()
-                                        .currentPos()?['address'] ??
-                                    "Enable GPS")
-                                .toString(),
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 10,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
+            actions: const <Widget>[
+              CurrentLocation(),
             ],
           ),
           CustomSliverBody(
@@ -117,14 +78,14 @@ class _HomePageState extends State<HomePage> {
                   mainAxisSize: MainAxisSize.min,
                   // ignore: prefer_const_literals_to_create_immutables
                   children: <Widget>[
-                    CupertinoSearchTextField(
-                      onChanged: (String value) {
-                        debugPrint('The text has changed to: $value');
-                      },
-                      onSubmitted: (String value) {
-                        debugPrint('Submitted text: $value');
-                      },
-                    ),
+                    // CupertinoSearchTextField(
+                    //   onChanged: (String value) {
+                    //     debugPrint('The text has changed to: $value');
+                    //   },
+                    //   onSubmitted: (String value) {
+                    //     debugPrint('Submitted text: $value');
+                    //   },
+                    // ),
                     const SelfBookingList(),
                     const QuickTapSection(),
                     _buildPopularList(context),
