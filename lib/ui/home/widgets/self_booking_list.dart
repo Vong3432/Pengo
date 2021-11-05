@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pengo/bloc/records/booking_record_bloc.dart';
 import 'package:pengo/helpers/storage/shared_preferences_helper.dart';
-import 'package:pengo/helpers/theme/theme_helper.dart';
-import 'package:pengo/models/booking_record_model.dart';
-import 'package:pengo/models/providers/auth_model.dart';
+import 'package:pengo/models/auth_model.dart';
 import 'package:pengo/ui/booking-records/booking_record_listing_view.dart';
 import 'package:pengo/ui/home/widgets/home_h_listview.dart';
 import 'package:pengo/ui/home/widgets/self_booking_item.dart';
 import 'package:pengo/ui/widgets/api/loading.dart';
 
 class SelfBookingList extends StatefulWidget {
-  const SelfBookingList({Key? key}) : super(key: key);
+  const SelfBookingList({Key? key, this.auth}) : super(key: key);
+
+  final Auth? auth;
 
   @override
   _SelfBookingListState createState() => _SelfBookingListState();
@@ -63,10 +63,7 @@ class _SelfBookingListState extends State<SelfBookingList> {
   }
 
   Future<void> _loadRecords() async {
-    final String? prefs = await SharedPreferencesHelper().getKey("user");
-    if (prefs != null) {
-      BlocProvider.of<BookingRecordBloc>(context)
-          .add(const FetchRecordsEvent(limit: 3));
-    }
+    BlocProvider.of<BookingRecordBloc>(context)
+        .add(const FetchRecordsEvent(limit: 3));
   }
 }

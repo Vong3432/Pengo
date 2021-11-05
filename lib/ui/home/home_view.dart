@@ -13,6 +13,7 @@ import 'package:pengo/helpers/geo/geo_helper.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/models/penger_model.dart';
+import 'package:pengo/models/providers/auth_model.dart';
 import 'package:pengo/ui/home/widgets/current_location.dart';
 import 'package:pengo/ui/home/widgets/guide_card.dart';
 import 'package:pengo/ui/home/widgets/home_h_listview.dart';
@@ -86,7 +87,7 @@ class _HomePageState extends State<HomePage> {
                     //     debugPrint('Submitted text: $value');
                     //   },
                     // ),
-                    const SelfBookingList(),
+                    SelfBookingList(auth: context.watch<AuthModel>().user),
                     const QuickTapSection(),
                     _buildPopularList(context),
                     _buildNearbyList(context),

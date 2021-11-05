@@ -12,6 +12,7 @@ import 'package:pengo/helpers/geo/geo_helper.dart';
 import 'package:pengo/helpers/geo/geocode_helper.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
+import 'package:pengo/helpers/toast/toast_helper.dart';
 import 'package:pengo/models/providers/auth_model.dart';
 import 'package:pengo/models/user_model.dart';
 import 'package:pengo/ui/home/widgets/save_location.dart';
@@ -35,7 +36,11 @@ class _LocationListState extends State<LocationList> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    GeoHelper().determinePosition();
+    try {
+      GeoHelper().determinePosition();
+    } catch (e) {
+      showToast(msg: e.toString());
+    }
 
     _loadUserLocations(
       Provider.of<AuthModel>(context, listen: false).user?.user,

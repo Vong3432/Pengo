@@ -163,6 +163,8 @@ class GeoHelper extends ChangeNotifier {
         return distance;
       });
     } catch (e) {
+      _currentAddress = null;
+      notifyListeners();
       debugPrint("distance bet error: $e");
       return null;
     }

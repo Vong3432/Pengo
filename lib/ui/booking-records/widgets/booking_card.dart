@@ -23,13 +23,14 @@ class BookingCard extends StatelessWidget {
     String? fSt;
     if (startDate != null) {
       fSd = DateFormat().add_yMMMEd().format(startDate.toLocal());
-      fSt = DateFormat().add_jm().format(startDate.toLocal());
+      fSt = record.bookTime;
+      // ?? DateFormat().add_jm().format(startDate.toLocal());
     }
     String? fEd;
     String? fEt;
     if (endDate != null) {
       fEd = DateFormat().add_yMMMEd().format(endDate.toLocal());
-      fEt = DateFormat().add_jm().format(endDate.toLocal());
+      // fEt = DateFormat().add_jm().format(endDate.toLocal());
     }
 
     return GestureDetector(
@@ -233,7 +234,7 @@ class BookingCardHeader extends StatelessWidget {
                       width: 4,
                     ),
                     Text(
-                      "$startTime - $endTime",
+                      "$startTime",
                       style: PengoStyle.caption(context).copyWith(
                         color: grayTextColor,
                       ),

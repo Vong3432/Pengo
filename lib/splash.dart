@@ -37,7 +37,11 @@ class _SplashState extends State<Splash> with AfterLayoutMixin<Splash> {
       context.read<AuthModel>().setUser(auth);
     }
 
-    await context.read<GeoHelper>().determinePosition();
+    try {
+      await context.read<GeoHelper>().determinePosition();
+    } catch (e) {
+      showToast(msg: e.toString());
+    }
 
     if (_seen) {
       Navigator.of(context).pushReplacement(CupertinoPageRoute(
