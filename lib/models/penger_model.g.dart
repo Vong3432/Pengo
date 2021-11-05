@@ -18,6 +18,9 @@ Penger _$PengerFromJson(Map<String, dynamic> json) {
     location: json['location'] == null
         ? null
         : Location.fromJson(json['location'] as Map<String, dynamic>),
+    closeDates: (json['close_dates'] as List<dynamic>?)
+        ?.map((e) => BookingCloseDate.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 
@@ -28,4 +31,5 @@ Map<String, dynamic> _$PengerToJson(Penger instance) => <String, dynamic>{
       'description': instance.description,
       'location': instance.location,
       'booking_items': instance.items,
+      'close_dates': instance.closeDates,
     };

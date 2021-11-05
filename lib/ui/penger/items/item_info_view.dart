@@ -44,7 +44,8 @@ class _ItemInfoViewState extends State<ItemInfoView> {
           if (state is BookingItemLoaded) {
             // hide book button if:
             // - `bookable` property status is FALSE.
-            final bool showBookBtn = state.status.bookable;
+            final bool showBookBtn =
+                state.status.bookable && state.item.isOpen != false;
             // && state.item.bookingRecords?.isEmpty == true
 
             return CustomScrollView(

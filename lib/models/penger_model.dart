@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:pengo/models/booking_close_date_model.dart';
 import 'package:pengo/models/booking_item_model.dart';
 import 'package:pengo/models/location_model.dart';
 import 'package:pengo/models/review.dart';
@@ -19,6 +20,7 @@ class Penger {
     this.description,
     this.location,
     // required this.reviews,
+    this.closeDates,
   });
 
   factory Penger.fromJson(Map<String, dynamic> json) => _$PengerFromJson(json);
@@ -33,4 +35,7 @@ class Penger {
 
   @JsonKey(name: 'booking_items')
   final List<BookingItem>? items;
+
+  @JsonKey(name: 'close_dates')
+  final List<BookingCloseDate>? closeDates;
 }

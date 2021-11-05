@@ -48,6 +48,7 @@ BookingItem _$BookingItemFromJson(Map<String, dynamic> json) {
     bookingCategory: json['category'] == null
         ? null
         : BookingCategory.fromJson(json['category'] as Map<String, dynamic>),
+    isOpen: json['is_open'] as bool?,
   );
 }
 
@@ -88,6 +89,7 @@ Map<String, dynamic> _$BookingItemToJson(BookingItem instance) {
   val['time_gap_value'] = instance.timeGapValue;
   val['priority_option'] = instance.priorityOption;
   val['category'] = instance.bookingCategory;
+  val['is_open'] = instance.isOpen;
   return val;
 }
 

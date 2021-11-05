@@ -3,8 +3,12 @@ import 'package:intl/intl.dart';
 import 'package:pengo/config/color.dart';
 import 'package:pengo/const/space_const.dart';
 import 'package:pengo/cubit/booking/booking_form_cubit.dart';
+import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
+import 'package:pengo/models/booking_close_date_model.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:collection/collection.dart';
+import 'package:pengo/extensions/date_extension.dart';
 
 class BookDateModal extends StatefulWidget {
   const BookDateModal({
@@ -13,11 +17,13 @@ class BookDateModal extends StatefulWidget {
     this.minDate,
     this.maxDate,
     this.selectionMode,
+    this.closeDates,
   }) : super(key: key);
 
   final BookingFormStateCubit cubit;
   final DateTime? minDate;
   final DateTime? maxDate;
+  final List<BookingCloseDate>? closeDates;
   final DateRangePickerSelectionMode? selectionMode;
 
   @override
@@ -25,10 +31,13 @@ class BookDateModal extends StatefulWidget {
 }
 
 class _BookDateModalState extends State<BookDateModal> {
+  final DateRangePickerController _controller = DateRangePickerController();
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    debugPrint("maxDate ${widget.maxDate}");
   }
 
   @override
@@ -51,7 +60,9 @@ class _BookDateModalState extends State<BookDateModal> {
               borderRadius: BorderRadius.circular(10),
             ),
             child: SfDateRangePicker(
+              controller: _controller,
               initialSelectedRange: widget.cubit.state.range,
+              showNavigationArrow: true,
               selectionMode:
                   widget.selectionMode ?? DateRangePickerSelectionMode.single,
               onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
@@ -90,14 +101,16 @@ class _BookDateModalState extends State<BookDateModal> {
               maxDate: widget.maxDate,
               headerStyle: DateRangePickerHeaderStyle(
                 textStyle: TextStyle(
-                    fontSize: 20,
-                    fontStyle: FontStyle.normal,
-                    color: textColor),
+                  fontSize: 20,
+                  fontStyle: FontStyle.normal,
+                  color: textColor,
+                ),
               ),
               monthViewSettings: DateRangePickerMonthViewSettings(
-                viewHeaderStyle: DateRangePickerViewHeaderStyle(
-                  textStyle: TextStyle(color: textColor),
-                ),
+                blackoutDates: _blackoutDates(),
+                // viewHeaderStyle: DateRangePickerViewHeaderStyle(
+                //   textStyle: TextStyle(color: textColor),
+                // ),
               ),
               monthCellStyle: DateRangePickerMonthCellStyle(
                 todayTextStyle: TextStyle(color: textColor),
@@ -108,5 +121,34 @@ class _BookDateModalState extends State<BookDateModal> {
         ],
       ),
     );
+  }
+
+  List<DateTime>? _blackoutDates() {
+    final List<List<DateTime>>? _blackoutDates2d =
+        widget.closeDates?.map((BookingCloseDate date) {
+      final DateTime fD = DateTime.parse(date.from);
+      final DateTime fT = DateTime.parse(date.to);
+
+      DateTime curr = fD;
+      final List<DateTime> list = [fD];
+
+      while (curr.isBefore(fT)) {
+        final DateTime i = curr.add(const Duration(days: 1));
+        curr = i;
+        list.add(curr);
+      }
+      return list;
+    }).toList();
+
+    final List<DateTime>? dates =
+        _blackoutDates2d?.expand((List<DateTime> x) => x).toList();
+    return dates;
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _controller.dispose();
   }
 }

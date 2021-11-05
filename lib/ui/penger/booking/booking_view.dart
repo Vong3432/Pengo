@@ -251,7 +251,8 @@ class _BookingViewState extends State<BookingView> {
                         ),
                         const Spacer(),
                         Visibility(
-                          visible: widget.bookingItem.price == null &&
+                          visible: widget.bookingItem.isOpen != false &&
+                              widget.bookingItem.price == null &&
                               context.select<BookingFormStateCubit, double>(
                                     (BookingFormStateCubit form) =>
                                         form.state.progress,
@@ -347,6 +348,7 @@ class _BookingViewState extends State<BookingView> {
           minDate: _minDate,
           maxDate: widget.bookingItem.endAt?.toLocal(),
           selectionMode: DateRangePickerSelectionMode.range,
+          closeDates: widget.bookingItem.bookingCategory?.penger?.closeDates,
         ),
       ),
     ).whenComplete(() {

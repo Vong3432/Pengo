@@ -36,9 +36,7 @@ class _SelfBookingListState extends State<SelfBookingList> {
             return const LoadingWidget();
           } else if (state is BookingRecordsLoaded) {
             if (state.records.isEmpty) {
-              return Container(
-                child: Text("Book now"),
-              );
+              return Container();
             }
             return HomeHListView(
               onTapSeeAll: () {

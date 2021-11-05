@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pengo/const/locale_const.dart';
 import 'package:pengo/models/booking_category_model.dart';
+import 'package:pengo/models/booking_close_date_model.dart';
 import 'package:pengo/models/booking_record_model.dart';
 import 'package:pengo/models/geolocation_model.dart';
 import 'package:pengo/models/priority_option_model.dart';
@@ -38,6 +39,7 @@ class BookingItem extends Equatable {
     required this.timeGapUnits,
     required this.timeGapValue,
     this.bookingCategory,
+    this.isOpen,
   });
 
   factory BookingItem.fromJson(Map<String, dynamic> json) {
@@ -130,6 +132,9 @@ class BookingItem extends Equatable {
   @JsonKey(name: 'category')
   final BookingCategory? bookingCategory;
 
+  @JsonKey(name: 'is_open')
+  final bool? isOpen;
+
   @override
   // TODO: implement props
   List<Object?> get props => [
@@ -160,5 +165,6 @@ class BookingItem extends Equatable {
         timeGapUnits,
         timeGapValue,
         bookingCategory,
+        isOpen,
       ];
 }
