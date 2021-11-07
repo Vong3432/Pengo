@@ -41,4 +41,13 @@ class RecordsApiProvider {
       throw e.response!.data['msg'].toString();
     }
   }
+
+  Future<void> cancelBook(int recordId) async {
+    try {
+      await _apiHelper.del('/pengoo/booking-records/$recordId');
+    } on DioError catch (e) {
+      debugPrint(e.response.toString());
+      throw e.response!.data['msg'].toString();
+    }
+  }
 }

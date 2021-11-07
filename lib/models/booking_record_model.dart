@@ -14,6 +14,8 @@ class BookingRecord {
     required this.item,
     required this.goocardID,
     required this.pengerID,
+    required this.rewardPoint,
+    required this.isUsed,
     this.log,
   });
 
@@ -37,6 +39,12 @@ class BookingRecord {
 
   @JsonKey(name: 'item')
   final BookingItem? item;
+
+  @JsonKey(name: 'reward_point')
+  final double rewardPoint;
+
+  @JsonKey(name: 'is_used')
+  final bool isUsed;
 
   @JsonKey(name: 'log')
   final GoocardLog? log;

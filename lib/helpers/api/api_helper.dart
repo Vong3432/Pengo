@@ -101,4 +101,23 @@ class ApiHelper {
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress);
   }
+
+  Future<Response<Map<String, dynamic>>> del(
+    String url, {
+    Map<String, dynamic>? data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    bool? isFormData,
+    CancelToken? cancelToken,
+  }) async {
+    return _dio.delete(
+      url,
+      data: data != null
+          ? (isFormData == true ? FormData.fromMap(data) : data)
+          : null,
+      queryParameters: queryParameters,
+      options: options,
+      cancelToken: cancelToken,
+    );
+  }
 }

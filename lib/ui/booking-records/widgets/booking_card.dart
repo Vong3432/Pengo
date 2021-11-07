@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -8,10 +9,13 @@ import 'package:pengo/const/space_const.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/models/booking_record_model.dart';
+import 'package:pengo/ui/widgets/button/custom_button.dart';
 
 class BookingCard extends StatelessWidget {
-  const BookingCard({Key? key, required this.record}) : super(key: key);
+  const BookingCard({Key? key, required this.record, required this.onCancel})
+      : super(key: key);
 
+  final ValueSetter<int> onCancel;
   final BookingRecord record;
 
   @override
@@ -72,8 +76,45 @@ class BookingCard extends StatelessWidget {
               fSd: fSd,
               fEd: fEd,
             ),
+            const SizedBox(
+              height: SECTION_GAP_HEIGHT,
+            ),
+            if (record.isUsed == false)
+              CustomButton(
+                backgroundColor: dangerColor,
+                onPressed: () => _confirmDelete(context),
+                text: const Text("Cancel"),
+              )
           ],
         ),
+      ),
+    );
+  }
+
+  Future<void> _confirmDelete(BuildContext context) async {
+    await showCupertinoDialog<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: const Text('Alert'),
+        content: const Text(
+            'Cancel booking? No refund will be given if cancel this booking'),
+        actions: <CupertinoDialogAction>[
+          CupertinoDialogAction(
+            child: const Text('No'),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          CupertinoDialogAction(
+            child: const Text('Yes'),
+            isDestructiveAction: true,
+            onPressed: () {
+              // Do something destructive.
+              onCancel(record.id);
+              Navigator.pop(context);
+            },
+          )
+        ],
       ),
     );
   }

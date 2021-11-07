@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:pengo/bloc/records/booking_record_bloc.dart';
+import 'package:pengo/bloc/records/booking_record_repo.dart';
 import 'package:pengo/config/color.dart';
 import 'package:pengo/const/space_const.dart';
 import 'package:pengo/extensions/date_extension.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
+import 'package:pengo/helpers/toast/toast_helper.dart';
 import 'package:pengo/models/booking_record_model.dart';
 import 'package:pengo/ui/booking-records/widgets/booking_card.dart';
 import 'package:pengo/ui/widgets/api/loading.dart';
@@ -148,6 +150,7 @@ class _BookingRecordListState extends State<BookingRecordList> {
                           final BookingRecord record = state.records[index];
                           return BookingCard(
                             record: record,
+                            onCancel: _cancelBooking,
                           );
                         },
                         separatorBuilder: (BuildContext context, int index) {
@@ -174,6 +177,21 @@ class _BookingRecordListState extends State<BookingRecordList> {
       category: 1,
       date: date,
     ));
+  }
+
+  Future<void> _cancelBooking(int recordId) async {
+    try {
+      await RecordRepo().cancelBook(recordId);
+      showToast(
+        msg: "Cancel successfully",
+        backgroundColor: successColor,
+      );
+      _loadRecords(
+        date: _selectedDate,
+      );
+    } catch (e) {
+      showToast(msg: e.toString());
+    }
   }
 
   @override

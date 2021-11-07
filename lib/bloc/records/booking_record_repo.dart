@@ -22,4 +22,7 @@ class RecordRepo {
       );
   Future<ResponseModel> book(BookingFormState state) async =>
       _recordsApiProvider.book(state);
+
+  Future<void> cancelBook(int recordId) async =>
+      _recordsApiProvider.cancelBook(recordId);
 }
