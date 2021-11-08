@@ -17,6 +17,7 @@ class BookingFormState extends Equatable {
     this.hasStartDate = true,
     this.hasEndDate = true,
     this.hasTime = true,
+    this.coupon,
   });
 
   BookingFormState copyWith({
@@ -32,13 +33,14 @@ class BookingFormState extends Equatable {
     bool? hasTime,
     double? latestProgress = 0.0,
     PickerDateRange? range,
+    Coupon? coupon,
   }) {
     // Total conditon that needs to be checked.
-    int totalCondition = 3;
+    int totalCondition = 2;
 
     // Decrease total conditions based on item info
     // eg: Item's price is free, hence we don't need to show it in UI
-    if (hasPayment != true) totalCondition -= 1;
+    // if (hasPayment != true) totalCondition -= 1;
     if (hasTime != true) totalCondition -= 1;
     if (hasStartDate != true && hasEndDate != true) totalCondition -= 1;
 
@@ -99,6 +101,7 @@ class BookingFormState extends Equatable {
       hasStartDate: hasStartDate ?? this.hasStartDate,
       hasEndDate: hasEndDate ?? this.hasEndDate,
       range: range ?? this.range,
+      coupon: coupon ?? this.coupon,
     );
   }
 
@@ -113,6 +116,10 @@ class BookingFormState extends Equatable {
       "book_time": bookTime,
       "booking_item_id": bookingItemId,
     };
+
+    if (coupon != null) {
+      map["coupon_id"] = coupon!.id;
+    }
     return map;
   }
 
@@ -129,6 +136,7 @@ class BookingFormState extends Equatable {
   final bool hasStartDate;
   final bool hasEndDate;
   final bool hasTime;
+  final Coupon? coupon;
 
   @override
   List<Object?> get props => [
@@ -145,5 +153,6 @@ class BookingFormState extends Equatable {
         hasTime,
         hasPayment,
         range,
+        coupon,
       ];
 }

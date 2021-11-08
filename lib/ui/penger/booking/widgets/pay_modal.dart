@@ -65,6 +65,7 @@ class _PayModalState extends State<PayModal> {
               builder: (BuildContext gatewayContext) => PaymentScreen(
                 pengerId: widget.pengerId,
                 bookingItemId: widget.bookingItemId,
+                couponId: widget.formState.coupon?.id,
                 onSuccessCallback: () {
                   debugPrint("payment ok");
                   BlocProvider.of<BookingRecordBloc>(context).add(

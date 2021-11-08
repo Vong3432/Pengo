@@ -32,141 +32,143 @@ class GooCardLogList extends StatelessWidget {
         ),
       ),
       padding: const EdgeInsets.all(18),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                ActionButton(
-                  onPressed: () {
-                    Navigator.of(context, rootNavigator: true)
-                        .push(
-                          CupertinoPageRoute(
-                              builder: (context) => const CouponPage()),
-                        )
-                        .then((_) => reload());
-                  },
-                  name: "My coupons",
-                  icon: COUPON_ICON_PATH,
-                ),
-                ActionButton(
-                  onPressed: () {
-                    Navigator.of(context, rootNavigator: true)
-                        .push(
-                          CupertinoPageRoute(
-                            builder: (BuildContext context) =>
-                                const BookingRecordList(),
-                          ),
-                        )
-                        .then((_) => reload());
-                  },
-                  name: "My booking",
-                  icon: TICKET_ICON_PATH,
-                ),
-                ActionButton(
-                  onPressed: () {},
-                  name: "Logs",
-                  icon: LOG_ICON_PATH,
-                ),
-              ],
+      child: SingleChildScrollView(
+        physics: const NeverScrollableScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  ActionButton(
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: true)
+                          .push(
+                            CupertinoPageRoute(
+                                builder: (context) => const CouponPage()),
+                          )
+                          .then((_) => reload());
+                    },
+                    name: "My coupons",
+                    icon: COUPON_ICON_PATH,
+                  ),
+                  ActionButton(
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: true)
+                          .push(
+                            CupertinoPageRoute(
+                              builder: (BuildContext context) =>
+                                  const BookingRecordList(),
+                            ),
+                          )
+                          .then((_) => reload());
+                    },
+                    name: "My booking",
+                    icon: TICKET_ICON_PATH,
+                  ),
+                  ActionButton(
+                    onPressed: () {},
+                    name: "Logs",
+                    icon: LOG_ICON_PATH,
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(
-            height: SECTION_GAP_HEIGHT,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SvgPicture.asset(
-                HISTORY_ICON_PATH,
-                width: 23,
-                color: primaryColor,
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              Text(
-                "Credits History",
-                style: PengoStyle.title2(context),
-              ),
-              const Spacer(),
-              Text(
-                "See all",
-                style: PengoStyle.caption(context).copyWith(
+            const SizedBox(
+              height: SECTION_GAP_HEIGHT,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SvgPicture.asset(
+                  HISTORY_ICON_PATH,
+                  width: 23,
                   color: primaryColor,
                 ),
-              )
-            ],
-          ),
-          const Divider(),
-          BlocBuilder<GoocardBloc, GoocardState>(
-            builder: (BuildContext context, GoocardState state) {
-              if (state is GoocardLoading) {
-                return Column(
-                  children: List.generate(
-                    3,
-                    (int index) => const SkeletonText(height: 15),
+                const SizedBox(
+                  width: 8,
+                ),
+                Text(
+                  "Credits History",
+                  style: PengoStyle.title2(context),
+                ),
+                const Spacer(),
+                Text(
+                  "See all",
+                  style: PengoStyle.caption(context).copyWith(
+                    color: primaryColor,
                   ),
-                );
-              }
-              if (state is GoocardLoadSuccess) {
-                if (state.goocard.logs?.isEmpty == true) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Text(
-                      "No record",
-                      style: PengoStyle.caption(context).copyWith(
-                        color: secondaryTextColor,
-                      ),
-                      textAlign: TextAlign.left,
+                )
+              ],
+            ),
+            const Divider(),
+            BlocBuilder<GoocardBloc, GoocardState>(
+              builder: (BuildContext context, GoocardState state) {
+                if (state is GoocardLoading) {
+                  return Column(
+                    children: List.generate(
+                      3,
+                      (int index) => const SkeletonText(height: 15),
                     ),
                   );
                 }
-                return ListView.builder(
-                    itemCount: state.goocard.logs?.length,
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (BuildContext context, int index) {
-                      final GoocardLog log = state.goocard.logs![index];
-                      return ListTile(
-                        dense: true,
-                        contentPadding: EdgeInsets.zero,
-                        minLeadingWidth: 10,
-                        leading: Container(
-                          margin: EdgeInsets.only(
-                            top: mediaQuery(context).size.height * 0.01,
-                          ),
-                          width: 10,
-                          height: 10,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: secondaryTextColor.withOpacity(0.5),
-                          ),
+                if (state is GoocardLoadSuccess) {
+                  if (state.goocard.logs?.isEmpty == true) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Text(
+                        "No record",
+                        style: PengoStyle.caption(context).copyWith(
+                          color: secondaryTextColor,
                         ),
-                        title: Text(
-                          log.title,
-                          style: PengoStyle.caption(context).copyWith(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
+                        textAlign: TextAlign.left,
+                      ),
+                    );
+                  }
+                  return ListView.builder(
+                      itemCount: state.goocard.logs?.length,
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) {
+                        final GoocardLog log = state.goocard.logs![index];
+                        return ListTile(
+                          dense: true,
+                          contentPadding: EdgeInsets.zero,
+                          minLeadingWidth: 10,
+                          leading: Container(
+                            margin: EdgeInsets.only(
+                              top: mediaQuery(context).size.height * 0.01,
+                            ),
+                            width: 10,
+                            height: 10,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: secondaryTextColor.withOpacity(0.5),
+                            ),
                           ),
-                        ),
-                        subtitle: Text(
-                          log.body ?? "",
-                          style: PengoStyle.captionNormal(context).copyWith(
-                            fontSize: 12,
+                          title: Text(
+                            log.title,
+                            style: PengoStyle.caption(context).copyWith(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                            ),
                           ),
-                        ),
-                      );
-                    });
-              }
-              return Container();
-            },
-          ),
-        ],
+                          subtitle: Text(
+                            log.body ?? "",
+                            style: PengoStyle.captionNormal(context).copyWith(
+                              fontSize: 12,
+                            ),
+                          ),
+                        );
+                      });
+                }
+                return Container();
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -15,6 +16,8 @@ import 'package:pengo/helpers/toast/toast_helper.dart';
 import 'package:pengo/models/booking_item_model.dart';
 import 'package:pengo/models/booking_record_model.dart';
 import 'package:pengo/models/system_function_model.dart';
+import 'package:pengo/models/coupon_model.dart';
+import 'package:pengo/ui/coupon/widgets/coupon.dart' as CouponUI;
 import 'package:pengo/ui/goocard/widgets/goocard_request_modal.dart';
 import 'package:pengo/ui/penger/booking/booking_result.dart';
 import 'package:pengo/ui/penger/booking/widgets/book_date_modal.dart';
@@ -221,6 +224,94 @@ class _BookingViewState extends State<BookingView> {
                           ),
                         ),
                         Visibility(
+                          visible: widget.bookingItem.price != null,
+                          child: const Divider(),
+                        ),
+                        if (widget.bookingItem.price != null)
+                          ListTile(
+                            onTap: () => _viewCoupons(state),
+                            contentPadding: const EdgeInsets.all(18),
+                            title: Text(
+                              "Select Coupon",
+                              style: textTheme(context).headline5,
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Visibility(
+                                  visible: state.coupon == null,
+                                  child: Text(
+                                    "Use coupon",
+                                    style: PengoStyle.text(context).copyWith(
+                                      color: secondaryTextColor,
+                                    ),
+                                  ),
+                                ),
+                                if (state.coupon != null)
+                                  ListTile(
+                                    dense: true,
+                                    contentPadding: EdgeInsets.zero,
+                                    title: Text(
+                                      "Discount percentage:",
+                                      style: PengoStyle.captionNormal(context)
+                                          .copyWith(
+                                        color: secondaryTextColor,
+                                      ),
+                                    ),
+                                    trailing: Text(
+                                      "${state.coupon?.discountPercentage}%",
+                                      style:
+                                          PengoStyle.caption(context).copyWith(
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                                if (state.coupon != null)
+                                  ListTile(
+                                    dense: true,
+                                    minVerticalPadding: 0,
+                                    contentPadding: EdgeInsets.zero,
+                                    title: Text(
+                                      "Discount amount",
+                                      style: PengoStyle.captionNormal(context)
+                                          .copyWith(
+                                        color: secondaryTextColor,
+                                      ),
+                                    ),
+                                    trailing: Text(
+                                      "RM ${widget.bookingItem.price! * (state.coupon!.discountPercentage / 100)}",
+                                      style:
+                                          PengoStyle.caption(context).copyWith(
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                                if (state.coupon != null)
+                                  ListTile(
+                                    dense: true,
+                                    contentPadding: EdgeInsets.zero,
+                                    title: Text(
+                                      "New price",
+                                      style: PengoStyle.captionNormal(context)
+                                          .copyWith(
+                                        color: secondaryTextColor,
+                                      ),
+                                    ),
+                                    trailing: Text(
+                                      "RM ${widget.bookingItem.price! - (widget.bookingItem.price! * (state.coupon!.discountPercentage / 100))}",
+                                      style:
+                                          PengoStyle.caption(context).copyWith(
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  )
+                              ],
+                            ),
+                            trailing: const Icon(
+                              Icons.keyboard_arrow_right_outlined,
+                            ),
+                          ),
+                        Visibility(
                           visible: context.select<BookingFormStateCubit, bool>(
                             (BookingFormStateCubit form) => form.state.hasTime,
                           ),
@@ -228,9 +319,14 @@ class _BookingViewState extends State<BookingView> {
                         ),
                         Visibility(
                           visible: context.select<BookingFormStateCubit, bool>(
-                            (BookingFormStateCubit form) =>
-                                form.state.hasPayment,
-                          ),
+                                (BookingFormStateCubit form) =>
+                                    form.state.hasPayment,
+                              ) &&
+                              context.select<BookingFormStateCubit, double>(
+                                    (BookingFormStateCubit form) =>
+                                        form.state.progress,
+                                  ) ==
+                                  1,
                           child: ListTile(
                             onTap: () => _onPayTapped(context, _formStateCubit),
                             contentPadding: const EdgeInsets.all(18),
@@ -310,6 +406,87 @@ class _BookingViewState extends State<BookingView> {
           },
         ),
       ),
+    );
+  }
+
+  void _viewCoupons(BookingFormState state) {
+    showCupertinoModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Material(
+          child: Container(
+            height: mediaQuery(context).size.height * 0.6,
+            padding: const EdgeInsets.all(18),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  "Coupons",
+                  style: PengoStyle.header(context),
+                ),
+                Text(
+                  "Tap to use",
+                  style: PengoStyle.smallerText(context).copyWith(
+                    color: secondaryTextColor,
+                  ),
+                ),
+                const SizedBox(height: SECTION_GAP_HEIGHT * 1.5),
+                ListView.builder(
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  itemCount: widget.bookingItem.coupons?.length ?? 0,
+                  itemBuilder: (BuildContext context, int index) {
+                    final Coupon coupon = widget.bookingItem.coupons![index];
+                    final bool selected = coupon.id == state.coupon?.id;
+                    return ListTile(
+                      onTap: () {
+                        _formStateCubit.updateFormState(
+                          coupon: selected ? null : coupon,
+                        );
+                        Navigator.of(context).pop();
+                      },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      tileColor: selected ? primaryLightColor : greyBgColor,
+                      contentPadding: const EdgeInsets.all(18),
+                      title: Text(
+                        coupon.title,
+                        style: PengoStyle.title2(context),
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Visibility(
+                            visible: coupon.description != null,
+                            child: Text(
+                              coupon.description ?? "",
+                              style: PengoStyle.smallerText(context).copyWith(
+                                color: secondaryTextColor,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            "${DateFormat("d MMM y").format(DateTime.parse(coupon.validFrom).toLocal())} - ${DateFormat("d MMM y").format(DateTime.parse(coupon.validTo).toLocal())}",
+                            style: PengoStyle.smallerText(context).copyWith(
+                              color: secondaryTextColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      trailing: Icon(
+                        Icons.check,
+                        color: selected ? primaryColor : Colors.transparent,
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

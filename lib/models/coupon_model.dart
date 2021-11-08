@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pengo/models/booking_item_model.dart';
 import 'package:pengo/models/penger_model.dart';
@@ -6,7 +7,7 @@ import 'package:pengo/models/booking_item_model.dart';
 part 'coupon_model.g.dart';
 
 @JsonSerializable()
-class Coupon {
+class Coupon extends Equatable {
   Coupon({
     this.id,
     required this.title,
@@ -70,4 +71,8 @@ class Coupon {
 
   @JsonKey(name: 'is_owned')
   final bool? isOwned;
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [id];
 }

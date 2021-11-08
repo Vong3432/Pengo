@@ -15,10 +15,12 @@ class PaymentScreen extends StatefulWidget {
     required this.bookingItemId,
     this.onSuccessCallback,
     this.onFailureCallback,
+    this.couponId,
   }) : super(key: key);
 
   final int pengerId;
   final int bookingItemId;
+  final int? couponId;
   final VoidCallback? onSuccessCallback;
   final VoidCallback? onFailureCallback;
   @override
@@ -28,11 +30,18 @@ class PaymentScreen extends StatefulWidget {
 class _PaymentScreenState extends State<PaymentScreen> {
   Future<void> _checkout() async {
     try {
-      /// retrieve data from the backend
-      final response = await ApiHelper().post("/pengoo/payments", data: {
+      final Map<String, dynamic> paymentData = <String, dynamic>{
         "target_holder_id": widget.pengerId,
         "booking_item_id": widget.bookingItemId,
-      });
+      };
+
+      if (widget.couponId != null) {
+        paymentData["coupon_id"] = widget.couponId;
+      }
+
+      /// retrieve data from the backend
+      final response =
+          await ApiHelper().post("/pengoo/payments", data: paymentData);
       final _paymentSheetData = response.data!['data'] as Map<String, dynamic>;
 
       await Stripe.instance.initPaymentSheet(

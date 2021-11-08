@@ -49,6 +49,9 @@ BookingItem _$BookingItemFromJson(Map<String, dynamic> json) {
         ? null
         : BookingCategory.fromJson(json['category'] as Map<String, dynamic>),
     isOpen: json['is_open'] as bool?,
+    coupons: (json['coupons'] as List<dynamic>?)
+        ?.map((e) => Coupon.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 
@@ -90,6 +93,7 @@ Map<String, dynamic> _$BookingItemToJson(BookingItem instance) {
   val['priority_option'] = instance.priorityOption;
   val['category'] = instance.bookingCategory;
   val['is_open'] = instance.isOpen;
+  val['coupons'] = instance.coupons;
   return val;
 }
 
