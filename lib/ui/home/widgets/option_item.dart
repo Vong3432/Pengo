@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pengo/config/color.dart';
 import 'package:pengo/const/icon_const.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
+import 'package:pengo/helpers/theme/theme_helper.dart';
 
 class OptionItem extends StatelessWidget {
   const OptionItem({
@@ -18,8 +19,8 @@ class OptionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 2,
+    return SizedBox(
+      width: mediaQuery(context).size.width * 0.4,
       child: GestureDetector(
         onTap: onTap,
         child: Stack(

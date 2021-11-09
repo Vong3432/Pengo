@@ -63,7 +63,9 @@ class _SelfBookingListState extends State<SelfBookingList> {
   }
 
   Future<void> _loadRecords() async {
-    BlocProvider.of<BookingRecordBloc>(context)
-        .add(const FetchRecordsEvent(limit: 3));
+    BlocProvider.of<BookingRecordBloc>(context).add(const FetchRecordsEvent(
+      limit: 3,
+      isUsed: 0,
+    ));
   }
 }

@@ -27,6 +27,7 @@ class BookingRecordBloc extends Bloc<BookingRecordEvent, BookingRecordState> {
         limit: event.limit,
         category: event.category,
         date: event.date,
+        isUsed: event.isUsed,
       );
       emit(BookingRecordsLoaded(records));
     } catch (_) {

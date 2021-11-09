@@ -31,6 +31,8 @@ class SocketHelper extends ChangeNotifier {
       // Configure socket transports must be sepecified
       socket = io(uri, <String, dynamic>{
         'transports': ['websocket'],
+        'autoConnect': false,
+        'forceNew': true,
       });
 
       // Connect to websocket

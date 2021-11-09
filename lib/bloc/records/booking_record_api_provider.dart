@@ -11,6 +11,7 @@ class RecordsApiProvider {
   Future<List<BookingRecord>> fetchRecords({
     int? limit,
     int? category,
+    int? isUsed,
     DateTime? date,
   }) async {
     try {
@@ -19,6 +20,7 @@ class RecordsApiProvider {
         "limit": limit,
         "category": category,
         "date": date?.toIso8601String(),
+        "is_used": isUsed,
       });
       final List<BookingRecord> records = List<BookingRecord>.from(
           (response.data['data']! as List)

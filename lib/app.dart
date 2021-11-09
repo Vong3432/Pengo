@@ -76,8 +76,9 @@ class _MyHomePageState extends State<MyHomePage> {
                             "Use",
                             style: PengoStyle.header(context),
                           ),
+                          const SizedBox(height: 8),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               OptionItem(
                                 assetName: GOOCARD_ICON_PATH,
@@ -89,20 +90,24 @@ class _MyHomePageState extends State<MyHomePage> {
                                       expand: false,
                                       builder: (BuildContext context) {
                                         return const BookingPassView();
-                                      });
+                                      }).then((shouldClose) {
+                                    // if (shouldClose == "pop") {
+                                    //   Navigator.pop(context);
+                                    // }
+                                  });
                                 },
                               ),
-                              const SizedBox(width: 10),
-                              OptionItem(
-                                  assetName: COUPON_ICON_PATH,
-                                  title: 'Coupon',
-                                  onTap: () {}),
+                              // const SizedBox(width: 10),
+                              // OptionItem(
+                              //     assetName: COUPON_ICON_PATH,
+                              //     title: 'Coupon',
+                              //     onTap: () {}),
                             ],
                           ),
                         ],
                       ),
                     );
-            });
+            }).then((_) {});
         // _navigatorKey.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
         break;
       case 3:

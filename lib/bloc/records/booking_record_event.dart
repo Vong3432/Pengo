@@ -8,10 +8,16 @@ abstract class BookingRecordEvent extends Equatable {
 }
 
 class FetchRecordsEvent extends BookingRecordEvent {
-  const FetchRecordsEvent({this.limit, this.category, this.date});
+  const FetchRecordsEvent({
+    this.limit,
+    this.category,
+    this.date,
+    this.isUsed,
+  });
 
   final int? limit;
   final int? category;
+  final int? isUsed;
   final DateTime? date;
 }
 
