@@ -16,7 +16,10 @@ class BookingRecord {
     required this.pengerID,
     required this.rewardPoint,
     required this.isUsed,
+    this.aheadUserCount,
+    this.streetAddress,
     this.log,
+    this.formattedBookDateTime,
   });
 
   factory BookingRecord.fromJson(Map<String, dynamic> json) =>
@@ -48,6 +51,15 @@ class BookingRecord {
 
   @JsonKey(name: 'log')
   final GoocardLog? log;
+
+  @JsonKey(name: 'street_address')
+  final String? streetAddress;
+
+  @JsonKey(name: 'ahead_user_count')
+  final int? aheadUserCount;
+
+  @JsonKey(name: 'formatted_book_datetime')
+  final DateTime? formattedBookDateTime;
 }
 
 @JsonSerializable()

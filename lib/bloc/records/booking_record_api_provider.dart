@@ -32,6 +32,24 @@ class RecordsApiProvider {
     }
   }
 
+  Future<BookingRecord> fetchRecord({
+    required int recordId,
+    bool? showStats,
+  }) async {
+    try {
+      final response = await _apiHelper
+          .get('/pengoo/booking-records/$recordId', queryParameters: {
+        "show_stats": showStats == true ? 1 : 0,
+      });
+      final BookingRecord record =
+          BookingRecord.fromJson(response.data['data'] as Map<String, dynamic>);
+      return record;
+    } catch (e) {
+      debugPrint(e.toString());
+      throw Exception(e);
+    }
+  }
+
   Future<ResponseModel> book(BookingFormState data) async {
     try {
       final response =

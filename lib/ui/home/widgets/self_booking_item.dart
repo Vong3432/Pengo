@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pengo/config/color.dart';
 import 'package:pengo/config/shadow.dart';
@@ -5,6 +6,7 @@ import 'package:pengo/extensions/double_extension.dart';
 import 'package:pengo/helpers/geo/geo_helper.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/models/booking_record_model.dart';
+import 'package:pengo/ui/booking-records/booking_record_detail_view.dart';
 
 class SelfBookingItem extends StatefulWidget {
   const SelfBookingItem({
@@ -24,11 +26,14 @@ class _SelfBookingItemState extends State<SelfBookingItem> {
     return GestureDetector(
       onTap: () {
         if (widget.record.item == null) return;
-        Navigator.of(context, rootNavigator: true).pushNamed(
-          "/booking-item",
-          arguments: {
-            "id": widget.record.item!.id,
-          },
+        Navigator.of(context, rootNavigator: true).push(
+          CupertinoPageRoute(
+            builder: (BuildContext context) {
+              return BookingRecordDetailPage(
+                id: widget.record.id,
+              );
+            },
+          ),
         );
       },
       child: Column(

@@ -25,6 +25,16 @@ class RecordRepo {
         date: date,
         isUsed: isUsed,
       );
+
+  Future<BookingRecord> fetchRecord({
+    required int recordId,
+    bool? showStats,
+  }) async =>
+      _recordsApiProvider.fetchRecord(
+        recordId: recordId,
+        showStats: showStats,
+      );
+
   Future<ResponseModel> book(BookingFormState state) async =>
       _recordsApiProvider.book(state);
 
