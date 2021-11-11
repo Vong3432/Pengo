@@ -4,6 +4,7 @@ extension DateOnlyCompare on DateTime {
   }
 
   bool isBetweenDate(DateTime from, DateTime end) {
-    return isAfter(from) && isBefore(end);
+    return (isSameDate(from) || isAfter(from)) &&
+        (isSameDate(end) || isBefore(end));
   }
 }

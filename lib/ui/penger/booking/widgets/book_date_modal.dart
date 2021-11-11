@@ -126,8 +126,8 @@ class _BookDateModalState extends State<BookDateModal> {
   List<DateTime>? _blackoutDates() {
     final List<List<DateTime>>? _blackoutDates2d =
         widget.closeDates?.map((BookingCloseDate date) {
-      final DateTime fD = DateTime.parse(date.from);
-      final DateTime fT = DateTime.parse(date.to);
+      final DateTime fD = DateTime.parse(date.from).toLocal();
+      final DateTime fT = DateTime.parse(date.to).toLocal();
 
       DateTime curr = fD;
       final List<DateTime> list = [fD];

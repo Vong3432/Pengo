@@ -26,6 +26,7 @@ class BookingRecordList extends StatefulWidget {
 
 class _BookingRecordListState extends State<BookingRecordList> {
   final DateRangePickerController _controller = DateRangePickerController();
+  List<BookingRecord> _records = [];
   DateTime? _selectedDate;
 
   @override
@@ -75,28 +76,47 @@ class _BookingRecordListState extends State<BookingRecordList> {
                 child: SfDateRangePicker(
                   controller: _controller,
                   monthCellStyle: DateRangePickerMonthCellStyle(
-                    cellDecoration: BoxDecoration(
-                        color: Colors.blueGrey.withOpacity(0.4),
-                        border: Border.all(
-                          color: const Color(0xFF2B732F),
-                          width: 1,
-                        ),
-                        shape: BoxShape.circle),
+                    todayTextStyle: TextStyle(
+                      color: secondaryTextColor,
+                    ),
+                    todayCellDecoration: BoxDecoration(
+                      color: secondaryTextColor.withOpacity(0.4),
+                      shape: BoxShape.circle,
+                    ),
                   ),
-                  cellBuilder: (
-                    BuildContext context,
-                    DateRangePickerCellDetails details,
-                  ) {
-                    final DateTime today = DateTime.now();
-                    final bool isToday =
-                        details.date.toLocal().isSameDate(today);
+                  monthViewSettings: DateRangePickerMonthViewSettings(
+                    specialDates: _bookedSpecialDates(),
+                  ),
+                  // cellBuilder: (
+                  //   BuildContext context,
+                  //   DateRangePickerCellDetails details,
+                  // ) {
+                  //   bool isToday = false;
 
-                    return DayCell(
-                      details: details,
-                      isToday: isToday,
-                      state: BlocProvider.of<BookingRecordBloc>(context).state,
-                    );
-                  },
+                  //   for (BookingRecord record in _records) {
+                  //     // no idea why this plugin is 1 month quicker, so minus 1 month
+                  //     final DateTime sub1Month = DateTime(
+                  //       details.date.year,
+                  //       details.date.month,
+                  //       details.date.day,
+                  //     );
+                  //     // debugPrint("sub1mon ${sub1Month.toLocal()}");
+                  //     if (sub1Month.toLocal().isBetweenDate(
+                  //           record.bookDate!.startDate!.toLocal(),
+                  //           record.bookDate!.endDate!.toLocal(),
+                  //         )) {
+                  //       isToday = true;
+                  //     }
+                  //     // debugPrint(
+                  //     //     "${details.date.toLocal()} is between ${record.bookDate!.startDate!.toLocal()} and ${record.bookDate!.endDate!.toLocal()} $isToday");
+                  //   }
+
+                  //   return DayCell(
+                  //     details: details,
+                  //     isToday: isToday,
+                  //     state: BlocProvider.of<BookingRecordBloc>(context).state,
+                  //   );
+                  // },
                   showNavigationArrow: true,
                   onSelectionChanged:
                       (DateRangePickerSelectionChangedArgs args) {
@@ -128,7 +148,16 @@ class _BookingRecordListState extends State<BookingRecordList> {
                   textScaleFactor: 1.2,
                 ),
               ),
-              BlocBuilder<BookingRecordBloc, BookingRecordState>(
+              BlocConsumer<BookingRecordBloc, BookingRecordState>(
+                listener: (BuildContext context, BookingRecordState state) {
+                  if (state is BookingRecordsLoaded) {
+                    if (_records.isEmpty) {
+                      setState(() {
+                        _records = state.records;
+                      });
+                    }
+                  }
+                },
                 builder: (BuildContext context, BookingRecordState state) {
                   if (state is BookingRecordsLoading) {
                     return const LoadingWidget();
@@ -170,6 +199,30 @@ class _BookingRecordListState extends State<BookingRecordList> {
         ],
       ),
     );
+  }
+
+  List<DateTime>? _bookedSpecialDates() {
+    if (_records.isNotEmpty == false) {
+      return const <DateTime>[];
+    }
+
+    final List<List<DateTime>> _specialDates =
+        _records.map((BookingRecord record) {
+      DateTime curr = record.bookDate!.startDate!.toLocal();
+      final List<DateTime> list = <DateTime>[curr];
+
+      while (curr.isBefore(record.bookDate!.endDate!.toLocal())) {
+        final DateTime i = curr.add(const Duration(days: 1));
+        curr = i;
+        list.add(curr);
+      }
+      return list;
+    }).toList();
+
+    final List<DateTime> dates =
+        _specialDates.expand((List<DateTime> x) => x).toList();
+
+    return dates;
   }
 
   void _loadRecords({DateTime? date}) {
@@ -216,6 +269,7 @@ class DayCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("isToday $isToday");
     return Container(
       margin: const EdgeInsets.all(4),
       child: Column(
@@ -228,68 +282,16 @@ class DayCell extends StatelessWidget {
               color: isToday ? primaryColor : textColor,
             ),
           ),
-          _buildCell(state)
+          Container(
+            width: 4,
+            height: 4,
+            decoration: BoxDecoration(
+              color: isToday ? secondaryTextColor : Colors.transparent,
+              shape: BoxShape.circle,
+            ),
+          ),
         ],
       ),
     );
-  }
-
-  Widget _buildCell(BookingRecordState state) {
-    if (state is BookingRecordsLoaded) {
-      debugPrint("run");
-      final List<BookingRecord> records =
-          state.records.where((BookingRecord r) {
-        bool hasRecord = false;
-
-        if (r.bookDate == null) {
-          // if this record dont have bookDate, return false directly.
-          // maybe will be useless since bookDate is required.
-          return hasRecord;
-        } else if (r.bookDate?.startDate != null) {
-          // will be executed when book records is range type
-
-          if (r.bookDate?.endDate != null) {
-            // endDate is not null
-            // check if current cell is between startDate and endDate
-            hasRecord = details.date.isBetweenDate(
-              r.bookDate!.startDate!.toLocal(),
-              r.bookDate!.endDate!.toLocal(),
-            );
-          } else {
-            hasRecord =
-                r.bookDate!.startDate!.toLocal().isSameDate(details.date);
-          }
-        } else {
-          // will be executed when the book records is only single day
-          hasRecord = r.bookDate!.endDate!.toLocal().isSameDate(details.date);
-        }
-        return hasRecord;
-      }).toList();
-
-      // (!) Fix if have time
-      // final bool hasRecords = records.isNotEmpty;
-      final bool hasRecords = false;
-
-      if (hasRecords) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(
-            1,
-            (index) => Container(
-              width: 4,
-              height: 4,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: secondaryTextColor.withOpacity(
-                  0.5,
-                ),
-              ),
-            ),
-          ),
-        );
-      }
-    }
-
-    return Container();
   }
 }
