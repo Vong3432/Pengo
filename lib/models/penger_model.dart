@@ -19,7 +19,7 @@ class Penger {
     this.items,
     this.description,
     this.location,
-    // required this.reviews,
+    this.reviews,
     this.closeDates,
   });
 
@@ -31,7 +31,7 @@ class Penger {
   final String logo;
   final String? description;
   final Location? location;
-  // final List<Review> reviews;
+  final List<Review>? reviews;
 
   @JsonKey(name: 'booking_items')
   final List<BookingItem>? items;

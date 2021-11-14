@@ -32,5 +32,5 @@ class FetchPopularNearestPengers extends PengerEvent {
 class FetchPenger extends PengerEvent {
   const FetchPenger(this.id);
 
-  final String id;
+  final int id;
 }

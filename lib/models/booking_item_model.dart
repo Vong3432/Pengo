@@ -64,6 +64,7 @@ class BookingItem extends Equatable {
   @JsonKey(name: 'poster_url')
   final String poster;
 
+  @JsonKey(includeIfNull: false)
   final double? price;
 
   @JsonKey(ignore: true, fromJson: null, toJson: null)
@@ -105,6 +106,9 @@ class BookingItem extends Equatable {
   @JsonKey(name: 'credit_points')
   final double? creditPoints;
 
+  @JsonKey(
+    includeIfNull: false,
+  )
   final int? quantity;
 
   @JsonKey(name: 'discount_amount')

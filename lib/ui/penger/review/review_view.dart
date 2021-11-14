@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:pengo/config/color.dart';
 import 'package:pengo/const/icon_const.dart';
 import 'package:pengo/const/space_const.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/models/penger_model.dart';
 import 'package:pengo/models/review.dart';
-import 'package:pengo/ui/home/widgets/penger_item.dart';
+import 'package:pengo/models/user_model.dart';
 import 'package:pengo/ui/widgets/layout/sliver_appbar.dart';
 import 'package:pengo/ui/widgets/layout/sliver_body.dart';
 import 'package:pengo/ui/widgets/list/outlined_list_tile.dart';
 
 class PengerReviewPage extends StatelessWidget {
-  const PengerReviewPage(
-      {Key? key, required this.reviews, required this.penger})
-      : super(key: key);
+  const PengerReviewPage({
+    Key? key,
+    required this.reviews,
+    required this.penger,
+  }) : super(key: key);
 
   final List<Review> reviews;
   final Penger penger;
@@ -55,7 +58,9 @@ class PengerReviewPage extends StatelessWidget {
                           style: PengoStyle.header(context),
                         ),
                         const Spacer(),
-                        Text("${reviews.length} reviews"),
+                        Text(
+                          "${reviews.length} review ${reviews.length > 1 ? "s" : ""}",
+                        ),
                       ],
                     ),
                     _buildReviewList(),
@@ -74,7 +79,7 @@ class PengerReviewPage extends StatelessWidget {
         shrinkWrap: true,
         itemCount: reviews.length,
         physics: const NeverScrollableScrollPhysics(),
-        padding: const EdgeInsets.all(0),
+        padding: EdgeInsets.zero,
         itemBuilder: (BuildContext context, int index) {
           final Review review = reviews[index];
           return _buildReviewItem(review, context);
@@ -82,6 +87,9 @@ class PengerReviewPage extends StatelessWidget {
   }
 
   Container _buildReviewItem(Review review, BuildContext context) {
+    final User user = review.record!.goocard!.user!;
+    final bool hasModified = review.createdAt != review.updatedAt;
+
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 18),
       child: Column(
@@ -91,7 +99,7 @@ class PengerReviewPage extends StatelessWidget {
             children: <Widget>[
               CircleAvatar(
                 radius: 15,
-                foregroundImage: NetworkImage(review.user.avatar),
+                foregroundImage: NetworkImage(user.avatar),
               ),
               const SizedBox(
                 width: SECTION_GAP_HEIGHT / 1.5,
@@ -100,12 +108,12 @@ class PengerReviewPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    review.user.username,
+                    user.username,
                     style: PengoStyle.title2(context)
                         .copyWith(fontWeight: FontWeight.w600),
                   ),
                   Text(
-                    "Reviewd on ${review.date}",
+                    "Reviewed on ${DateFormat("yyyy-MM-dd").format(review.updatedAt.toLocal())}",
                     style: PengoStyle.captionNormal(context)
                         .copyWith(color: grayTextColor),
                     textScaleFactor: 0.8,
@@ -142,7 +150,7 @@ class PengerReviewPage extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       review.title,
-                      style: PengoStyle.caption(context)
+                      style: PengoStyle.title2(context)
                           .copyWith(height: 1.4, fontWeight: FontWeight.w500),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,

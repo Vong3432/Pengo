@@ -29,8 +29,23 @@ class PengerBloc extends Bloc<PengerEvent, PengerState> {
         searchKeywordOnly: event.searchKeywordOnly,
       );
     }
+    if (event is FetchPenger) {
+      yield* _mapFetchPengerToState(id: event.id);
+    }
     if (event is FetchPopularNearestPengers) {
       yield* _mapFetchPopularNearestPengersToState();
+    }
+  }
+
+  Stream<PengerState> _mapFetchPengerToState({
+    required int id,
+  }) async* {
+    try {
+      yield PengerLoading();
+      final Penger penger = await _pengerRepo.fetchPenger(id: id);
+      yield PengerLoaded(penger);
+    } catch (_) {
+      yield PengerNotLoaded();
     }
   }
 
@@ -52,7 +67,7 @@ class PengerBloc extends Bloc<PengerEvent, PengerState> {
         limit: limit,
         searchKeywordOnly: searchKeywordOnly,
       );
-      await Future.delayed(const Duration(seconds: 1));
+      // await Future.delayed(const Duration(seconds: 1));
       yield PengersLoaded(pengers);
     } catch (_) {
       yield PengersNotLoaded();
@@ -68,7 +83,7 @@ class PengerBloc extends Bloc<PengerEvent, PengerState> {
       final List<Penger> popularPengers =
           await _pengerRepo.fetchPopularPengers(limit: limit, pageNum: pageNum);
 
-      await Future.delayed(const Duration(seconds: 1));
+      // await Future.delayed(const Duration(seconds: 1));
       yield NearestPopularPengersLoaded(nearestPengers, popularPengers);
     } catch (_) {
       yield NearestPopularPengersNotLoaded();

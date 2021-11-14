@@ -29,6 +29,9 @@ BookingRecord _$BookingRecordFromJson(Map<String, dynamic> json) {
         ? null
         : DateTime.parse(json['formatted_book_datetime'] as String),
     isReviewed: json['is_reviewed'] as bool?,
+    goocard: json['goocard'] == null
+        ? null
+        : Goocard.fromJson(json['goocard'] as Map<String, dynamic>),
   );
 }
 
@@ -41,6 +44,7 @@ Map<String, dynamic> _$BookingRecordToJson(BookingRecord instance) =>
       'book_date': instance.bookDate,
       'item': instance.item,
       'reward_point': instance.rewardPoint,
+      'goocard': instance.goocard,
       'is_used': instance.isUsed,
       'log': instance.log,
       'street_address': instance.streetAddress,

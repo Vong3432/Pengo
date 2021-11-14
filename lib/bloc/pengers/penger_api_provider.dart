@@ -53,6 +53,18 @@ class PengerApiProvider {
     }
   }
 
+  Future<Penger> fetchPenger({required int id}) async {
+    try {
+      final response = await _apiHelper.get('/core/pengers/$id');
+      final data = response.data['data'];
+      final Penger penger = Penger.fromJson(data as Map<String, dynamic>);
+      return penger;
+    } catch (e) {
+      debugPrint("err $e");
+      throw Exception(e);
+    }
+  }
+
   Future<List<Penger>> fetchNearestPengers({int? limit, int? pageNum}) async {
     try {
       final response = await _apiHelper.get(

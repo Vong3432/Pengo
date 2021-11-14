@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:pengo/models/booking_record_model.dart';
 import 'package:pengo/models/user_model.dart';
 
 part 'review.g.dart';
@@ -8,26 +9,30 @@ class Review {
   const Review({
     required this.id,
     required this.title,
-    required this.date,
-    this.description,
-    required this.user,
+    required this.bookingRecordId,
+    required this.category,
+    required this.description,
+    required this.createdAt,
+    required this.updatedAt,
+    this.record,
   });
 
   factory Review.fromJson(Map<String, dynamic> json) => _$ReviewFromJson(json);
   Map<String, dynamic> toJson() => _$ReviewToJson(this);
   final int id;
   final String title;
-  final User user;
-  final String date;
-  final String? description;
-}
+  final String description;
 
-List<Review> fakedReviews = [
-  Review(
-    id: 9999,
-    title: "Nice service",
-    description: "The staff are very kind",
-    user: userMockDataList[0],
-    date: "12 Jul 2021",
-  ),
-];
+  @JsonKey(name: 'booking_record_id')
+  final int bookingRecordId;
+
+  final BookingRecord? record;
+
+  final String category;
+
+  @JsonKey(name: 'created_at')
+  final DateTime createdAt;
+
+  @JsonKey(name: 'updated_at')
+  final DateTime updatedAt;
+}

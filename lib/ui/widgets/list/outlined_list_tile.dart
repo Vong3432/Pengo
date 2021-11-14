@@ -69,6 +69,7 @@ class OutlinedListTile extends StatelessWidget {
       width: leadingWidth ?? 27,
       height: leadingHeight ?? 27,
       fit: BoxFit.scaleDown,
+      color: primaryColor,
     );
   }
 }

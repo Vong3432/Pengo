@@ -27,6 +27,9 @@ class PengerRepo {
         name: name,
         searchKeywordOnly: searchKeywordOnly,
       );
+  Future<Penger> fetchPenger({required int id}) async =>
+      _pengerApiProvider.fetchPenger(id: id);
+
   Future<List<Penger>> fetchNearestPengers({int? limit, int? pageNum}) async =>
       _pengerApiProvider.fetchNearestPengers(limit: limit, pageNum: pageNum);
   Future<List<Penger>> fetchPopularPengers({int? limit, int? pageNum}) async =>

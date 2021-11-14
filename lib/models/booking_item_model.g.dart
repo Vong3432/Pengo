@@ -61,7 +61,6 @@ Map<String, dynamic> _$BookingItemToJson(BookingItem instance) {
     'is_active': instance.isActive,
     'name': instance.title,
     'poster_url': instance.poster,
-    'price': instance.price,
   };
 
   void writeNotNull(String key, dynamic value) {
@@ -70,6 +69,7 @@ Map<String, dynamic> _$BookingItemToJson(BookingItem instance) {
     }
   }
 
+  writeNotNull('price', instance.price);
   writeNotNull('available_from_time', instance.availableFrom);
   writeNotNull('available_to_time', instance.availableTo);
   writeNotNull('start_from', instance.startFrom?.toIso8601String());
@@ -82,7 +82,7 @@ Map<String, dynamic> _$BookingItemToJson(BookingItem instance) {
   val['maximum_book'] = instance.maxBook;
   val['preserved_book'] = instance.preservedBook;
   val['credit_points'] = instance.creditPoints;
-  val['quantity'] = instance.quantity;
+  writeNotNull('quantity', instance.quantity);
   val['discount_amount'] = instance.discountAmount;
   val['booking_category_id'] = instance.categoryId;
   writeNotNull('description', instance.description);

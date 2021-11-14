@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:pengo/bloc/pengers/penger_bloc.dart';
 import 'package:pengo/config/color.dart';
 import 'package:pengo/const/icon_const.dart';
 import 'package:pengo/const/space_const.dart';
@@ -13,12 +15,10 @@ import 'package:pengo/models/booking_item_model.dart';
 import 'package:pengo/models/penger_model.dart';
 import 'package:pengo/models/review.dart';
 import 'package:pengo/ui/home/widgets/penger_item.dart';
-import 'package:pengo/ui/penger/booking/booking_view.dart';
 import 'package:pengo/ui/penger/items/items_view.dart';
 import 'package:pengo/ui/penger/review/review_view.dart';
 import 'package:pengo/ui/widgets/layout/sliver_appbar.dart';
 import 'package:pengo/ui/widgets/layout/sliver_body.dart';
-import 'package:pengo/ui/widgets/list/custom_list_item.dart';
 import 'package:pengo/ui/widgets/list/outlined_list_tile.dart';
 import 'package:pengo/ui/widgets/stacks/h_stack.dart';
 
@@ -33,131 +33,151 @@ class InfoPage extends StatefulWidget {
 
 class _InfoPageState extends State<InfoPage> {
   final Completer<GoogleMapController> _controller = Completer();
+  final PengerBloc _bloc = PengerBloc();
 
-  static late CameraPosition _kGooglePlex;
+  static CameraPosition? _kGooglePlex;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _kGooglePlex = CameraPosition(
-      target: LatLng(
-        widget.penger.location?.geolocation.latitude ?? 0,
-        widget.penger.location?.geolocation.longitude ?? 0,
-      ),
-      zoom: 14.4746,
-    );
+    _load();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: <Widget>[
-          CustomSliverAppBar(
-            title: Text(
-              widget.penger.name,
-              style: PengoStyle.navigationTitle(context),
-            ),
-            actions: <Widget>[
-              IconButton(
-                onPressed: () {},
-                icon: SvgPicture.asset(INFO_ICON_PATH, fit: BoxFit.scaleDown),
-              )
-            ],
-          ),
-          CustomSliverBody(
-            content: <Widget>[
-              Container(
-                padding: const EdgeInsets.all(18),
-                child: Column(
-                  children: [
-                    // _buildMap(),
-                    const SizedBox(
-                      height: SECTION_GAP_HEIGHT * 1.5,
-                    ),
-                    _buildActions(),
-                    const SizedBox(
-                      height: SECTION_GAP_HEIGHT * 1.5,
-                    ),
-                    _buildBookingListView(),
-                    const SizedBox(
-                      height: SECTION_GAP_HEIGHT * 1.5,
-                    ),
-                    _buildHistory(context),
-                  ],
-                ),
+    return BlocProvider<PengerBloc>(
+      create: (context) => _bloc,
+      child: Scaffold(
+        body: CustomScrollView(
+          slivers: <Widget>[
+            CustomSliverAppBar(
+              title: Text(
+                widget.penger.name,
+                style: PengoStyle.navigationTitle(context),
               ),
-            ],
-          ),
-        ],
+              actions: <Widget>[
+                IconButton(
+                  onPressed: () {},
+                  icon: SvgPicture.asset(INFO_ICON_PATH, fit: BoxFit.scaleDown),
+                )
+              ],
+            ),
+            CustomSliverBody(
+              content: <Widget>[
+                Container(
+                  padding: const EdgeInsets.all(18),
+                  child: BlocConsumer<PengerBloc, PengerState>(
+                    listener: (BuildContext context, PengerState state) {
+                      if (state is PengerLoaded) {
+                        _kGooglePlex = CameraPosition(
+                          target: LatLng(
+                            state.penger.location?.geolocation.latitude ?? 0,
+                            state.penger.location?.geolocation.longitude ?? 0,
+                          ),
+                          zoom: 14.4746,
+                        );
+                      }
+                    },
+                    builder: (BuildContext context, PengerState state) {
+                      if (state is PengerLoaded) {
+                        return Column(
+                          children: <Widget>[
+                            _buildMap(),
+                            const SizedBox(
+                              height: SECTION_GAP_HEIGHT * 1.5,
+                            ),
+                            _buildActions(
+                              state.penger.reviews ?? const <Review>[],
+                            ),
+                            const SizedBox(
+                              height: SECTION_GAP_HEIGHT * 1.5,
+                            ),
+                            _buildBookingListView(
+                              state.penger.items ?? const <BookingItem>[],
+                            ),
+                            const SizedBox(
+                              height: SECTION_GAP_HEIGHT * 1.5,
+                            ),
+                            // _buildHistory(context),
+                          ],
+                        );
+                      }
+                      return Container();
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Column _buildHistory(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            Text(
-              "History",
-              style: PengoStyle.header(context),
-            ),
-            const Spacer(),
-            GestureDetector(
-              child: Text(
-                "See all",
-                style: PengoStyle.caption(context),
-              ),
-            ),
-          ],
-        ),
-        ListView.separated(
-            padding: const EdgeInsets.symmetric(vertical: 18),
-            separatorBuilder: (BuildContext context, int index) {
-              return const SizedBox(
-                height: SECTION_GAP_HEIGHT,
-              );
-            },
-            shrinkWrap: true,
-            itemCount: 2,
-            itemBuilder: (BuildContext context, int index) {
-              return CustomListItem(
-                  leading: Container(
-                    width: 42,
-                    height: 42,
-                    decoration: BoxDecoration(
-                      color: primaryLightColor,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    padding: const EdgeInsets.all(8),
-                    child: index.isEven
-                        ? SvgPicture.asset(
-                            COUPON_ICON_PATH,
-                            fit: BoxFit.scaleDown,
-                          )
-                        : SvgPicture.asset(TICKET_ICON_PATH,
-                            fit: BoxFit.scaleDown),
-                  ),
-                  content: <Widget>[
-                    Text(
-                      index.isEven ? "Used CouponA" : "Used Ticket A",
-                      style: PengoStyle.caption(context),
-                    ),
-                    Text(
-                      "1 Jul 2021 03:00PM",
-                      style: PengoStyle.captionNormal(context),
-                    ),
-                  ]);
-            })
-      ],
-    );
-  }
+  // Column _buildHistory(BuildContext context) {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     mainAxisSize: MainAxisSize.min,
+  //     children: <Widget>[
+  //       Row(
+  //         children: <Widget>[
+  //           Text(
+  //             "History",
+  //             style: PengoStyle.header(context),
+  //           ),
+  //           const Spacer(),
+  //           GestureDetector(
+  //             child: Text(
+  //               "See all",
+  //               style: PengoStyle.caption(context),
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //       ListView.separated(
+  //           padding: const EdgeInsets.symmetric(vertical: 18),
+  //           separatorBuilder: (BuildContext context, int index) {
+  //             return const SizedBox(
+  //               height: SECTION_GAP_HEIGHT,
+  //             );
+  //           },
+  //           shrinkWrap: true,
+  //           itemCount: 2,
+  //           itemBuilder: (BuildContext context, int index) {
+  //             return CustomListItem(
+  //                 leading: Container(
+  //                   width: 42,
+  //                   height: 42,
+  //                   decoration: BoxDecoration(
+  //                     color: primaryLightColor,
+  //                     borderRadius: BorderRadius.circular(8),
+  //                   ),
+  //                   padding: const EdgeInsets.all(8),
+  //                   child: index.isEven
+  //                       ? SvgPicture.asset(
+  //                           COUPON_ICON_PATH,
+  //                           fit: BoxFit.scaleDown,
+  //                         )
+  //                       : SvgPicture.asset(TICKET_ICON_PATH,
+  //                           fit: BoxFit.scaleDown),
+  //                 ),
+  //                 content: <Widget>[
+  //                   Text(
+  //                     index.isEven ? "Used CouponA" : "Used Ticket A",
+  //                     style: PengoStyle.caption(context),
+  //                   ),
+  //                   Text(
+  //                     "1 Jul 2021 03:00PM",
+  //                     style: PengoStyle.captionNormal(context),
+  //                   ),
+  //                 ]);
+  //           })
+  //     ],
+  //   );
+  // }
 
-  Column _buildBookingListView() {
+  Column _buildBookingListView(List<BookingItem> items) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -184,13 +204,13 @@ class _InfoPageState extends State<InfoPage> {
           ],
         ),
         const SizedBox(height: SECTION_GAP_HEIGHT),
-        _buildBookingItems,
+        _buildBookingItems(items),
       ],
     );
   }
 
-  Widget get _buildBookingItems {
-    if (widget.penger.items == null) {
+  Widget _buildBookingItems(List<BookingItem> items) {
+    if (items.isEmpty) {
       return Text(
         'No items',
         style: PengoStyle.caption(context).copyWith(color: grayTextColor),
@@ -200,7 +220,7 @@ class _InfoPageState extends State<InfoPage> {
       height: 50,
       child: HStack(
         gap: 5,
-        children: List.generate(widget.penger.items!.length, (index) {
+        children: List.generate(items.length, (index) {
           final BookingItem item = widget.penger.items![index];
           return PengerItem(
             width: mediaQuery(context).size.width / 2,
@@ -221,7 +241,7 @@ class _InfoPageState extends State<InfoPage> {
     );
   }
 
-  Widget _buildActions() {
+  Widget _buildActions(List<Review> reviews) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -241,13 +261,15 @@ class _InfoPageState extends State<InfoPage> {
         OutlinedListTile(
           assetName: REVIEW_ICON_PATH,
           title: "View review",
-          subTitle: "${fakedReviews.length} people reviewed",
+          subTitle: "${reviews.length} people reviewed",
           trailing: Icon(Icons.chevron_right),
           onTap: () {
             Navigator.of(context, rootNavigator: true).push(
               CupertinoPageRoute(
                 builder: (context) => PengerReviewPage(
-                    reviews: fakedReviews, penger: widget.penger),
+                  reviews: reviews,
+                  penger: widget.penger,
+                ),
               ),
             );
           },
@@ -261,6 +283,7 @@ class _InfoPageState extends State<InfoPage> {
   }
 
   Widget _buildMap() {
+    if (_kGooglePlex == null) return Container();
     return SizedBox(
       height: 250,
       child: ClipRRect(
@@ -268,7 +291,7 @@ class _InfoPageState extends State<InfoPage> {
         child: Align(
           child: GoogleMap(
             mapType: MapType.hybrid,
-            initialCameraPosition: _kGooglePlex,
+            initialCameraPosition: _kGooglePlex!,
             onMapCreated: (GoogleMapController controller) {
               _controller.complete(controller);
             },
@@ -276,5 +299,9 @@ class _InfoPageState extends State<InfoPage> {
         ),
       ),
     );
+  }
+
+  void _load() {
+    _bloc.add(FetchPenger(widget.penger.id));
   }
 }

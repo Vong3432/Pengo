@@ -10,13 +10,16 @@ Goocard _$GoocardFromJson(Map<String, dynamic> json) {
   return Goocard(
     userId: json['user_id'] as int,
     id: json['id'] as int,
-    creditPoints: (json['credit_points'] as num).toDouble(),
+    creditPoints: (json['credit_points'] as num?)?.toDouble(),
     logs: (json['logs'] as List<dynamic>?)
         ?.map((e) => GoocardLog.fromJson(e as Map<String, dynamic>))
         .toList(),
     records: (json['records'] as List<dynamic>?)
         ?.map((e) => BookingRecord.fromJson(e as Map<String, dynamic>))
         .toList(),
+    user: json['user'] == null
+        ? null
+        : User.fromJson(json['user'] as Map<String, dynamic>),
   );
 }
 
@@ -25,5 +28,6 @@ Map<String, dynamic> _$GoocardToJson(Goocard instance) => <String, dynamic>{
       'user_id': instance.userId,
       'logs': instance.logs,
       'records': instance.records,
+      'user': instance.user,
       'credit_points': instance.creditPoints,
     };

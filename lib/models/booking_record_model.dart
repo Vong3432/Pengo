@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pengo/models/booking_item_model.dart';
 import 'package:pengo/models/goocard_log_model.dart';
+import 'package:pengo/models/goocard_model.dart';
 
 part 'booking_record_model.g.dart';
 
@@ -21,6 +22,7 @@ class BookingRecord {
     this.log,
     this.formattedBookDateTime,
     this.isReviewed,
+    this.goocard,
   });
 
   factory BookingRecord.fromJson(Map<String, dynamic> json) =>
@@ -46,6 +48,8 @@ class BookingRecord {
 
   @JsonKey(name: 'reward_point')
   final double rewardPoint;
+
+  final Goocard? goocard;
 
   @JsonKey(name: 'is_used')
   final bool isUsed;
