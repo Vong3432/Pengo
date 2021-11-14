@@ -46,8 +46,7 @@ class ApiHelper {
   }
 
   final Dio _dio = Dio(BaseOptions(
-    baseUrl:
-        Platform.isIOS ? 'http://localhost:3333/' : 'http://10.0.2.2:3333/',
+    baseUrl: "${dotenv.env['SERVER_URL']}/",
     connectTimeout: 5000, //5
     receiveTimeout: 3000,
   ));

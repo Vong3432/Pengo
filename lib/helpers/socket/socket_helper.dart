@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 class SocketHelper extends ChangeNotifier {
@@ -12,8 +13,7 @@ class SocketHelper extends ChangeNotifier {
 
   static final _instance = SocketHelper._constructor();
 
-  final String uri =
-      Platform.isIOS ? 'http://172.20.10.7:3333' : 'http://10.0.2.2:3333';
+  final String uri = "${dotenv.env['SERVER_URL']}";
   late Socket socket;
 
   Future<void> init() async {

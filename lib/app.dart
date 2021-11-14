@@ -12,6 +12,7 @@ import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/helpers/toast/toast_helper.dart';
 import 'package:pengo/models/providers/auth_model.dart';
+import 'package:pengo/ui/booking-records/past_record_listing_view.dart';
 import 'package:pengo/ui/explore/explore_view.dart';
 import 'package:pengo/ui/goocard/goocard_view.dart';
 import 'package:pengo/ui/home/booking_pass.dart';
@@ -112,7 +113,8 @@ class _MyHomePageState extends State<MyHomePage> {
         break;
       case 3:
         // history
-        _navigatorKey.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
+        _navigatorKey.currentState!
+            .pushNamedAndRemoveUntil('/past-records', (_) => false);
         break;
       case 4:
         // profile
@@ -186,6 +188,9 @@ class _MyHomePageState extends State<MyHomePage> {
               case "/booking-item":
                 builder = (BuildContext context) => ItemInfoView();
                 break;
+              case "/past-records":
+                builder = (BuildContext context) => PastRecordListPage();
+                break;
               case "/explore":
                 builder = (BuildContext context) => ExploreView();
                 setState(() {
@@ -229,7 +234,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           DotNavigationBarItem(
             selectedColor: primaryColor,
-            icon: navIcon(_selectedIndex == 3, CALENDAR_ICON_PATH),
+            icon: navIcon(_selectedIndex == 3, REVIEW_ICON_PATH),
           ),
           DotNavigationBarItem(
             selectedColor: primaryColor,

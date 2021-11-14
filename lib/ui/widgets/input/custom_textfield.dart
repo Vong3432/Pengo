@@ -7,7 +7,7 @@ import 'package:pengo/helpers/theme/custom_font.dart';
 class CustomTextField extends StatelessWidget {
   const CustomTextField({
     Key? key,
-    required this.label,
+    this.label,
     required this.hintText,
     this.onChanged,
     this.obsecureText,
@@ -25,9 +25,11 @@ class CustomTextField extends StatelessWidget {
     this.onSaved,
     this.onEditingComplete,
     this.error,
+    this.maxLines,
+    this.height,
   }) : super(key: key);
 
-  final String label;
+  final String? label;
   final String hintText;
   final void Function(String value)? onChanged;
   final void Function(String? value)? onSaved;
@@ -45,6 +47,8 @@ class CustomTextField extends StatelessWidget {
   final bool? isOptional;
   final Text? sideNote;
   final String? error;
+  final double? height;
+  final int? maxLines;
 
   @override
   Widget build(BuildContext context) {
@@ -53,13 +57,14 @@ class CustomTextField extends StatelessWidget {
       children: <Widget>[
         Row(
           children: <Widget>[
-            Text(
-              label,
-              style: lblStyle ??
-                  PengoStyle.title2(context).copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
+            if (label != null)
+              Text(
+                label!,
+                style: lblStyle ??
+                    PengoStyle.title2(context).copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
             const Spacer(),
             if (isOptional == true)
               Text(
@@ -79,7 +84,7 @@ class CustomTextField extends StatelessWidget {
         Stack(
           children: [
             Container(
-              height: 52,
+              height: height ?? 52,
               decoration: BoxDecoration(
                 border: Border.all(
                   width: 2.5,
@@ -89,6 +94,7 @@ class CustomTextField extends StatelessWidget {
               ),
             ),
             TextFormField(
+              maxLines: maxLines,
               onEditingComplete: onEditingComplete,
               controller: controller,
               validator: validator,

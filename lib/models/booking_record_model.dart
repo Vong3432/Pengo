@@ -20,6 +20,7 @@ class BookingRecord {
     this.streetAddress,
     this.log,
     this.formattedBookDateTime,
+    this.isReviewed,
   });
 
   factory BookingRecord.fromJson(Map<String, dynamic> json) =>
@@ -60,6 +61,9 @@ class BookingRecord {
 
   @JsonKey(name: 'formatted_book_datetime')
   final DateTime? formattedBookDateTime;
+
+  @JsonKey(name: 'is_reviewed')
+  final bool? isReviewed;
 }
 
 @JsonSerializable()

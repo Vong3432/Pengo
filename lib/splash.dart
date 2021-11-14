@@ -10,6 +10,7 @@ import 'package:pengo/helpers/toast/toast_helper.dart';
 import 'package:pengo/models/auth_model.dart';
 import 'package:pengo/models/providers/auth_model.dart';
 import 'package:pengo/onboarding.dart';
+import 'package:pengo/ui/widgets/api/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -65,6 +66,6 @@ class _SplashState extends State<Splash> with AfterLayoutMixin<Splash> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: CircularProgressIndicator());
+    return const Scaffold(body: LoadingWidget());
   }
 }

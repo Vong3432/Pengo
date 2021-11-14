@@ -28,6 +28,7 @@ BookingRecord _$BookingRecordFromJson(Map<String, dynamic> json) {
     formattedBookDateTime: json['formatted_book_datetime'] == null
         ? null
         : DateTime.parse(json['formatted_book_datetime'] as String),
+    isReviewed: json['is_reviewed'] as bool?,
   );
 }
 
@@ -46,6 +47,7 @@ Map<String, dynamic> _$BookingRecordToJson(BookingRecord instance) =>
       'ahead_user_count': instance.aheadUserCount,
       'formatted_book_datetime':
           instance.formattedBookDateTime?.toIso8601String(),
+      'is_reviewed': instance.isReviewed,
     };
 
 BookDate _$BookDateFromJson(Map<String, dynamic> json) {

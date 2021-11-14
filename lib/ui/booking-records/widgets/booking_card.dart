@@ -12,10 +12,15 @@ import 'package:pengo/models/booking_record_model.dart';
 import 'package:pengo/ui/widgets/button/custom_button.dart';
 
 class BookingCard extends StatelessWidget {
-  const BookingCard({Key? key, required this.record, required this.onCancel})
-      : super(key: key);
+  const BookingCard({
+    Key? key,
+    required this.record,
+    this.onCancel,
+    this.onReview,
+  }) : super(key: key);
 
-  final ValueSetter<int> onCancel;
+  final ValueSetter<int>? onCancel;
+  final VoidCallback? onReview;
   final BookingRecord record;
 
   @override
@@ -85,6 +90,17 @@ class BookingCard extends StatelessWidget {
                 onPressed: () => _confirmDelete(context),
                 text: const Text("Cancel"),
               )
+            else if (record.isUsed == true && record.isReviewed == false)
+              CustomButton(
+                backgroundColor: secondaryTextColor,
+                onPressed: () {
+                  if (onReview != null) {
+                    // ignore: prefer_null_aware_method_calls
+                    onReview!();
+                  }
+                },
+                text: const Text("Review"),
+              ),
           ],
         ),
       ),
@@ -110,7 +126,10 @@ class BookingCard extends StatelessWidget {
             isDestructiveAction: true,
             onPressed: () {
               // Do something destructive.
-              onCancel(record.id);
+              if (onCancel != null) {
+                // ignore: prefer_null_aware_method_calls
+                onCancel!(record.id);
+              }
               Navigator.pop(context);
             },
           )
