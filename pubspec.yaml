@@ -43,6 +43,7 @@ dependencies:
   fluttertoast: ^8.0.8
   form_field_validator: ^1.1.0
   geolocator: ^7.2.0+1
+  get: ^4.3.8
   google_geocoding: ^0.2.0
   google_maps_flutter: ^2.0.6
   image_picker: ^0.8.3+3

@@ -1,11 +1,11 @@
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart' hide Response, FormData;
 import 'package:pengo/helpers/storage/shared_preferences_helper.dart';
 import 'package:pengo/models/auth_model.dart';
+import 'package:pengo/ui/auth/login_view.dart';
 
 class ApiHelper {
   //https://medium.com/flutter-community/implementing-bloc-pattern-using-flutter-bloc-62a62e0319b5
@@ -27,6 +27,10 @@ class ApiHelper {
         // debugPrint("Error dio: ${error.response?.data['msg'].toString()}");
 
         errorInterceptorHandler.reject(error);
+        if (error.response?.statusCode == 401) {
+          debugPrint("401");
+          Get.to(const LoginPage());
+        }
       }, onRequest:
           (RequestOptions request, RequestInterceptorHandler handler) async {
         _dio.interceptors.requestLock.lock();

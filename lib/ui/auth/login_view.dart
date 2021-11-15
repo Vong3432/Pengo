@@ -96,6 +96,7 @@ class LoginPageState extends State<LoginPage> {
               CustomTextField(
                 controller: _passwordController,
                 obsecureText: true,
+                maxLines: 1,
                 label: "Password",
                 hintText: "Password",
                 validator: _passwordValidator,
