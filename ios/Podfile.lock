@@ -66,6 +66,9 @@ PODS:
     - Flutter
   - flutter_local_notifications (0.0.1):
     - Flutter
+  - flutter_mapbox_navigation (0.0.20):
+    - Flutter
+    - MapboxNavigation (~> 1.4)
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
@@ -117,14 +120,39 @@ PODS:
     - GoogleUtilities/Logger
   - image_picker (0.0.1):
     - Flutter
+  - Mapbox-iOS-SDK (6.4.1):
+    - MapboxMobileEvents (~> 0.10.12)
+  - MapboxAccounts (2.3.1)
+  - MapboxCommon (9.2.0)
+  - MapboxCoreNavigation (1.4.2):
+    - MapboxAccounts (~> 2.3.0)
+    - MapboxDirections (~> 1.2.0)
+    - MapboxMobileEvents (~> 0.10.2)
+    - MapboxNavigationNative (~> 32.0)
+    - Turf (~> 1.0)
+  - MapboxDirections (1.2.0):
+    - Polyline (~> 5.0)
+    - Turf (~> 1.0)
+  - MapboxMobileEvents (0.10.13)
+  - MapboxNavigation (1.4.2):
+    - Mapbox-iOS-SDK (~> 6.0)
+    - MapboxCoreNavigation (= 1.4.2)
+    - MapboxMobileEvents (~> 0.10.2)
+    - MapboxSpeech (~> 1.0)
+    - Solar (~> 2.1)
+  - MapboxNavigationNative (32.0.0):
+    - MapboxCommon (= 9.2.0)
+  - MapboxSpeech (1.0.0)
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
     - nanopb/encode (= 2.30908.0)
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
+  - Polyline (5.0.2)
   - PromisesObjC (2.0.0)
   - shared_preferences (0.0.1):
     - Flutter
+  - Solar (2.1.0)
   - Stripe (21.8.1):
     - Stripe/Stripe3DS2 (= 21.8.1)
     - StripeCore (= 21.8.1)
@@ -135,6 +163,7 @@ PODS:
     - Stripe (~> 21.8.1)
   - StripeCore (21.8.1)
   - Toast (4.0.0)
+  - Turf (1.2.0)
 
 DEPENDENCIES:
   - Firebase/Analytics
@@ -144,6 +173,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_config (from `.symlinks/plugins/flutter_config/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
+  - flutter_mapbox_navigation (from `.symlinks/plugins/flutter_mapbox_navigation/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
   - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
@@ -163,11 +193,23 @@ SPEC REPOS:
     - GoogleDataTransport
     - GoogleMaps
     - GoogleUtilities
+    - Mapbox-iOS-SDK
+    - MapboxAccounts
+    - MapboxCommon
+    - MapboxCoreNavigation
+    - MapboxDirections
+    - MapboxMobileEvents
+    - MapboxNavigation
+    - MapboxNavigationNative
+    - MapboxSpeech
     - nanopb
+    - Polyline
     - PromisesObjC
+    - Solar
     - Stripe
     - StripeCore
     - Toast
+    - Turf
 
 EXTERNAL SOURCES:
   firebase_analytics:
@@ -182,6 +224,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_config/ios"
   flutter_local_notifications:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
+  flutter_mapbox_navigation:
+    :path: ".symlinks/plugins/flutter_mapbox_navigation/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
   geolocator_apple:
@@ -208,6 +252,7 @@ SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_config: 2226c1df19c78fe34a05eb7f1363445f18e76fc1
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
+  flutter_mapbox_navigation: b2d023f58478f5f80242db9b70cc75ee37f42e20
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
   geolocator_apple: b741765c55dc21950e3e106e8b3584e55cf81ce5
   google_maps_flutter: abdb8dee6c52d4be36ad131ee6ebfacd14417c5a
@@ -216,14 +261,26 @@ SPEC CHECKSUMS:
   GoogleMaps: 086ae1dab659eaa7339bdb30fc88e2f44e7c597c
   GoogleUtilities: 8de2a97a17e15b6b98e38e8770e2d129a57c0040
   image_picker: 9aa50e1d8cdacdbed739e925b7eea16d014367e6
+  Mapbox-iOS-SDK: f870f83cbdc7aa4a74afcee143aafb0dae390c82
+  MapboxAccounts: e40ef575df5d8b7ef33d0504ff2d393f4fde0455
+  MapboxCommon: 2c4ef00c10cba35302835423f4d63c6f3dea4bc4
+  MapboxCoreNavigation: fd24751d42a53c2ca4ddebd55f49a11b925f08be
+  MapboxDirections: 383df0cd65784897c2269750a42d9654c832f0ce
+  MapboxMobileEvents: e78db24b348f48e41e5895be7dc16e5b1bb43562
+  MapboxNavigation: b596028515707e1b4b94d22f298a7c7000712e6d
+  MapboxNavigationNative: e811b9beed18c01e4693e29f843d36b4a760fa61
+  MapboxSpeech: 4b3aea42e35d056fae1d7ad847a9fc0f412d911e
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
+  Polyline: fce41d72e1146c41c6d081f7656827226f643dff
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
   shared_preferences: 5033afbb22d372e15aff8ff766df9021b845f273
+  Solar: 2dc6e7cc39186cb0c8228fa08df76fb50c7d8f24
   Stripe: 57c6997c64042a3f5aedae9b76e331942f8b75d2
   stripe_ios: a47cfc31126ca3f0c47a9c60c0bd4be110d14aea
   StripeCore: a6e50d58119a0c7601773b56f274db2d394dcdac
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
+  Turf: aaa060138b11a8e979a19e6d81091d156a31bc58
 
-PODFILE CHECKSUM: ad56a7708cfcd80804fde8ff9b25949a719fb354
+PODFILE CHECKSUM: 8ef24d96e8079bc01f16c1f77d3f6809d6f25c6a
 
 COCOAPODS: 1.11.2

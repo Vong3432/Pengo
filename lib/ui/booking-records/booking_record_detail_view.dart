@@ -1,19 +1,21 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:pengo/bloc/records/booking_record_bloc.dart';
 import 'package:pengo/bloc/records/booking_record_repo.dart';
 import 'package:pengo/config/color.dart';
 import 'package:pengo/const/icon_const.dart';
 import 'package:pengo/const/space_const.dart';
+import 'package:pengo/helpers/geo/geo_helper.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/models/booking_item_model.dart';
 import 'package:pengo/models/booking_record_model.dart';
 import 'package:pengo/ui/widgets/api/loading.dart';
 import 'package:pengo/ui/widgets/layout/sliver_appbar.dart';
 import 'package:pengo/ui/widgets/layout/sliver_body.dart';
+import 'package:pengo/ui/widgets/mapbox/map_view.dart';
+import 'package:provider/src/provider.dart';
 
 class BookingRecordDetailPage extends StatefulWidget {
   const BookingRecordDetailPage({Key? key, required this.id}) : super(key: key);
@@ -31,7 +33,73 @@ class _BookingRecordDetailPageState extends State<BookingRecordDetailPage> {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          CustomSliverAppBar(title: Container()),
+          CustomSliverAppBar(
+            title: Container(),
+            actions: <Widget>[
+              FutureBuilder(
+                  future: RecordRepo().fetchRecord(
+                    recordId: widget.id,
+                    showStats: true,
+                  ),
+                  builder: (
+                    BuildContext context,
+                    AsyncSnapshot<BookingRecord> snapshot,
+                  ) {
+                    if (snapshot.hasData) {
+                      final BookingRecord _currRecord = snapshot.data!;
+                      return IconButton(
+                        onPressed: () async {
+                          double lat = double.tryParse(
+                                Provider.of<GeoHelper>(context, listen: false)
+                                    .currentPos()!['latitude']
+                                    .toString(),
+                              ) ??
+                              0;
+
+                          double lng = double.tryParse(
+                                Provider.of<GeoHelper>(context, listen: false)
+                                    .currentPos()!['longitude']
+                                    .toString(),
+                              ) ??
+                              0;
+
+                          try {
+                            final posFromDevice =
+                                await GeoHelper().getDeviceLocation();
+                            lat = posFromDevice.latitude;
+                            lng = posFromDevice.longitude;
+
+                            debugPrint("use device location $lat $lng");
+                          } catch (e) {
+                            debugPrint("use user saved location $lat $lng");
+                          }
+
+                          if (lat == 0 || lng == 0) return;
+
+                          Navigator.of(context, rootNavigator: true).push(
+                            CupertinoPageRoute(builder: (BuildContext context) {
+                              return MapView(
+                                destinationName: _currRecord.item!.title,
+                                bookingLat:
+                                    _currRecord.item!.geolocation!.latitude,
+                                bookingLng:
+                                    _currRecord.item!.geolocation!.longitude,
+                                initialLat: lat,
+                                initialLng: lng,
+                              );
+                            }),
+                          );
+                        },
+                        icon: Icon(
+                          Icons.map,
+                          color: primaryColor,
+                        ),
+                      );
+                    }
+                    return const SizedBox();
+                  })
+            ],
+          ),
           CustomSliverBody(
             content: <Widget>[
               FutureBuilder<BookingRecord>(
@@ -167,6 +235,9 @@ class _BookingRecordDetailPageState extends State<BookingRecordDetailPage> {
                                 color: secondaryTextColor,
                               ),
                             ),
+                          ),
+                          const SizedBox(
+                            height: SECTION_GAP_HEIGHT,
                           ),
                         ],
                       ),

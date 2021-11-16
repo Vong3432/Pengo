@@ -1,13 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_geocoding/google_geocoding.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pengo/bloc/locations/locations_repo.dart';
 import 'package:pengo/helpers/geo/geocode_helper.dart';
 import 'package:pengo/helpers/storage/shared_preferences_helper.dart';
-import 'package:pengo/models/auth_model.dart';
 import 'package:pengo/models/user_model.dart';
 import 'package:collection/collection.dart';
 

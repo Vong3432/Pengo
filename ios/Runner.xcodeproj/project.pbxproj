@@ -143,6 +143,7 @@
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				35402FB18AE254FC3C79A68F /* [CP] Embed Pods Frameworks */,
 				3C38DF12133797E1BFB5621D /* [CP] Copy Pods Resources */,
+				3B0641FA2743E0EF00D98D53 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -219,6 +220,24 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		3B0641FA2743E0EF00D98D53 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(TARGET_BUILD_DIR)/$(INFOPLIST_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n# Look for a global file named 'mapbox' or '.mapbox' within the home directory\ntoken_file=~/.mapbox\ntoken_file2=~/mapbox\ntoken=\"$(cat $token_file 2>/dev/null || cat $token_file2 2>/dev/null)\"\nif [ \"$token\" ]; then\n  plutil -replace MGLMapboxAccessToken -string $token \"$TARGET_BUILD_DIR/$INFOPLIST_PATH\"\nelse\n  echo 'warning: Missing Mapbox access token'\n  open 'https://account.mapbox.com/access-tokens/'\n  echo \"warning: Get an access token from <https://account.mapbox.com/access-tokens/>, then create a new file at $token_file or $token_file2 that contains the access token.\"\nfi\n";
+		};
 		3B06AD1E1E4923F5004D2608 /* Thin Binary */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -284,7 +303,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
