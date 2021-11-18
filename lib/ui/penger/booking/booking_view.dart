@@ -76,7 +76,8 @@ class _BookingViewState extends State<BookingView> {
             final SystemFunction? noTimeFunc = widget
                 .bookingItem.bookingCategory?.bookingOptions
                 ?.firstWhereOrNull(
-              (SystemFunction element) => element.name == "No time limit",
+              (SystemFunction element) =>
+                  element.name == "Fixed timeslot" && element.isActive == true,
             );
 
             // TODO: More configuration checking ...
@@ -89,10 +90,9 @@ class _BookingViewState extends State<BookingView> {
               hasStartDate: widget.bookingItem.startFrom != null,
               hasEndDate: widget.bookingItem.endAt != null,
               hasTime: (widget.bookingItem.availableFrom != null ||
-                      widget.bookingItem.availableTo != null ||
-                      _extractTimeFromEndDt != null ||
-                      _extractTimeFromStartDt != null) &&
-                  noTimeFunc == null,
+                  widget.bookingItem.availableTo != null ||
+                  _extractTimeFromEndDt != null ||
+                  _extractTimeFromStartDt != null),
             );
 
             return CustomScrollView(
@@ -206,7 +206,11 @@ class _BookingViewState extends State<BookingView> {
                             (BookingFormStateCubit form) => form.state.hasTime,
                           ),
                           child: ListTile(
-                            onTap: () => _onTimeTapped(context, state),
+                            onTap: () => _onTimeTapped(
+                              context,
+                              state,
+                              noTimeFunc != null,
+                            ),
                             contentPadding: const EdgeInsets.all(18),
                             title: Text(
                               "Pick a time",
@@ -538,8 +542,9 @@ class _BookingViewState extends State<BookingView> {
   Future<void> _onTimeTapped(
     BuildContext context,
     BookingFormState state,
+    bool isFixed,
   ) async {
-    load();
+    load(isFixed: isFixed);
 
     setState(() {
       _isTimeModalOpened = true;
@@ -669,12 +674,25 @@ class _BookingViewState extends State<BookingView> {
     });
   }
 
-  Future<void> load() async {
+  Future<void> load({bool isFixed = false}) async {
     Future.delayed(Duration.zero, () {
       if ((widget.bookingItem.startFrom == null ||
               widget.bookingItem.endAt == null) &&
           (widget.bookingItem.availableFrom == null ||
               widget.bookingItem.availableTo == null)) {
+        return;
+      }
+
+      if (isFixed == true) {
+        final DateTime st = widget.bookingItem.startFrom!.toLocal();
+        final DateTime ed = widget.bookingItem.endAt!.toLocal();
+
+        final String timeOfDay =
+            TimeOfDay(hour: st.hour, minute: st.minute).format(context);
+        setState(() {
+          timeslots = <String>[timeOfDay];
+        });
+
         return;
       }
 

@@ -278,6 +278,6 @@ class _MapViewState extends State<MapView> {
       default:
         break;
     }
-    setState(() {});
+    // setState(() {});
   }
 }
