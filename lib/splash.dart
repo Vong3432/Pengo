@@ -25,7 +25,7 @@ class _SplashState extends State<Splash> with AfterLayoutMixin<Splash> {
   Future<void> checkFirstSeen() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? _user = await SharedPreferencesHelper().getKey("user");
-    final bool _seen = prefs.getBool('seen') ?? true; // default: false
+    final bool _seen = prefs.getBool('seen') ?? false; // default: false
 
     if (_user != null) {
       final Map<String, dynamic> decoded =
@@ -36,12 +36,6 @@ class _SplashState extends State<Splash> with AfterLayoutMixin<Splash> {
           Auth.fromJson(jsonDecode(_user) as Map<String, dynamic>);
 
       context.read<AuthModel>().setUser(auth);
-    }
-
-    try {
-      await context.read<GeoHelper>().determinePosition();
-    } catch (e) {
-      showToast(msg: e.toString());
     }
 
     if (_seen) {

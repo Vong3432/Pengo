@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names
 const String PREFIX_PATH = 'assets/svg/icons';
 
+const String ONBOARDING1_ICON_PATH = '$PREFIX_PATH/onboarding1.svg';
 const String GOOCARD_ICON_PATH = '$PREFIX_PATH/goo.svg';
 const String COUPON_ICON_PATH = '$PREFIX_PATH/coupon.svg';
 const String SCAN_ICON_PATH = '$PREFIX_PATH/scan.svg';

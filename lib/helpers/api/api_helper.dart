@@ -42,6 +42,8 @@ class ApiHelper {
           request.headers["Authorization"] = "Bearer ${auth.token}";
         }
 
+        debugPrint("request url: ${request.path}");
+
         // end
         _dio.interceptors.requestLock.unlock();
         handler.next(request);

@@ -23,7 +23,9 @@ class _SelfBookingListState extends State<SelfBookingList> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _loadRecords();
+    if (widget.auth != null) {
+      _loadRecords();
+    }
   }
 
   @override

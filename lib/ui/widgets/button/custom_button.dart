@@ -50,7 +50,7 @@ class CustomButton extends StatelessWidget {
               child: DefaultTextStyle(
                 textAlign: TextAlign.center,
                 style: PengoStyle.title(context).copyWith(
-                  color: whiteColor,
+                  color: color ?? whiteColor,
                 ),
                 child: text,
               ),

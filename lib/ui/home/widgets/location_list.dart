@@ -137,7 +137,10 @@ class _LocationListState extends State<LocationList> {
                           snapshot.data!.longitude,
                           true,
                         );
+                    if (user == null) return;
+
                     await LocationRepo().markAllLocationNotFav();
+
                     showCupertinoModalBottomSheet(
                         context: context,
                         builder: (BuildContext context) {
