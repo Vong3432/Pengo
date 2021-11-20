@@ -141,7 +141,7 @@ class _ExploreViewState extends State<ExploreView>
                     },
                     name: item.title,
                     logo: item.poster,
-                    location: item.geolocation?.name,
+                    location: item.location,
                     trailing: FutureBuilder(
                         future: GeoHelper().distanceBetween(
                           item.geolocation!.latitude,

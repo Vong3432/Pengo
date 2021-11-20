@@ -91,7 +91,6 @@ class ViewItemBloc extends Bloc<ViewBookingItemEvent, ViewBookingItemState> {
       final BookingItem item = await _repo.fetchBookingItem(id: itemId);
       final BookingItemValidateStatus status =
           await _repo.getItemStatusMsg(id: itemId);
-      Future.delayed(Duration(seconds: 1));
       yield BookingItemLoaded(item, status);
     } catch (_) {
       yield BookingItemNotLoaded();

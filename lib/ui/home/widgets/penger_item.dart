@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pengo/config/color.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
+import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/ui/widgets/list/custom_list_item.dart';
 
 class PengerItem extends StatelessWidget {
@@ -70,12 +71,15 @@ class PengerItem extends StatelessWidget {
         ),
         Visibility(
           visible: location != null,
-          child: Text(
-            location ?? "",
-            style: PengoStyle.captionNormal(context).copyWith(
-              color: secondaryTextColor,
+          child: SizedBox(
+            width: 200,
+            child: Text(
+              location ?? "",
+              style: PengoStyle.captionNormal(context).copyWith(
+                color: secondaryTextColor,
+              ),
+              overflow: TextOverflow.ellipsis,
             ),
-            overflow: TextOverflow.ellipsis,
           ),
         ),
         Visibility(

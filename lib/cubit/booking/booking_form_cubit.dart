@@ -55,29 +55,28 @@ class BookingFormStateCubit extends Cubit<BookingFormState> {
     }
 
     final DateTime _startDate =
-        DateFormat("yyyy-MM-dd").parse(state.startDate!);
+        DateFormat("yyyy-MM-dd").parse(state.startDate!).toLocal();
     final DateTime _endDate =
         state.endDate != null && state.endDate?.isNotEmpty == true
-            ? DateFormat("yyyy-MM-dd").parse(state.endDate!)
+            ? DateFormat("yyyy-MM-dd").parse(state.endDate!).toLocal()
             : _startDate;
 
     // check
-    final BookingRecord? matched =
-        records.firstWhereOrNull((BookingRecord record) {
-      return _startDate.toLocal().isBetweenDate(
-                    record.bookDate!.startDate!.toLocal(),
-                    record.bookDate!.endDate!.toLocal(),
-                  ) ==
+    final List<BookingRecord> matched = records.where((BookingRecord record) {
+      return _startDate.isBetweenDate(
+                record.bookDate!.startDate!.toLocal(),
+                record.bookDate!.endDate!.toLocal(),
+              ) ==
               true &&
-          _endDate.toLocal().isBetweenDate(
-                    record.bookDate!.startDate!.toLocal(),
-                    record.bookDate!.endDate!.toLocal(),
-                  ) ==
+          _endDate.isBetweenDate(
+                record.bookDate!.startDate!.toLocal(),
+                record.bookDate!.endDate!.toLocal(),
+              ) ==
               true &&
           record.bookTime == timeslot;
-    });
+    }).toList();
 
-    if (matched != null) return true;
+    if (matched.length == maxBook) return true;
 
     return false;
   }

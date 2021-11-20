@@ -418,8 +418,8 @@ class _BookingViewState extends State<BookingView> {
                           ),
                         Visibility(
                           visible: isOverBooked &&
-                              state.bookTime != null &&
-                              state.startDate != null,
+                              (state.bookTime != null ||
+                                  state.startDate != null),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 28.0),
                             child: Text(
@@ -546,7 +546,7 @@ class _BookingViewState extends State<BookingView> {
         controller: ModalScrollController.of(context),
         child: BookDateModal(
           cubit: _formStateCubit,
-          minDate: _minDate,
+          minDate: _minDate.toLocal(),
           maxDate: widget.bookingItem.endAt?.toLocal(),
           selectionMode: DateRangePickerSelectionMode.range,
           closeDates: widget.bookingItem.bookingCategory?.penger?.closeDates,
@@ -617,25 +617,23 @@ class _BookingViewState extends State<BookingView> {
                           timeslots[index],
                           style: PengoStyle.title2(context),
                         ),
-                        trailing: Visibility(
-                          visible: !isOverBooked,
-                          child: Chip(
-                            backgroundColor:
-                                isSelected ? primaryColor : greyBgColor,
-                            label: GestureDetector(
-                              onTap: () {
-                                _formStateCubit.updateFormState(
-                                  bookTime: currentTimeSlot,
-                                );
-                                Navigator.of(context).pop();
-                              },
-                              child: Text(
-                                isSelected ? "Booked" : "Select",
-                                style: TextStyle(
-                                  color: isSelected
-                                      ? whiteColor
-                                      : secondaryTextColor,
-                                ),
+                        trailing: Chip(
+                          backgroundColor: isOverBooked == true || !isSelected
+                              ? greyBgColor
+                              : primaryColor,
+                          label: GestureDetector(
+                            onTap: () {
+                              _formStateCubit.updateFormState(
+                                bookTime: currentTimeSlot,
+                              );
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(
+                              isOverBooked == true ? "Unavailable" : "Select",
+                              style: TextStyle(
+                                color: isOverBooked == true || !isSelected
+                                    ? secondaryTextColor
+                                    : whiteColor,
                               ),
                             ),
                           ),
@@ -734,11 +732,11 @@ class _BookingViewState extends State<BookingView> {
         context,
         // will look for time from "availableFrom", otherwise look for time from "startFrom"
         start: widget.bookingItem.availableFrom != null
-            ? DateTime.parse(widget.bookingItem.availableFrom!)
+            ? DateTime.parse(widget.bookingItem.availableFrom!).toLocal()
             : widget.bookingItem.startFrom!,
         // will look for time from "availableTo", otherwise look for time from "endAt"
         end: widget.bookingItem.availableTo != null
-            ? DateTime.parse(widget.bookingItem.availableTo!)
+            ? DateTime.parse(widget.bookingItem.availableTo!).toLocal()
             : widget.bookingItem.endAt!,
         gap: widget.bookingItem.timeGapValue,
         units: widget.bookingItem.timeGapUnits,
@@ -753,14 +751,18 @@ class _BookingViewState extends State<BookingView> {
   void _confirmBooked(BookingFormState state) {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       builder: (BuildContext context) {
-        return GoocardRequestModal(
-          onVerifySuccess: (String pin) {
-            BlocProvider.of<BookingRecordBloc>(context).add(
-              BookRecordEvent(state.copyWith(pin: pin)),
-            );
-          },
-          onVerifyFailed: () => debugPrint("Not booking"),
+        return Padding(
+          padding: mediaQuery(context).viewInsets,
+          child: GoocardRequestModal(
+            onVerifySuccess: (String pin) {
+              BlocProvider.of<BookingRecordBloc>(context).add(
+                BookRecordEvent(state.copyWith(pin: pin)),
+              );
+            },
+            onVerifyFailed: () => debugPrint("Not booking"),
+          ),
         );
       },
     );

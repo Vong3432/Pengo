@@ -428,9 +428,13 @@ class Pass extends StatelessWidget {
                             height: 21,
                           ),
                           const SizedBox(width: 8),
-                          Text(
-                            curr.item?.geolocation?.name ?? "",
-                            style: PengoStyle.captionNormal(context),
+                          SizedBox(
+                            width: mediaQuery(context).size.width * 0.6,
+                            child: Text(
+                              curr.item?.geolocation?.name ?? "",
+                              style: PengoStyle.captionNormal(context),
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ],
                       ),

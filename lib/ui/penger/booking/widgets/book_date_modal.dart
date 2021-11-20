@@ -37,7 +37,6 @@ class _BookDateModalState extends State<BookDateModal> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    debugPrint("maxDate ${widget.maxDate}");
   }
 
   @override
@@ -97,8 +96,8 @@ class _BookDateModalState extends State<BookDateModal> {
               selectionColor: primaryColor,
               rangeSelectionColor: primaryLightColor,
               todayHighlightColor: primaryColor,
-              minDate: widget.minDate,
-              maxDate: widget.maxDate,
+              minDate: widget.minDate?.toLocal(),
+              maxDate: widget.maxDate?.toLocal(),
               headerStyle: DateRangePickerHeaderStyle(
                 textStyle: TextStyle(
                   fontSize: 20,

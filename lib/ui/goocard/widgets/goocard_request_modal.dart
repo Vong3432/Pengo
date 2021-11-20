@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pengo/bloc/goocard/goocard_bloc.dart';
 import 'package:pengo/config/color.dart';
+import 'package:pengo/const/space_const.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/helpers/toast/toast_helper.dart';
@@ -44,16 +45,17 @@ class _GoocardRequestModalState extends State<GoocardRequestModal> {
         padding: const EdgeInsets.all(18),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Text(
               "Enter pin:",
               style: PengoStyle.header(context),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 18.0),
-              child: GooCardPinCode(
-                controller: _pinController,
-              ),
+            const SizedBox(
+              height: 18,
+            ),
+            GooCardPinCode(
+              controller: _pinController,
             ),
             const Spacer(),
             BlocConsumer<GoocardBloc, GoocardState>(

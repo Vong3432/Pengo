@@ -125,25 +125,23 @@ class _BookingRecordDetailPageState extends State<BookingRecordDetailPage> {
                     String? fSd;
                     String? fSt;
                     if (startDate != null) {
-                      fSd = DateFormat("yyyy-MM-dd")
-                          .add_jm()
-                          .format(startDate.toLocal());
+                      fSd =
+                          DateFormat("yyyy-MM-dd").format(startDate.toLocal());
                       fSt = record.bookTime;
-                      // ?? DateFormat().add_jm().format(startDate.toLocal());
+                      // ?? DateFormat().add_jm().format(startDate());
                     }
                     String? fEd;
                     String? fEt;
                     if (endDate != null) {
-                      fEd = DateFormat("yyyy-MM-dd")
-                          .add_jm()
-                          .format(endDate.toLocal());
-                      // fEt = DateFormat().add_jm().format(endDate.toLocal());
+                      fEd = DateFormat("yyyy-MM-dd").format(endDate.toLocal());
+                      // fEt = DateFormat().add_jm().format(endDate());
                     }
 
                     String bookDateAndTime = fSd ?? "";
 
                     if (fEd != null) {
-                      bookDateAndTime = bookDateAndTime + " to " + fEd;
+                      bookDateAndTime =
+                          bookDateAndTime + " to " + fEd + "($fSt)";
                     }
 
                     return Padding(
@@ -262,7 +260,7 @@ class _BookingRecordDetailPageState extends State<BookingRecordDetailPage> {
           ) {
             if (snapshot.hasData) {
               final BookingRecord record = snapshot.data!;
-              final DateTime now = DateTime.now().toLocal();
+              final DateTime now = DateTime.now();
 
               final Duration gap =
                   record.formattedBookDateTime!.difference(now);

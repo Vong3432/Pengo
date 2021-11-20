@@ -374,17 +374,20 @@ class PengooInfo extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 18.0),
-              child: CustomButton(
-                backgroundColor:
-                    coupon.isOwned == true ? secondaryTextColor : primaryColor,
-                isLoading:
-                    bloc.state.redeemCouponStatus == RedeemCouponStatus.loading,
-                text: Text(coupon.isOwned == true ? "Redeemed" : "Redeem now"),
-                onPressed: coupon.isOwned == true ? null : _redeem,
-              ),
-            )
+            if (coupon.afterCp != null && coupon.afterCp!.isNegative == false)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 18.0),
+                child: CustomButton(
+                  backgroundColor: coupon.isOwned == true
+                      ? secondaryTextColor
+                      : primaryColor,
+                  isLoading: bloc.state.redeemCouponStatus ==
+                      RedeemCouponStatus.loading,
+                  text:
+                      Text(coupon.isOwned == true ? "Redeemed" : "Redeem now"),
+                  onPressed: coupon.isOwned == true ? null : _redeem,
+                ),
+              )
           ],
         ),
       ),

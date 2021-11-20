@@ -11,6 +11,7 @@ import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/models/providers/auth_model.dart';
 import 'package:pengo/ui/penger/booking/booking_view.dart';
 import 'package:pengo/ui/penger/items/widgets/requirement_list.dart';
+import 'package:pengo/ui/widgets/api/no_result.dart';
 import 'package:pengo/ui/widgets/button/custom_button.dart';
 import 'package:pengo/ui/widgets/layout/sliver_appbar.dart';
 import 'package:pengo/ui/widgets/layout/sliver_body.dart';
@@ -41,6 +42,23 @@ class _ItemInfoViewState extends State<ItemInfoView> {
     return Scaffold(
       body: BlocBuilder<ViewItemBloc, ViewBookingItemState>(
         builder: (BuildContext context, ViewBookingItemState state) {
+          if (state is BookingItemNotLoaded) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(28.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    NoResultWidget(),
+                    CustomButton(
+                      onPressed: () => Navigator.pop(context),
+                      text: const Text("Back"),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
           if (state is BookingItemLoaded) {
             // hide book button if:
             // - `bookable` property status is FALSE.

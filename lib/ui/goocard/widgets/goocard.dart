@@ -75,7 +75,7 @@ class GooCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "${state.goocard.creditPoints}",
+                            "${state.goocard.creditPoints ?? 0}",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize:

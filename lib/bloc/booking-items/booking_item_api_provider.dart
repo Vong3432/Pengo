@@ -64,7 +64,6 @@ class BookingItemApiProvider {
           BookingItem.fromJson(response.data['data'] as Map<String, dynamic>);
       return data;
     } catch (e) {
-      debugPrint(e.toString());
       throw Exception((e as DioError).error);
     }
   }
@@ -79,6 +78,7 @@ class BookingItemApiProvider {
               response.data['data'] as Map<String, dynamic>);
       return status;
     } catch (e) {
+      debugPrint("er $e");
       throw Exception((e as DioError).error);
     }
   }

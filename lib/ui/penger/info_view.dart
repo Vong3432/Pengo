@@ -221,14 +221,14 @@ class _InfoPageState extends State<InfoPage> {
       child: HStack(
         gap: 5,
         children: List.generate(items.length, (index) {
-          final BookingItem item = widget.penger.items![index];
+          final BookingItem item = items[index];
           return PengerItem(
             width: mediaQuery(context).size.width / 2,
             name: item.title,
             location: item.location,
             logo: item.poster,
             onTap: () {
-              Navigator.of(context).pushNamed(
+              Navigator.of(context, rootNavigator: true).pushNamed(
                 "/booking-item",
                 arguments: {
                   "id": item.id,

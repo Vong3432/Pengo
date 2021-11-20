@@ -33,13 +33,13 @@ class BookingCard extends StatelessWidget {
     if (startDate != null) {
       fSd = DateFormat().add_yMMMEd().format(startDate.toLocal());
       fSt = record.bookTime;
-      // ?? DateFormat().add_jm().format(startDate.toLocal());
+      // ?? DateFormat().add_jm().format(startDate());
     }
     String? fEd;
     String? fEt;
     if (endDate != null) {
       fEd = DateFormat().add_yMMMEd().format(endDate.toLocal());
-      // fEt = DateFormat().add_jm().format(endDate.toLocal());
+      // fEt = DateFormat().add_jm().format(endDate());
     }
 
     return GestureDetector(
@@ -90,7 +90,9 @@ class BookingCard extends StatelessWidget {
                 onPressed: () => _confirmDelete(context),
                 text: const Text("Cancel"),
               )
-            else if (record.isUsed == true && record.isReviewed == false)
+            else if (record.isUsed == true &&
+                record.isReviewed == false &&
+                onReview != null)
               CustomButton(
                 backgroundColor: secondaryTextColor,
                 onPressed: () {
@@ -210,9 +212,12 @@ class BookingCardBody extends StatelessWidget {
                   height: 21,
                 ),
                 const SizedBox(width: 8),
-                Text(
-                  record.item?.geolocation?.name ?? "",
-                  style: PengoStyle.captionNormal(context),
+                SizedBox(
+                  width: mediaQuery(context).size.width * 0.7,
+                  child: Text(
+                    record.item?.geolocation?.name ?? "",
+                    style: PengoStyle.captionNormal(context),
+                  ),
                 ),
               ],
             ),
