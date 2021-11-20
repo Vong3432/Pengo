@@ -15,9 +15,8 @@ import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/helpers/toast/toast_helper.dart';
 import 'package:pengo/models/booking_item_model.dart';
 import 'package:pengo/models/booking_record_model.dart';
-import 'package:pengo/models/system_function_model.dart';
 import 'package:pengo/models/coupon_model.dart';
-import 'package:pengo/ui/coupon/widgets/coupon.dart' as CouponUI;
+import 'package:pengo/models/system_function_model.dart';
 import 'package:pengo/ui/goocard/widgets/goocard_request_modal.dart';
 import 'package:pengo/ui/penger/booking/booking_result.dart';
 import 'package:pengo/ui/penger/booking/widgets/book_date_modal.dart';
@@ -89,11 +88,55 @@ class _BookingViewState extends State<BookingView> {
               bookingItemId: widget.bookingItem.id,
               hasStartDate: widget.bookingItem.startFrom != null,
               hasEndDate: widget.bookingItem.endAt != null,
-              hasTime: (widget.bookingItem.availableFrom != null ||
+              hasTime: widget.bookingItem.availableFrom != null ||
                   widget.bookingItem.availableTo != null ||
                   _extractTimeFromEndDt != null ||
-                  _extractTimeFromStartDt != null),
+                  _extractTimeFromStartDt != null,
             );
+
+            final double _bookFormProgress =
+                context.select<BookingFormStateCubit, double>(
+              (BookingFormStateCubit form) => form.state.progress,
+            );
+
+            final bool _showDateTile =
+                context.select<BookingFormStateCubit, bool>(
+              (BookingFormStateCubit form) =>
+                  form.state.hasStartDate || form.state.hasEndDate,
+            );
+
+            final bool _showTimeTile =
+                context.select<BookingFormStateCubit, bool>(
+              (BookingFormStateCubit form) => form.state.hasTime,
+            );
+
+            bool isOverBooked;
+
+            if (widget.bookingItem.maxBook == null) {
+              isOverBooked = false;
+            } else {
+              isOverBooked = _formStateCubit.checkIsOverBooked(
+                widget.bookingItem.maxBook!,
+                state.bookTime ?? "",
+                widget.bookingItem.bookingRecords ?? [],
+              );
+            }
+
+            final bool _showPaymentTile =
+                context.select<BookingFormStateCubit, bool>(
+                      (BookingFormStateCubit form) => form.state.hasPayment,
+                    ) &&
+                    context.select<BookingFormStateCubit, double>(
+                          (BookingFormStateCubit form) => form.state.progress,
+                        ) ==
+                        1 &&
+                    !isOverBooked;
+
+            final bool _showNormalBookBtn =
+                widget.bookingItem.isOpen != false &&
+                    widget.bookingItem.price == null &&
+                    _bookFormProgress == 1 &&
+                    !isOverBooked;
 
             return CustomScrollView(
               slivers: <Widget>[
@@ -167,11 +210,7 @@ class _BookingViewState extends State<BookingView> {
                     child: Column(
                       children: <Widget>[
                         Visibility(
-                          visible: context.select<BookingFormStateCubit, bool>(
-                            (BookingFormStateCubit form) =>
-                                form.state.hasStartDate ||
-                                form.state.hasEndDate,
-                          ),
+                          visible: _showDateTile,
                           child: ListTile(
                             onTap: () => _onDateTapped(),
                             contentPadding: const EdgeInsets.all(18),
@@ -194,17 +233,11 @@ class _BookingViewState extends State<BookingView> {
                           ),
                         ),
                         Visibility(
-                          visible: context.select<BookingFormStateCubit, bool>(
-                            (BookingFormStateCubit form) =>
-                                form.state.hasEndDate ||
-                                form.state.hasStartDate,
-                          ),
+                          visible: _showDateTile,
                           child: const Divider(),
                         ),
                         Visibility(
-                          visible: context.select<BookingFormStateCubit, bool>(
-                            (BookingFormStateCubit form) => form.state.hasTime,
-                          ),
+                          visible: _showTimeTile,
                           child: ListTile(
                             onTap: () => _onTimeTapped(
                               context,
@@ -321,17 +354,8 @@ class _BookingViewState extends State<BookingView> {
                           ),
                           child: const Divider(),
                         ),
-                        Visibility(
-                          visible: context.select<BookingFormStateCubit, bool>(
-                                (BookingFormStateCubit form) =>
-                                    form.state.hasPayment,
-                              ) &&
-                              context.select<BookingFormStateCubit, double>(
-                                    (BookingFormStateCubit form) =>
-                                        form.state.progress,
-                                  ) ==
-                                  1,
-                          child: ListTile(
+                        if (_showPaymentTile)
+                          ListTile(
                             onTap: () => _onPayTapped(context, _formStateCubit),
                             contentPadding: const EdgeInsets.all(18),
                             title: Text(
@@ -348,17 +372,9 @@ class _BookingViewState extends State<BookingView> {
                                   : Icons.keyboard_arrow_up_outlined,
                             ),
                           ),
-                        ),
                         const Spacer(),
-                        Visibility(
-                          visible: widget.bookingItem.isOpen != false &&
-                              widget.bookingItem.price == null &&
-                              context.select<BookingFormStateCubit, double>(
-                                    (BookingFormStateCubit form) =>
-                                        form.state.progress,
-                                  ) ==
-                                  1,
-                          child: Padding(
+                        if (_showNormalBookBtn)
+                          Padding(
                             padding: const EdgeInsets.only(bottom: 28.0),
                             child: BlocConsumer<BookingRecordBloc,
                                 BookingRecordState>(
@@ -400,7 +416,21 @@ class _BookingViewState extends State<BookingView> {
                               },
                             ),
                           ),
-                        ),
+                        Visibility(
+                          visible: isOverBooked &&
+                              state.bookTime != null &&
+                              state.startDate != null,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 28.0),
+                            child: Text(
+                              "The booking slot is full, please change either time or date",
+                              style: PengoStyle.caption(context).copyWith(
+                                color: dangerColor,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -510,16 +540,6 @@ class _BookingViewState extends State<BookingView> {
       }
     }
 
-    // DateRangePickerSelectionMode? pickerMode;
-
-    // (!) Can be improved
-    // range picker mode if
-    // - item does not have start time or end time.
-    // if (widget.bookingItem.availableFrom == null &&
-    //     widget.bookingItem.availableTo == null) {
-    //   pickerMode = DateRangePickerSelectionMode.range;
-    // }
-
     return showCupertinoModalBottomSheet(
       context: context,
       builder: (BuildContext context) => SingleChildScrollView(
@@ -577,6 +597,17 @@ class _BookingViewState extends State<BookingView> {
                     // If current endDate + currentTimeslot is found in the bookingItems.records list,
                     // set isSelected to false.
                     final bool isSelected = state.bookTime == currentTimeSlot;
+                    bool isOverBooked;
+
+                    if (widget.bookingItem.maxBook == null) {
+                      isOverBooked = false;
+                    } else {
+                      isOverBooked = _formStateCubit.checkIsOverBooked(
+                        widget.bookingItem.maxBook!,
+                        currentTimeSlot,
+                        widget.bookingItem.bookingRecords ?? [],
+                      );
+                    }
 
                     return Material(
                       child: ListTile(
@@ -586,22 +617,25 @@ class _BookingViewState extends State<BookingView> {
                           timeslots[index],
                           style: PengoStyle.title2(context),
                         ),
-                        trailing: Chip(
-                          backgroundColor:
-                              isSelected ? primaryColor : greyBgColor,
-                          label: GestureDetector(
-                            onTap: () {
-                              _formStateCubit.updateFormState(
-                                bookTime: currentTimeSlot,
-                              );
-                              Navigator.of(context).pop();
-                            },
-                            child: Text(
-                              isSelected ? "Booked" : "Select",
-                              style: TextStyle(
-                                color: isSelected
-                                    ? whiteColor
-                                    : secondaryTextColor,
+                        trailing: Visibility(
+                          visible: !isOverBooked,
+                          child: Chip(
+                            backgroundColor:
+                                isSelected ? primaryColor : greyBgColor,
+                            label: GestureDetector(
+                              onTap: () {
+                                _formStateCubit.updateFormState(
+                                  bookTime: currentTimeSlot,
+                                );
+                                Navigator.of(context).pop();
+                              },
+                              child: Text(
+                                isSelected ? "Booked" : "Select",
+                                style: TextStyle(
+                                  color: isSelected
+                                      ? whiteColor
+                                      : secondaryTextColor,
+                                ),
                               ),
                             ),
                           ),
