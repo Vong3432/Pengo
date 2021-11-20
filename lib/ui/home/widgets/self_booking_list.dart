@@ -30,38 +30,40 @@ class _SelfBookingListState extends State<SelfBookingList> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 18.0),
-      child: BlocBuilder<BookingRecordBloc, BookingRecordState>(
-        builder: (BuildContext context, BookingRecordState state) {
-          if (state is BookingRecordsLoading) {
-            return const LoadingWidget();
-          } else if (state is BookingRecordsLoaded) {
-            if (state.records.isEmpty) {
-              return Container();
-            }
-            return HomeHListView(
-              onTapSeeAll: () {
-                Navigator.of(context, rootNavigator: true).push(
-                  CupertinoPageRoute(
-                    builder: (BuildContext context) =>
-                        const BookingRecordList(),
-                  ),
-                );
+    return widget.auth == null
+        ? Container()
+        : Padding(
+            padding: const EdgeInsets.only(top: 18.0),
+            child: BlocBuilder<BookingRecordBloc, BookingRecordState>(
+              builder: (BuildContext context, BookingRecordState state) {
+                if (state is BookingRecordsLoading) {
+                  return const LoadingWidget();
+                } else if (state is BookingRecordsLoaded) {
+                  if (state.records.isEmpty) {
+                    return Container();
+                  }
+                  return HomeHListView(
+                    onTapSeeAll: () {
+                      Navigator.of(context, rootNavigator: true).push(
+                        CupertinoPageRoute(
+                          builder: (BuildContext context) =>
+                              const BookingRecordList(),
+                        ),
+                      );
+                    },
+                    title: "My Booking",
+                    children: List.generate(
+                      state.records.length,
+                      (int index) => SelfBookingItem(
+                        record: state.records[index],
+                      ),
+                    ),
+                  );
+                }
+                return Container();
               },
-              title: "My Booking",
-              children: List.generate(
-                state.records.length,
-                (int index) => SelfBookingItem(
-                  record: state.records[index],
-                ),
-              ),
-            );
-          }
-          return Container();
-        },
-      ),
-    );
+            ),
+          );
   }
 
   Future<void> _loadRecords() async {

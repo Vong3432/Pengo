@@ -94,7 +94,7 @@ class CustomTextField extends StatelessWidget {
               ),
             ),
             TextFormField(
-              maxLines: maxLines,
+              maxLines: maxLines ?? 1,
               onEditingComplete: onEditingComplete,
               controller: controller,
               validator: validator,

@@ -143,12 +143,6 @@ class _HomePageState extends State<HomePage> {
                     style: PengoStyle.header(context),
                   ),
                   const Spacer(),
-                  Text(
-                    "See all",
-                    style: PengoStyle.caption(context).copyWith(
-                      color: primaryColor,
-                    ),
-                  ),
                 ],
               ),
               const SizedBox(
@@ -242,12 +236,6 @@ class _HomePageState extends State<HomePage> {
                     style: PengoStyle.header(context),
                   ),
                   const Spacer(),
-                  Text(
-                    "See all",
-                    style: PengoStyle.caption(context).copyWith(
-                      color: primaryColor,
-                    ),
-                  ),
                 ],
               ),
               const SizedBox(

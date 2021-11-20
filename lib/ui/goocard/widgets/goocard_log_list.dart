@@ -95,12 +95,12 @@ class GooCardLogList extends StatelessWidget {
                   style: PengoStyle.title2(context),
                 ),
                 const Spacer(),
-                Text(
-                  "See all",
-                  style: PengoStyle.caption(context).copyWith(
-                    color: primaryColor,
-                  ),
-                )
+                // Text(
+                //   "See all",
+                //   style: PengoStyle.caption(context).copyWith(
+                //     color: primaryColor,
+                //   ),
+                // )
               ],
             ),
             const Divider(),

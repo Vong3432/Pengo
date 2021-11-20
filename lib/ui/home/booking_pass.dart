@@ -272,14 +272,17 @@ class _BookingPassViewState extends State<BookingPassView> {
                         bounce: false,
                         context: context,
                         builder: (BuildContext context) {
-                          return Material(
-                            child: GoocardRequestModal(
-                              onVerifySuccess: (String pin) {
-                                _recordListener.pin = pin;
-                                _recordListener.record = record;
-                                Navigator.pop(context);
-                              },
-                              onVerifyFailed: () => debugPrint("Not booking"),
+                          return Padding(
+                            padding: mediaQuery(context).viewInsets,
+                            child: Material(
+                              child: GoocardRequestModal(
+                                onVerifySuccess: (String pin) {
+                                  _recordListener.pin = pin;
+                                  _recordListener.record = record;
+                                  Navigator.pop(context);
+                                },
+                                onVerifyFailed: () => debugPrint("Not booking"),
+                              ),
                             ),
                           );
                         },

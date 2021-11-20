@@ -46,91 +46,97 @@ class Record_ReviewStatePage extends State<RecordReviewPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Scaffold(
-        body: CustomScrollView(
-          slivers: <Widget>[
-            CustomSliverAppBar(
-              centerTitle: true,
-              shadowColor: secondaryTextColor,
-              floating: true,
-              elavation: 4,
-              title: Text(
-                "Review record",
-                style: PengoStyle.title2(context),
-              ),
-            ),
-            SliverFillRemaining(
-              child: Container(
-                padding: const EdgeInsets.all(18),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    RichText(
-                      text: TextSpan(
-                        style: PengoStyle.body(context),
-                        children: <TextSpan>[
-                          const TextSpan(
-                            text: "Describe overall experience in this booking",
-                          ),
-                          TextSpan(
-                            text: "*",
-                            style: PengoStyle.body(context).copyWith(
-                              color: dangerColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    CustomTextField(
-                      controller: _titleController,
-                      validator: _titleValidator,
-                      hintText: 'eg: Good service',
-                    ),
-                    RichText(
-                      text: TextSpan(
-                        style: PengoStyle.body(context),
-                        children: <TextSpan>[
-                          const TextSpan(
-                            text:
-                                "What do you think about this booking experience?",
-                          ),
-                          TextSpan(
-                            text: "*",
-                            style: PengoStyle.body(context).copyWith(
-                              color: dangerColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    CustomTextField(
-                      controller: _descriptionController,
-                      inputType: TextInputType.multiline,
-                      onChanged: (String? text) {
-                        setState(() {});
-                      },
-                      hintText: 'At least 50 words',
-                      height: 120,
-                      sideNote: Text(
-                        " ${_descriptionController.text.length}/50 words",
-                      ),
-                    ),
-                    const Spacer(),
-                    CustomButton(
-                      isLoading: isPosting,
-                      onPressed: _submit,
-                      text: const Text("Post review"),
-                    ),
-                    const SizedBox(
-                      height: SECTION_GAP_HEIGHT * 2,
-                    ),
-                  ],
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Form(
+        key: _formKey,
+        child: Scaffold(
+          body: CustomScrollView(
+            slivers: <Widget>[
+              CustomSliverAppBar(
+                centerTitle: true,
+                shadowColor: secondaryTextColor,
+                floating: true,
+                elavation: 4,
+                title: Text(
+                  "Review record",
+                  style: PengoStyle.title2(context),
                 ),
               ),
-            ),
-          ],
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Container(
+                  padding: const EdgeInsets.all(18),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      RichText(
+                        text: TextSpan(
+                          style: PengoStyle.body(context),
+                          children: <TextSpan>[
+                            const TextSpan(
+                              text:
+                                  "Describe overall experience in this booking",
+                            ),
+                            TextSpan(
+                              text: "*",
+                              style: PengoStyle.body(context).copyWith(
+                                color: dangerColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      CustomTextField(
+                        controller: _titleController,
+                        validator: _titleValidator,
+                        hintText: 'eg: Good service',
+                      ),
+                      RichText(
+                        text: TextSpan(
+                          style: PengoStyle.body(context),
+                          children: <TextSpan>[
+                            const TextSpan(
+                              text:
+                                  "What do you think about this booking experience?",
+                            ),
+                            TextSpan(
+                              text: "*",
+                              style: PengoStyle.body(context).copyWith(
+                                color: dangerColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      CustomTextField(
+                        controller: _descriptionController,
+                        inputType: TextInputType.multiline,
+                        onChanged: (String? text) {
+                          setState(() {});
+                        },
+                        maxLines: 5,
+                        hintText: 'At least 50 words',
+                        height: 120,
+                        sideNote: Text(
+                          " ${_descriptionController.text.length}/50 words",
+                        ),
+                      ),
+                      const Spacer(),
+                      CustomButton(
+                        isLoading: isPosting,
+                        onPressed: _submit,
+                        text: const Text("Post review"),
+                      ),
+                      const SizedBox(
+                        height: SECTION_GAP_HEIGHT * 2,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
