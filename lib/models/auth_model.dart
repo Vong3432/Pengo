@@ -41,6 +41,7 @@ class Auth {
     t.phone = t.user.phone;
     t.username = t.user.username;
     t.avatar = t.user.avatar;
+    t.email = t.user.email;
     return t;
   }
   Map<String, dynamic> toJson() => _$AuthToJson(this);
@@ -59,6 +60,9 @@ class Auth {
 
   @JsonKey(name: 'token')
   final Token tokenData;
+
+  @JsonKey(toJson: null, fromJson: null, ignore: true)
+  late String email;
 
   @JsonKey(ignore: true, fromJson: null, toJson: null)
   String? token;

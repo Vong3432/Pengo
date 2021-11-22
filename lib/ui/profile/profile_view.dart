@@ -8,6 +8,7 @@ import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/models/auth_model.dart';
 import 'package:pengo/models/providers/auth_model.dart';
 import 'package:pengo/ui/auth/login_view.dart';
+import 'package:pengo/ui/profile/edit_profile.dart';
 import 'package:pengo/ui/profile/profile_info.dart';
 import 'package:pengo/ui/profile/setting_view.dart';
 import 'package:pengo/ui/widgets/layout/sliver_appbar.dart';
@@ -138,6 +139,13 @@ class _ProfilePageState extends State<ProfilePage> {
           height: SECTION_GAP_HEIGHT,
         ),
         CustomListItem(
+          onTap: () {
+            Navigator.of(context, rootNavigator: true).push(
+              CupertinoPageRoute(
+                builder: (BuildContext context) => const EditProfilePage(),
+              ),
+            );
+          },
           leading: Container(
             width: 42,
             height: 42,

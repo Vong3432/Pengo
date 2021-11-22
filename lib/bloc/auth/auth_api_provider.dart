@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,11 +12,13 @@ class AuthApiProvider {
     String password,
   ) async {
     try {
-      final response =
-          await _apiHelper.post('auth/login', data: <String, String>{
-        "phone": "+6$phone",
-        "password": password,
-      });
+      final response = await _apiHelper.post(
+        'auth/login',
+        data: <String, String>{
+          "phone": "+6$phone",
+          "password": password,
+        },
+      );
       final auth =
           Auth.fromJson(response.data!['data'] as Map<String, dynamic>);
       return auth;
@@ -73,6 +73,40 @@ class AuthApiProvider {
       return auth;
     } catch (e) {
       throw Exception(e);
+    }
+  }
+
+  Future<Auth> updateProfile({
+    required int userId,
+    String? phone,
+    String? password,
+    String? username,
+    String? email,
+    XFile? avatar,
+  }) async {
+    try {
+      final Map<String, dynamic> fd = <String, dynamic>{
+        "phone": phone,
+        "password": password,
+        "username": username,
+        "email": email,
+        "avatar": avatar != null
+            ? await MultipartFile.fromFile(
+                avatar.path,
+                filename: avatar.path.split('/').last,
+              )
+            : null,
+      };
+      final Response<Map<String, dynamic>> response = await _apiHelper.put(
+        '/auth/update-profile/$userId',
+        data: fd,
+        isFormData: true,
+      );
+      final Auth auth =
+          Auth.fromJson(response.data!['data'] as Map<String, dynamic>);
+      return auth;
+    } on DioError catch (e) {
+      throw e.response!.data['msg'].toString();
     }
   }
 }

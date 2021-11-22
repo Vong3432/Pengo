@@ -33,11 +33,29 @@ class AuthRepo {
     required String pin,
   }) async =>
       _authApiProvider.register(
-          phone: phone,
-          password: password,
-          username: username,
-          email: email,
-          pin: pin,
-          age: age,
-          avatar: avatar);
+        phone: phone,
+        password: password,
+        username: username,
+        email: email,
+        pin: pin,
+        age: age,
+        avatar: avatar,
+      );
+
+  Future<Auth> updateProfile({
+    required int userId,
+    String? phone,
+    String? password,
+    String? username,
+    String? email,
+    XFile? avatar,
+  }) async =>
+      _authApiProvider.updateProfile(
+        userId: userId,
+        phone: phone,
+        password: password,
+        username: username,
+        email: email,
+        avatar: avatar,
+      );
 }
