@@ -142,34 +142,37 @@ class _ExploreViewState extends State<ExploreView>
                     name: item.title,
                     logo: item.poster,
                     location: item.location,
-                    trailing: FutureBuilder(
-                        future: GeoHelper().distanceBetween(
-                          item.geolocation!.latitude,
-                          item.geolocation!.longitude,
-                        ),
-                        builder: (
-                          BuildContext context,
-                          AsyncSnapshot<double?> snapshot,
-                        ) {
-                          if (snapshot.hasData) {
-                            return Row(
-                              children: [
-                                SvgPicture.asset(
-                                  DISTANCE_ICON_PATH,
-                                  width: 16,
-                                ),
-                                Text(
-                                  "${snapshot.data!.metersToKm().toStringAsFixed(1)} km",
-                                  style: PengoStyle.caption(context).copyWith(
-                                    color: secondaryTextColor,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ],
-                            );
-                          }
-                          return Container();
-                        }),
+                    trailing: item.geolocation == null
+                        ? const SizedBox()
+                        : FutureBuilder(
+                            future: GeoHelper().distanceBetween(
+                              item.geolocation!.latitude,
+                              item.geolocation!.longitude,
+                            ),
+                            builder: (
+                              BuildContext context,
+                              AsyncSnapshot<double?> snapshot,
+                            ) {
+                              if (snapshot.hasData) {
+                                return Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                      DISTANCE_ICON_PATH,
+                                      width: 16,
+                                    ),
+                                    Text(
+                                      "${snapshot.data!.metersToKm().toStringAsFixed(1)} km",
+                                      style:
+                                          PengoStyle.caption(context).copyWith(
+                                        color: secondaryTextColor,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }
+                              return Container();
+                            }),
                   );
                 });
           }

@@ -9,6 +9,7 @@ import 'package:pengo/const/space_const.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/models/booking_record_model.dart';
+import 'package:pengo/ui/booking-records/booking_record_detail_view.dart';
 import 'package:pengo/ui/widgets/button/custom_button.dart';
 
 class BookingCard extends StatelessWidget {
@@ -44,11 +45,20 @@ class BookingCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        Navigator.of(context, rootNavigator: true).pushNamed(
-          "/booking-item",
-          arguments: {
-            "id": record.item!.id,
-          },
+        // Navigator.of(context, rootNavigator: true).pushNamed(
+        //   "/booking-item",
+        //   arguments: {
+        //     "id": record.item!.id,
+        //   },
+        // );
+        Navigator.of(context, rootNavigator: true).push(
+          CupertinoPageRoute(
+            builder: (BuildContext context) {
+              return BookingRecordDetailPage(
+                id: record.id,
+              );
+            },
+          ),
         );
       },
       child: Container(

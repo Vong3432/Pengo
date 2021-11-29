@@ -58,44 +58,45 @@ class _SelfBookingItemState extends State<SelfBookingItem> {
                       width: double.infinity,
                       height: 150,
                     ),
-                    FutureBuilder(
-                        future: GeoHelper().distanceBetween(
-                          widget.record.item!.geolocation!.latitude,
-                          widget.record.item!.geolocation!.longitude,
-                        ),
-                        builder: (
-                          BuildContext context,
-                          AsyncSnapshot<double?> snapshot,
-                        ) {
-                          if (snapshot.hasData) {
-                            return Positioned.fill(
-                              right: 5,
-                              child: Align(
-                                alignment: Alignment.topRight,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8.0,
-                                    vertical: 2.0,
-                                  ),
-                                  child: Chip(
+                    if (widget.record.item?.geolocation != null)
+                      FutureBuilder(
+                          future: GeoHelper().distanceBetween(
+                            widget.record.item!.geolocation!.latitude,
+                            widget.record.item!.geolocation!.longitude,
+                          ),
+                          builder: (
+                            BuildContext context,
+                            AsyncSnapshot<double?> snapshot,
+                          ) {
+                            if (snapshot.hasData) {
+                              return Positioned.fill(
+                                right: 5,
+                                child: Align(
+                                  alignment: Alignment.topRight,
+                                  child: Padding(
                                     padding: const EdgeInsets.symmetric(
-                                      horizontal: 8,
+                                      horizontal: 8.0,
+                                      vertical: 2.0,
                                     ),
-                                    backgroundColor: primaryColor,
-                                    label: Text(
-                                      "${snapshot.data!.metersToKm().toStringAsFixed(1)} km",
-                                      style:
-                                          PengoStyle.caption(context).copyWith(
-                                        color: whiteColor,
+                                    child: Chip(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                      ),
+                                      backgroundColor: primaryColor,
+                                      label: Text(
+                                        "${snapshot.data!.metersToKm().toStringAsFixed(1)} km",
+                                        style: PengoStyle.caption(context)
+                                            .copyWith(
+                                          color: whiteColor,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            );
-                          }
-                          return Container();
-                        }),
+                              );
+                            }
+                            return Container();
+                          }),
                   ],
                 ),
                 Padding(
@@ -120,7 +121,7 @@ class _SelfBookingItemState extends State<SelfBookingItem> {
                             width: MediaQuery.of(context).size.width * 0.5,
                             padding: const EdgeInsets.only(left: 8.0),
                             child: Text(
-                              widget.record.item?.geolocation?.name ?? "",
+                              widget.record.item?.geolocation?.name ?? "REMOTE",
                               style: PengoStyle.subtitle(context).copyWith(
                                 color: secondaryTextColor,
                               ),

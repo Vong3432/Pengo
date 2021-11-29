@@ -10,6 +10,7 @@ import 'package:pengo/extensions/date_extension.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/helpers/toast/toast_helper.dart';
 import 'package:pengo/models/booking_record_model.dart';
+import 'package:pengo/ui/booking-records/booking_record_detail_view.dart';
 import 'package:pengo/ui/booking-records/widgets/booking_card.dart';
 import 'package:pengo/ui/widgets/api/loading.dart';
 import 'package:pengo/ui/widgets/layout/sliver_appbar.dart';
@@ -164,7 +165,7 @@ class _BookingRecordListState extends State<BookingRecordList> {
                   } else if (state is BookingRecordsLoaded) {
                     if (state.records.isEmpty) {
                       return const Center(
-                        child: Text("You haven't booked any thing yet."),
+                        child: Text("No record..."),
                       );
                     } else {
                       return ListView.separated(
@@ -229,6 +230,7 @@ class _BookingRecordListState extends State<BookingRecordList> {
     BlocProvider.of<BookingRecordBloc>(context).add(FetchRecordsEvent(
       category: 1,
       date: date,
+      showExpired: 0,
     ));
   }
 

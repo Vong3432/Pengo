@@ -208,7 +208,7 @@ class _ItemInfoViewState extends State<ItemInfoView> {
                               SizedBox(
                                 width: mediaQuery(context).size.width * 0.6,
                                 child: Text(
-                                  "${state.item.geolocation?.name}",
+                                  state.item.geolocation?.name ?? "Remote",
                                   style: PengoStyle.title2(context),
                                   textAlign: TextAlign.end,
                                 ),
@@ -236,14 +236,19 @@ class _ItemInfoViewState extends State<ItemInfoView> {
                                   : () {
                                       Navigator.of(context, rootNavigator: true)
                                           .push(
-                                        CupertinoPageRoute(
-                                          builder: (context) => BookingView(
-                                            bookingItem: state.item,
-                                            pengerId: state.item
-                                                .bookingCategory!.penger!.id,
-                                          ),
-                                        ),
-                                      );
+                                            CupertinoPageRoute(
+                                              builder: (context) => BookingView(
+                                                bookingItem: state.item,
+                                                pengerId: state
+                                                    .item
+                                                    .bookingCategory!
+                                                    .penger!
+                                                    .id,
+                                              ),
+                                            ),
+                                          )
+                                          .then(
+                                              (value) => _load(state.item.id));
                                     },
                               text: Text(
                                 context.watch<AuthModel>().user == null

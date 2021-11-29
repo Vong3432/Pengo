@@ -11,6 +11,8 @@ import 'package:pengo/helpers/geo/geo_helper.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/models/booking_item_model.dart';
 import 'package:pengo/models/booking_record_model.dart';
+import 'package:pengo/models/providers/auth_model.dart';
+import 'package:pengo/ui/video/video_meet.dart';
 import 'package:pengo/ui/widgets/api/loading.dart';
 import 'package:pengo/ui/widgets/layout/sliver_appbar.dart';
 import 'package:pengo/ui/widgets/layout/sliver_body.dart';
@@ -47,53 +49,87 @@ class _BookingRecordDetailPageState extends State<BookingRecordDetailPage> {
                   ) {
                     if (snapshot.hasData) {
                       final BookingRecord _currRecord = snapshot.data!;
-                      return IconButton(
-                        onPressed: () async {
-                          double lat = double.tryParse(
-                                Provider.of<GeoHelper>(context, listen: false)
-                                    .currentPos()!['latitude']
-                                    .toString(),
-                              ) ??
-                              0;
+                      final DateTime now = DateTime.now();
 
-                          double lng = double.tryParse(
-                                Provider.of<GeoHelper>(context, listen: false)
-                                    .currentPos()!['longitude']
-                                    .toString(),
-                              ) ??
-                              0;
+                      final Duration gap =
+                          _currRecord.formattedBookDateTime!.difference(now);
 
-                          try {
-                            final posFromDevice =
-                                await GeoHelper().getDeviceLocation();
-                            lat = posFromDevice.latitude;
-                            lng = posFromDevice.longitude;
+                      return Row(
+                        children: <Widget>[
+                          if (_currRecord.item?.isVirtual == true &&
+                              context.watch<AuthModel>().user != null)
+                            IconButton(
+                              onPressed: () {
+                                Navigator.of(context, rootNavigator: true).push(
+                                    CupertinoPageRoute(
+                                        builder: (BuildContext context) {
+                                  return VideoMeetPage(
+                                    user: context.watch<AuthModel>().user!,
+                                    subject: _currRecord.item!.title,
+                                    roomName: DateFormat("yyyy-MM-dd HH:mm")
+                                        .format(
+                                            _currRecord.formattedBookDateTime!),
+                                  );
+                                }));
+                              },
+                              icon: Icon(
+                                Icons.video_call,
+                              ),
+                            ),
+                          if (_currRecord.item?.geolocation != null)
+                            IconButton(
+                              onPressed: () async {
+                                double lat = double.tryParse(
+                                      Provider.of<GeoHelper>(context,
+                                              listen: false)
+                                          .currentPos()!['latitude']
+                                          .toString(),
+                                    ) ??
+                                    0;
 
-                            debugPrint("use device location $lat $lng");
-                          } catch (e) {
-                            debugPrint("use user saved location $lat $lng");
-                          }
+                                double lng = double.tryParse(
+                                      Provider.of<GeoHelper>(context,
+                                              listen: false)
+                                          .currentPos()!['longitude']
+                                          .toString(),
+                                    ) ??
+                                    0;
 
-                          if (lat == 0 || lng == 0) return;
+                                try {
+                                  final posFromDevice =
+                                      await GeoHelper().getDeviceLocation();
+                                  lat = posFromDevice.latitude;
+                                  lng = posFromDevice.longitude;
 
-                          Navigator.of(context, rootNavigator: true).push(
-                            CupertinoPageRoute(builder: (BuildContext context) {
-                              return MapView(
-                                destinationName: _currRecord.item!.title,
-                                bookingLat:
-                                    _currRecord.item!.geolocation!.latitude,
-                                bookingLng:
-                                    _currRecord.item!.geolocation!.longitude,
-                                initialLat: lat,
-                                initialLng: lng,
-                              );
-                            }),
-                          );
-                        },
-                        icon: Icon(
-                          Icons.map,
-                          color: primaryColor,
-                        ),
+                                  debugPrint("use device location $lat $lng");
+                                } catch (e) {
+                                  debugPrint(
+                                      "use user saved location $lat $lng");
+                                }
+
+                                if (lat == 0 || lng == 0) return;
+
+                                Navigator.of(context, rootNavigator: true).push(
+                                  CupertinoPageRoute(
+                                      builder: (BuildContext context) {
+                                    return MapView(
+                                      destinationName: _currRecord.item!.title,
+                                      bookingLat: _currRecord
+                                          .item!.geolocation!.latitude,
+                                      bookingLng: _currRecord
+                                          .item!.geolocation!.longitude,
+                                      initialLat: lat,
+                                      initialLng: lng,
+                                    );
+                                  }),
+                                );
+                              },
+                              icon: Icon(
+                                Icons.map,
+                                color: primaryColor,
+                              ),
+                            ),
+                        ],
                       );
                     }
                     return const SizedBox();
@@ -190,28 +226,30 @@ class _BookingRecordDetailPageState extends State<BookingRecordDetailPage> {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: SECTION_GAP_HEIGHT,
-                          ),
-                          ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            minLeadingWidth: 20,
-                            leading: SvgPicture.asset(
-                              LOCATION_ICON_PATH,
-                              width: 21,
-                              color: secondaryTextColor,
+                          if (record.streetAddress != null)
+                            const SizedBox(
+                              height: SECTION_GAP_HEIGHT,
                             ),
-                            title: Text(
-                              "Location",
-                              style: PengoStyle.title2(context),
-                            ),
-                            subtitle: Text(
-                              record.streetAddress ?? "",
-                              style: PengoStyle.smallerText(context).copyWith(
+                          if (record.streetAddress != null)
+                            ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              minLeadingWidth: 20,
+                              leading: SvgPicture.asset(
+                                LOCATION_ICON_PATH,
+                                width: 21,
                                 color: secondaryTextColor,
                               ),
+                              title: Text(
+                                "Location",
+                                style: PengoStyle.title2(context),
+                              ),
+                              subtitle: Text(
+                                record.streetAddress ?? "",
+                                style: PengoStyle.smallerText(context).copyWith(
+                                  color: secondaryTextColor,
+                                ),
+                              ),
                             ),
-                          ),
                           const SizedBox(
                             height: SECTION_GAP_HEIGHT,
                           ),

@@ -13,11 +13,13 @@ class FetchRecordsEvent extends BookingRecordEvent {
     this.category,
     this.date,
     this.isUsed,
+    this.showExpired,
   });
 
   final int? limit;
   final int? category;
   final int? isUsed;
+  final int? showExpired;
   final DateTime? date;
 }
 

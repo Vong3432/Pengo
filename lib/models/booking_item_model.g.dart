@@ -12,6 +12,7 @@ BookingItem _$BookingItemFromJson(Map<String, dynamic> json) {
     isActive: json['is_active'] as bool,
     title: json['name'] as String,
     id: json['id'] as int,
+    isVirtual: json['is_virtual'] as bool?,
     price: (json['price'] as num?)?.toDouble(),
     availableFrom: json['available_from_time'] as String?,
     availableTo: json['available_to_time'] as String?,
@@ -75,6 +76,7 @@ Map<String, dynamic> _$BookingItemToJson(BookingItem instance) {
   writeNotNull('start_from', instance.startFrom?.toIso8601String());
   writeNotNull('end_at', instance.endAt?.toIso8601String());
   val['is_preservable'] = instance.isPreserveable;
+  val['is_virtual'] = instance.isVirtual;
   val['is_transferable'] = instance.isTransferable;
   val['is_countable'] = instance.isCountable;
   val['is_discountable'] = instance.isDiscountable;

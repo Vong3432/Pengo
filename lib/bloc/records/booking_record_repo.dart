@@ -18,12 +18,14 @@ class RecordRepo {
     int? category,
     DateTime? date,
     int? isUsed,
+    int? showExpired,
   }) async =>
       _recordsApiProvider.fetchRecords(
         limit: limit,
         category: category,
         date: date,
         isUsed: isUsed,
+        showExpired: showExpired,
       );
 
   Future<BookingRecord> fetchRecord({

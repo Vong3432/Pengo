@@ -12,6 +12,7 @@ class RecordsApiProvider {
     int? limit,
     int? category,
     int? isUsed,
+    int? showExpired,
     DateTime? date,
   }) async {
     try {
@@ -21,6 +22,7 @@ class RecordsApiProvider {
         "category": category,
         "date": date?.toIso8601String(),
         "is_used": isUsed,
+        "show_outdated": showExpired,
       });
       final List<BookingRecord> records = List<BookingRecord>.from(
           (response.data['data']! as List)

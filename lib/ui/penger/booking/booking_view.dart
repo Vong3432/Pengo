@@ -83,7 +83,8 @@ class _BookingViewState extends State<BookingView> {
             // ...
 
             _formStateCubit.updateFormState(
-              hasPayment: widget.bookingItem.price != null,
+              hasPayment: widget.bookingItem.price != null &&
+                  widget.bookingItem.price != 0,
               pengerId: widget.pengerId,
               bookingItemId: widget.bookingItem.id,
               hasStartDate: widget.bookingItem.startFrom != null,
@@ -126,15 +127,13 @@ class _BookingViewState extends State<BookingView> {
                 context.select<BookingFormStateCubit, bool>(
                       (BookingFormStateCubit form) => form.state.hasPayment,
                     ) &&
-                    context.select<BookingFormStateCubit, double>(
-                          (BookingFormStateCubit form) => form.state.progress,
-                        ) ==
-                        1 &&
+                    _bookFormProgress == 1 &&
                     !isOverBooked;
 
             final bool _showNormalBookBtn =
                 widget.bookingItem.isOpen != false &&
-                    widget.bookingItem.price == null &&
+                    (widget.bookingItem.price == null ||
+                        widget.bookingItem.price == 0) &&
                     _bookFormProgress == 1 &&
                     !isOverBooked;
 
@@ -174,15 +173,12 @@ class _BookingViewState extends State<BookingView> {
                       ),
                       Text(
                         widget.bookingItem.geolocation?.name ??
-                            widget.bookingItem.location.toString(),
+                            (widget.bookingItem.location ?? ""),
                         style: textTheme(context).subtitle2,
                       ),
-                      Visibility(
-                        visible: widget.bookingItem.price != null,
-                        child: Text(
-                          "RM ${widget.bookingItem.price}",
-                          style: textTheme(context).caption,
-                        ),
+                      Text(
+                        "RM ${widget.bookingItem.price ?? 0.0}",
+                        style: textTheme(context).caption,
                       ),
                     ],
                   ),
@@ -261,10 +257,12 @@ class _BookingViewState extends State<BookingView> {
                           ),
                         ),
                         Visibility(
-                          visible: widget.bookingItem.price != null,
+                          visible: widget.bookingItem.price != null &&
+                              widget.bookingItem.price != 0,
                           child: const Divider(),
                         ),
-                        if (widget.bookingItem.price != null)
+                        if (widget.bookingItem.price != null &&
+                            widget.bookingItem.price != 0)
                           ListTile(
                             onTap: () => _viewCoupons(state),
                             contentPadding: const EdgeInsets.all(18),

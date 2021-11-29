@@ -17,6 +17,7 @@ class BookingItem extends Equatable {
     required this.isActive,
     required this.title,
     required this.id,
+    this.isVirtual,
     this.price,
     this.availableFrom,
     this.availableTo,
@@ -84,6 +85,9 @@ class BookingItem extends Equatable {
 
   @JsonKey(name: 'is_preservable')
   final bool? isPreserveable;
+
+  @JsonKey(name: 'is_virtual')
+  final bool? isVirtual;
 
   @JsonKey(name: 'is_transferable')
   final bool? isTransferable;
