@@ -81,7 +81,8 @@ class _HomePageState extends State<HomePage> {
                     //     debugPrint('Submitted text: $value');
                     //   },
                     // ),
-                    SelfBookingList(auth: context.watch<AuthModel>().user),
+                    if (context.watch<AuthModel>().user != null)
+                      SelfBookingList(auth: context.watch<AuthModel>().user!),
                     const QuickTapSection(),
                     _buildPopularList(context),
                     _buildNearbyList(context),

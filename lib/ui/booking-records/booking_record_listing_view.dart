@@ -27,6 +27,7 @@ class BookingRecordList extends StatefulWidget {
 
 class _BookingRecordListState extends State<BookingRecordList> {
   final DateRangePickerController _controller = DateRangePickerController();
+  final BookingRecordBloc _bloc = BookingRecordBloc();
   List<BookingRecord> _records = [];
   DateTime? _selectedDate;
 
@@ -39,165 +40,168 @@ class _BookingRecordListState extends State<BookingRecordList> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          CustomSliverAppBar(
-            centerTitle: true,
-            shadowColor: secondaryTextColor,
-            floating: true,
-            elavation: 4,
-            title: Text(
-              "My Booking",
-              style: PengoStyle.title2(context),
+    return BlocProvider<BookingRecordBloc>(
+      create: (context) => _bloc,
+      child: Scaffold(
+        body: CustomScrollView(
+          slivers: [
+            CustomSliverAppBar(
+              centerTitle: true,
+              shadowColor: secondaryTextColor,
+              floating: true,
+              elavation: 4,
+              title: Text(
+                "My Booking",
+                style: PengoStyle.title2(context),
+              ),
+              actions: [
+                Visibility(
+                  visible: _selectedDate != null,
+                  child: CupertinoButton(
+                      child: const Text("Reset"),
+                      onPressed: () {
+                        setState(() {
+                          _controller.selectedDate = null;
+                          _selectedDate = null;
+                        });
+                        _loadRecords(date: _selectedDate);
+                      }),
+                )
+              ],
             ),
-            actions: [
-              Visibility(
-                visible: _selectedDate != null,
-                child: CupertinoButton(
-                    child: const Text("Reset"),
-                    onPressed: () {
-                      setState(() {
-                        _controller.selectedDate = null;
-                        _selectedDate = null;
-                      });
-                      _loadRecords(date: _selectedDate);
-                    }),
-              )
-            ],
-          ),
-          CustomSliverBody(
-            content: <Widget>[
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
+            CustomSliverBody(
+              content: <Widget>[
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  clipBehavior: Clip.hardEdge,
+                  margin: const EdgeInsets.all(18),
+                  child: SfDateRangePicker(
+                    controller: _controller,
+                    monthCellStyle: DateRangePickerMonthCellStyle(
+                      todayTextStyle: TextStyle(
+                        color: secondaryTextColor,
+                      ),
+                      todayCellDecoration: BoxDecoration(
+                        color: secondaryTextColor.withOpacity(0.4),
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    monthViewSettings: DateRangePickerMonthViewSettings(
+                      specialDates: _bookedSpecialDates(),
+                    ),
+                    // cellBuilder: (
+                    //   BuildContext context,
+                    //   DateRangePickerCellDetails details,
+                    // ) {
+                    //   bool isToday = false;
+
+                    //   for (BookingRecord record in _records) {
+                    //     // no idea why this plugin is 1 month quicker, so minus 1 month
+                    //     final DateTime sub1Month = DateTime(
+                    //       details.date.year,
+                    //       details.date.month,
+                    //       details.date.day,
+                    //     );
+                    //     // debugPrint("sub1mon ${sub1Month.toLocal()}");
+                    //     if (sub1Month.toLocal().isBetweenDate(
+                    //           record.bookDate!.startDate!.toLocal(),
+                    //           record.bookDate!.endDate!.toLocal(),
+                    //         )) {
+                    //       isToday = true;
+                    //     }
+                    //     // debugPrint(
+                    //     //     "${details.date.toLocal()} is between ${record.bookDate!.startDate!.toLocal()} and ${record.bookDate!.endDate!.toLocal()} ");
+                    //   }
+
+                    //   return DayCell(
+                    //     details: details,
+                    //     isToday: isToday,
+                    //     state: BlocProvider.of<BookingRecordBloc>(context).state,
+                    //   );
+                    // },
+                    showNavigationArrow: true,
+                    onSelectionChanged:
+                        (DateRangePickerSelectionChangedArgs args) {
+                      if (args.value is DateTime) {
+                        setState(() {
+                          _selectedDate = DateTime.parse(args.value.toString());
+                        });
+                        _loadRecords(date: _selectedDate);
+                      }
+                    },
+                    backgroundColor: greyBgColor,
+                    headerStyle: DateRangePickerHeaderStyle(
+                      textStyle: TextStyle(
+                        fontSize: 20,
+                        fontStyle: FontStyle.normal,
+                        color: textColor,
+                      ),
+                    ),
+                  ),
                 ),
-                clipBehavior: Clip.hardEdge,
-                margin: const EdgeInsets.all(18),
-                child: SfDateRangePicker(
-                  controller: _controller,
-                  monthCellStyle: DateRangePickerMonthCellStyle(
-                    todayTextStyle: TextStyle(
-                      color: secondaryTextColor,
-                    ),
-                    todayCellDecoration: BoxDecoration(
-                      color: secondaryTextColor.withOpacity(0.4),
-                      shape: BoxShape.circle,
-                    ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 18.0, vertical: 14),
+                  child: Text(
+                    _selectedDate == null
+                        ? "All"
+                        : "Booking in ${DateFormat().add_yMMMd().format(_selectedDate!.toLocal())}",
+                    style: PengoStyle.header(context),
+                    textScaleFactor: 1.2,
                   ),
-                  monthViewSettings: DateRangePickerMonthViewSettings(
-                    specialDates: _bookedSpecialDates(),
-                  ),
-                  // cellBuilder: (
-                  //   BuildContext context,
-                  //   DateRangePickerCellDetails details,
-                  // ) {
-                  //   bool isToday = false;
-
-                  //   for (BookingRecord record in _records) {
-                  //     // no idea why this plugin is 1 month quicker, so minus 1 month
-                  //     final DateTime sub1Month = DateTime(
-                  //       details.date.year,
-                  //       details.date.month,
-                  //       details.date.day,
-                  //     );
-                  //     // debugPrint("sub1mon ${sub1Month.toLocal()}");
-                  //     if (sub1Month.toLocal().isBetweenDate(
-                  //           record.bookDate!.startDate!.toLocal(),
-                  //           record.bookDate!.endDate!.toLocal(),
-                  //         )) {
-                  //       isToday = true;
-                  //     }
-                  //     // debugPrint(
-                  //     //     "${details.date.toLocal()} is between ${record.bookDate!.startDate!.toLocal()} and ${record.bookDate!.endDate!.toLocal()} $isToday");
-                  //   }
-
-                  //   return DayCell(
-                  //     details: details,
-                  //     isToday: isToday,
-                  //     state: BlocProvider.of<BookingRecordBloc>(context).state,
-                  //   );
-                  // },
-                  showNavigationArrow: true,
-                  onSelectionChanged:
-                      (DateRangePickerSelectionChangedArgs args) {
-                    if (args.value is DateTime) {
-                      setState(() {
-                        _selectedDate = DateTime.parse(args.value.toString());
-                      });
-                      _loadRecords(date: _selectedDate);
+                ),
+                BlocConsumer<BookingRecordBloc, BookingRecordState>(
+                  listener: (BuildContext context, BookingRecordState state) {
+                    if (state is BookingRecordsLoaded) {
+                      if (_records.isEmpty) {
+                        setState(() {
+                          _records = state.records;
+                        });
+                      }
                     }
                   },
-                  backgroundColor: greyBgColor,
-                  headerStyle: DateRangePickerHeaderStyle(
-                    textStyle: TextStyle(
-                      fontSize: 20,
-                      fontStyle: FontStyle.normal,
-                      color: textColor,
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 18.0, vertical: 14),
-                child: Text(
-                  _selectedDate == null
-                      ? "All"
-                      : "Booking in ${DateFormat().add_yMMMd().format(_selectedDate!.toLocal())}",
-                  style: PengoStyle.header(context),
-                  textScaleFactor: 1.2,
-                ),
-              ),
-              BlocConsumer<BookingRecordBloc, BookingRecordState>(
-                listener: (BuildContext context, BookingRecordState state) {
-                  if (state is BookingRecordsLoaded) {
-                    if (_records.isEmpty) {
-                      setState(() {
-                        _records = state.records;
-                      });
+                  builder: (BuildContext context, BookingRecordState state) {
+                    if (state is BookingRecordsLoading) {
+                      return const LoadingWidget();
+                    } else if (state is BookingRecordsLoaded) {
+                      if (state.records.isEmpty) {
+                        return const Center(
+                          child: Text("No record..."),
+                        );
+                      } else {
+                        return ListView.separated(
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.only(
+                            bottom: 28,
+                            left: 12,
+                            right: 12,
+                          ),
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (BuildContext context, int index) {
+                            final BookingRecord record = state.records[index];
+                            return BookingCard(
+                              record: record,
+                              onCancel: _cancelBooking,
+                            );
+                          },
+                          separatorBuilder: (BuildContext context, int index) {
+                            return const SizedBox(
+                              height: SECTION_GAP_HEIGHT,
+                            );
+                          },
+                          itemCount: state.records.length,
+                        );
+                      }
                     }
-                  }
-                },
-                builder: (BuildContext context, BookingRecordState state) {
-                  if (state is BookingRecordsLoading) {
-                    return const LoadingWidget();
-                  } else if (state is BookingRecordsLoaded) {
-                    if (state.records.isEmpty) {
-                      return const Center(
-                        child: Text("No record..."),
-                      );
-                    } else {
-                      return ListView.separated(
-                        shrinkWrap: true,
-                        padding: const EdgeInsets.only(
-                          bottom: 28,
-                          left: 12,
-                          right: 12,
-                        ),
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (BuildContext context, int index) {
-                          final BookingRecord record = state.records[index];
-                          return BookingCard(
-                            record: record,
-                            onCancel: _cancelBooking,
-                          );
-                        },
-                        separatorBuilder: (BuildContext context, int index) {
-                          return const SizedBox(
-                            height: SECTION_GAP_HEIGHT,
-                          );
-                        },
-                        itemCount: state.records.length,
-                      );
-                    }
-                  }
-                  return Container();
-                },
-              )
-            ],
-          ),
-        ],
+                    return Container();
+                  },
+                )
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -227,7 +231,7 @@ class _BookingRecordListState extends State<BookingRecordList> {
   }
 
   void _loadRecords({DateTime? date}) {
-    BlocProvider.of<BookingRecordBloc>(context).add(FetchRecordsEvent(
+    _bloc.add(FetchRecordsEvent(
       category: 1,
       date: date,
       showExpired: 0,

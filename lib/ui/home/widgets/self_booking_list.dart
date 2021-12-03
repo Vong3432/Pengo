@@ -10,9 +10,9 @@ import 'package:pengo/ui/home/widgets/self_booking_item.dart';
 import 'package:pengo/ui/widgets/api/loading.dart';
 
 class SelfBookingList extends StatefulWidget {
-  const SelfBookingList({Key? key, this.auth}) : super(key: key);
+  const SelfBookingList({Key? key, required this.auth}) : super(key: key);
 
-  final Auth? auth;
+  final Auth auth;
 
   @override
   _SelfBookingListState createState() => _SelfBookingListState();
@@ -23,9 +23,7 @@ class _SelfBookingListState extends State<SelfBookingList> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    if (widget.auth != null) {
-      _loadRecords();
-    }
+    _loadRecords();
   }
 
   @override
