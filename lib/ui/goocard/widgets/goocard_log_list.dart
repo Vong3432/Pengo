@@ -110,7 +110,10 @@ class GooCardLogList extends StatelessWidget {
                   return Column(
                     children: List.generate(
                       3,
-                      (int index) => const SkeletonText(height: 15),
+                      (int index) => Container(
+                        padding: const EdgeInsets.only(bottom: 4),
+                        child: const SkeletonText(height: 15),
+                      ),
                     ),
                   );
                 }

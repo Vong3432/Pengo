@@ -175,27 +175,6 @@ class _CouponPageState extends State<CouponPage>
   }
 
   ListView _buildCouponsList(List<Coupon> coupons) {
-    // return ListView.separated(
-    //     shrinkWrap: true,
-    //     itemCount: coupons.length,
-    //     padding: const EdgeInsets.symmetric(vertical: 4),
-    //     separatorBuilder: (BuildContext context, int index) {
-    //       return const SizedBox(
-    //         height: SECTION_GAP_HEIGHT,
-    //       );
-    //     },
-    //     itemBuilder: (BuildContext context, int index) {
-    //       final Coupon coupon = coupons[index];
-    //       return CouponUI.Coupon(
-    //         reload: () => _tabChanged(_tabIndex),
-    //         id: coupon.id!,
-    //         name: coupon.title,
-    //         pengerName: coupon.createdBy?.name ?? "",
-    //         minimumCp: coupon.requiredCreditPoints,
-    //         date:
-    //             '${DateFormat("d MMM y").format(DateTime.parse(coupon.validFrom).toLocal())} - ${DateFormat("d MMM y").format(DateTime.parse(coupon.validTo).toLocal())}',
-    //       );
-    //     });
     return ListView.separated(
         shrinkWrap: true,
         itemCount: coupons.length,
