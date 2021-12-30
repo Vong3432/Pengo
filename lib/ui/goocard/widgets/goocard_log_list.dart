@@ -32,105 +32,104 @@ class GooCardLogList extends StatelessWidget {
         ),
       ),
       padding: const EdgeInsets.all(18),
-      child: SingleChildScrollView(
-        physics: const NeverScrollableScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  ActionButton(
-                    onPressed: () {
-                      Navigator.of(context, rootNavigator: true)
-                          .push(
-                            CupertinoPageRoute(
-                                builder: (context) => const CouponPage()),
-                          )
-                          .then((_) => reload());
-                    },
-                    name: "My coupons",
-                    icon: COUPON_ICON_PATH,
-                  ),
-                  ActionButton(
-                    onPressed: () {
-                      Navigator.of(context, rootNavigator: true)
-                          .push(
-                            CupertinoPageRoute(
-                              builder: (BuildContext context) =>
-                                  const BookingRecordList(),
-                            ),
-                          )
-                          .then((_) => reload());
-                    },
-                    name: "My booking",
-                    icon: TICKET_ICON_PATH,
-                  ),
-                  ActionButton(
-                    onPressed: () {},
-                    name: "Logs",
-                    icon: LOG_ICON_PATH,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: SECTION_GAP_HEIGHT,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                SvgPicture.asset(
-                  HISTORY_ICON_PATH,
-                  width: 23,
-                  color: primaryColor,
+                ActionButton(
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true)
+                        .push(
+                          CupertinoPageRoute(
+                              builder: (context) => const CouponPage()),
+                        )
+                        .then((_) => reload());
+                  },
+                  name: "My coupons",
+                  icon: COUPON_ICON_PATH,
                 ),
-                const SizedBox(
-                  width: 8,
+                ActionButton(
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true)
+                        .push(
+                          CupertinoPageRoute(
+                            builder: (BuildContext context) =>
+                                const BookingRecordList(),
+                          ),
+                        )
+                        .then((_) => reload());
+                  },
+                  name: "My booking",
+                  icon: TICKET_ICON_PATH,
                 ),
-                Text(
-                  "Credits History",
-                  style: PengoStyle.title2(context),
+                ActionButton(
+                  onPressed: () {},
+                  name: "Logs",
+                  icon: LOG_ICON_PATH,
                 ),
-                const Spacer(),
-                // Text(
-                //   "See all",
-                //   style: PengoStyle.caption(context).copyWith(
-                //     color: primaryColor,
-                //   ),
-                // )
               ],
             ),
-            const Divider(),
-            BlocBuilder<GoocardBloc, GoocardState>(
-              builder: (BuildContext context, GoocardState state) {
-                if (state is GoocardLoading) {
-                  return Column(
-                    children: List.generate(
-                      3,
-                      (int index) => Container(
-                        padding: const EdgeInsets.only(bottom: 4),
-                        child: const SkeletonText(height: 15),
+          ),
+          const SizedBox(
+            height: SECTION_GAP_HEIGHT,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SvgPicture.asset(
+                HISTORY_ICON_PATH,
+                width: 23,
+                color: primaryColor,
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Text(
+                "Credits History",
+                style: PengoStyle.title2(context),
+              ),
+              const Spacer(),
+              // Text(
+              //   "See all",
+              //   style: PengoStyle.caption(context).copyWith(
+              //     color: primaryColor,
+              //   ),
+              // )
+            ],
+          ),
+          const Divider(),
+          BlocBuilder<GoocardBloc, GoocardState>(
+            builder: (BuildContext context, GoocardState state) {
+              if (state is GoocardLoading) {
+                return Column(
+                  children: List.generate(
+                    3,
+                    (int index) => Container(
+                      padding: const EdgeInsets.only(bottom: 4),
+                      child: const SkeletonText(height: 15),
+                    ),
+                  ),
+                );
+              }
+              if (state is GoocardLoadSuccess) {
+                if (state.goocard.logs?.isEmpty == true) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text(
+                      "No record",
+                      style: PengoStyle.caption(context).copyWith(
+                        color: secondaryTextColor,
                       ),
+                      textAlign: TextAlign.left,
                     ),
                   );
                 }
-                if (state is GoocardLoadSuccess) {
-                  if (state.goocard.logs?.isEmpty == true) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Text(
-                        "No record",
-                        style: PengoStyle.caption(context).copyWith(
-                          color: secondaryTextColor,
-                        ),
-                        textAlign: TextAlign.left,
-                      ),
-                    );
-                  }
-                  return ListView.builder(
+                return Expanded(
+                  child: ListView.builder(
                       itemCount: state.goocard.logs?.length,
                       padding: EdgeInsets.zero,
                       shrinkWrap: true,
@@ -165,13 +164,13 @@ class GooCardLogList extends StatelessWidget {
                             ),
                           ),
                         );
-                      });
-                }
-                return Container();
-              },
-            ),
-          ],
-        ),
+                      }),
+                );
+              }
+              return Container();
+            },
+          ),
+        ],
       ),
     );
   }

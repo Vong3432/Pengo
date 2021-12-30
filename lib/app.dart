@@ -6,11 +6,9 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pengo/config/color.dart';
 import 'package:pengo/config/shadow.dart';
 import 'package:pengo/const/icon_const.dart';
-import 'package:pengo/helpers/geo/geo_helper.dart';
 import 'package:pengo/helpers/notification/push_notification_manager.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
-import 'package:pengo/helpers/toast/toast_helper.dart';
 import 'package:pengo/models/providers/auth_model.dart';
 import 'package:pengo/ui/booking-records/past_record_listing_view.dart';
 import 'package:pengo/ui/explore/explore_view.dart';
@@ -209,35 +207,34 @@ class _MyHomePageState extends State<MyHomePage> {
           },
         ),
       ),
-      bottomNavigationBar: DotNavigationBar(
+      bottomNavigationBar: BottomNavigationBar(
         backgroundColor: whiteColor,
         currentIndex: _selectedIndex,
-        borderRadius: 50,
-        paddingR: const EdgeInsets.all(8),
-        itemPadding: const EdgeInsets.all(8),
-        dotIndicatorColor: Colors.transparent,
-        boxShadow: normalShadow(Theme.of(context)),
-        marginR: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
         onTap: _onBottomNavItemTapped,
-        items: <DotNavigationBarItem>[
-          DotNavigationBarItem(
-            selectedColor: primaryColor,
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: textColor,
+        showSelectedLabels: true,
+        showUnselectedLabels: true,
+        elevation: 17,
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            label: "Home",
             icon: navIcon(_selectedIndex == 0, HOME_ICON_PATH),
           ),
-          DotNavigationBarItem(
-            selectedColor: primaryColor,
+          BottomNavigationBarItem(
+            label: "Goocard",
             icon: navIcon(_selectedIndex == 1, CARD_ICON_PATH),
           ),
-          DotNavigationBarItem(
-            selectedColor: primaryColor,
+          BottomNavigationBarItem(
+            label: "Scan",
             icon: navIcon(false, SCAN_ICON_PATH), // always
           ),
-          DotNavigationBarItem(
-            selectedColor: primaryColor,
+          BottomNavigationBarItem(
+            label: "My reviews",
             icon: navIcon(_selectedIndex == 3, REVIEW_ICON_PATH),
           ),
-          DotNavigationBarItem(
-            selectedColor: primaryColor,
+          BottomNavigationBarItem(
+            label: "Profile",
             icon: navIcon(_selectedIndex == 4, PROFILE_ICON_PATH),
           ),
         ],

@@ -5,6 +5,7 @@ import 'package:lottie/lottie.dart';
 import 'package:pengo/bloc/goocard/goocard_bloc.dart';
 import 'package:pengo/config/color.dart';
 import 'package:pengo/const/lottie_const.dart';
+import 'package:pengo/const/space_const.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/models/providers/auth_model.dart';
@@ -67,6 +68,9 @@ class _GooCardPageState extends State<GooCardPage> {
                             bloc: _goocardBloc,
                             reload: _loadCard,
                           ),
+                        ),
+                        SizedBox(
+                          height: mediaQuery(context).size.height * 0.15,
                         ),
                       ],
                     ),
