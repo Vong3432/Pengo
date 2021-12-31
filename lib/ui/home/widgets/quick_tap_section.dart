@@ -191,16 +191,17 @@ class QuickTapActionItem extends StatelessWidget {
       onTap: () {
         if (category != null) {
           Navigator.of(context).push(
-            CupertinoPageRoute(
+            CupertinoPageRoute<Widget>(
               builder: (BuildContext context) {
                 return InfoPage(penger: category!.penger!);
               },
             ),
           );
         } else {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            "/explore",
-            (_) => false,
+          Navigator.of(context, rootNavigator: true).push(
+            CupertinoPageRoute<Widget>(
+              builder: (BuildContext context) => const ExploreView(),
+            ),
           );
         }
       },

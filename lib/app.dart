@@ -189,12 +189,6 @@ class _MyHomePageState extends State<MyHomePage> {
               case "/past-records":
                 builder = (BuildContext context) => PastRecordListPage();
                 break;
-              case "/explore":
-                builder = (BuildContext context) => ExploreView();
-                setState(() {
-                  _selectedIndex = -1;
-                });
-                break;
               default:
                 throw Exception('Invalid route: ${settings.name}');
             }
