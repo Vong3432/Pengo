@@ -7,9 +7,18 @@ import 'package:pengo/models/booking_category_model.dart';
 class BookingCategoryApiProvider {
   final ApiHelper _apiHelper = ApiHelper();
 
-  Future<List<BookingCategory>> fetchBookingCategories() async {
+  Future<List<BookingCategory>> fetchBookingCategories({int? pengerId}) async {
     try {
-      final response = await _apiHelper.get('/core/booking-categories');
+      final Map<String, dynamic> parameters = {};
+
+      if (pengerId != null) {
+        parameters["penger_id"] = pengerId;
+      }
+
+      final response = await _apiHelper.get(
+        '/core/booking-categories',
+        queryParameters: parameters,
+      );
       final data = response.data['data'] as List;
 
       List<BookingCategory> bookingCategories = List<BookingCategory>.from(

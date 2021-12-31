@@ -22,16 +22,17 @@ class BookingCategoryBloc
     debugPrint(event.toString());
     // TODO: implement mapEventToState
     if (event is FetchBookingCategoriesEvent) {
-      yield* _mapFetchCategoriesToState();
+      yield* _mapFetchCategoriesToState(pengerId: event.pengerId);
     }
   }
 
-  Stream<BookingCategoryState> _mapFetchCategoriesToState() async* {
+  Stream<BookingCategoryState> _mapFetchCategoriesToState({
+    int? pengerId,
+  }) async* {
     try {
       yield BookingCategoriesLoading();
       final List<BookingCategory> categories =
-          await _repo.fetchBookingCategories();
-      await Future.delayed(const Duration(seconds: 1));
+          await _repo.fetchBookingCategories(pengerId: pengerId);
       yield BookingCategoriesLoaded(categories);
     } catch (_) {
       yield BookingCategoriesNotLoaded();

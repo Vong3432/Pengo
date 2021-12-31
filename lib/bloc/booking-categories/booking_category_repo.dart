@@ -13,6 +13,6 @@ class BookingCategoryRepo {
   final BookingCategoryApiProvider _bookingCategoryApiProvider =
       BookingCategoryApiProvider();
 
-  Future<List<BookingCategory>> fetchBookingCategories() async =>
-      _bookingCategoryApiProvider.fetchBookingCategories();
+  Future<List<BookingCategory>> fetchBookingCategories({int? pengerId}) async =>
+      _bookingCategoryApiProvider.fetchBookingCategories(pengerId: pengerId);
 }

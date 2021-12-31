@@ -123,7 +123,7 @@ class _ItemsViewState extends State<ItemsView> with TickerProviderStateMixin {
 
   void _fetchCategories() {
     BlocProvider.of<BookingCategoryBloc>(context)
-        .add(FetchBookingCategoriesEvent());
+        .add(FetchBookingCategoriesEvent(pengerId: widget.pengerId));
   }
 
   @override
