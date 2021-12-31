@@ -1,16 +1,17 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pengo/bloc/booking-items/view_booking_item_bloc.dart';
 import 'package:pengo/models/booking_item_model.dart';
-import 'package:pengo/ui/penger/booking/booking_view.dart';
-import 'package:pengo/ui/penger/items/items_view.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 
 class ItemListingTabViewContent extends StatefulWidget {
-  const ItemListingTabViewContent(
-      {Key? key, required this.catId, required this.pengerId})
-      : super(key: key);
+  const ItemListingTabViewContent({
+    Key? key,
+    required this.catId,
+    required this.pengerId,
+  }) : super(key: key);
 
   final int catId;
   final int pengerId;
@@ -67,9 +68,12 @@ class _ItemListingTabViewContentState extends State<ItemListingTabViewContent> {
                             },
                           ).then((_) => _fetchItems());
                         },
-                        leading: Image.network(
-                          item.poster,
+                        leading: CachedNetworkImage(
+                          imageUrl: item.poster,
+                          placeholder: (BuildContext context, String url) =>
+                              const SkeletonText(height: 30),
                           width: 58,
+                          fit: BoxFit.cover,
                         ),
                         title: Text(item.title),
                         subtitle: Text(

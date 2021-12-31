@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -18,6 +19,7 @@ import 'package:pengo/ui/widgets/layout/sliver_appbar.dart';
 import 'package:pengo/ui/widgets/layout/sliver_body.dart';
 import 'package:pengo/ui/widgets/mapbox/map_view.dart';
 import 'package:provider/src/provider.dart';
+import 'package:skeleton_animation/skeleton_animation.dart';
 
 class BookingRecordDetailPage extends StatefulWidget {
   const BookingRecordDetailPage({Key? key, required this.id}) : super(key: key);
@@ -192,8 +194,10 @@ class _BookingRecordDetailPageState extends State<BookingRecordDetailPage> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             clipBehavior: Clip.hardEdge,
-                            child: Image.network(
-                              item.poster,
+                            child: CachedNetworkImage(
+                              imageUrl: item.poster,
+                              placeholder: (BuildContext context, String url) =>
+                                  const SkeletonText(height: 30),
                               fit: BoxFit.cover,
                             ),
                           ),

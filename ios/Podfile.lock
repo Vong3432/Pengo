@@ -72,6 +72,9 @@ PODS:
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
   - geolocator_apple (1.2.0):
     - Flutter
   - google_maps_flutter (0.0.1):
@@ -152,11 +155,16 @@ PODS:
     - nanopb/encode (= 2.30908.0)
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
+  - path_provider_ios (0.0.1):
+    - Flutter
   - Polyline (5.0.2)
   - PromisesObjC (2.0.0)
   - shared_preferences (0.0.1):
     - Flutter
   - Solar (2.1.0)
+  - sqflite (0.0.2):
+    - Flutter
+    - FMDB (>= 2.7.5)
   - Stripe (21.8.1):
     - Stripe/Stripe3DS2 (= 21.8.1)
     - StripeCore (= 21.8.1)
@@ -183,7 +191,9 @@ DEPENDENCIES:
   - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - jitsi_meet (from `.symlinks/plugins/jitsi_meet/ios`)
+  - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
+  - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - stripe_ios (from `.symlinks/plugins/stripe_ios/ios`)
 
 SPEC REPOS:
@@ -194,6 +204,7 @@ SPEC REPOS:
     - FirebaseCoreDiagnostics
     - FirebaseInstallations
     - FirebaseMessaging
+    - FMDB
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleMaps
@@ -242,8 +253,12 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_picker/ios"
   jitsi_meet:
     :path: ".symlinks/plugins/jitsi_meet/ios"
+  path_provider_ios:
+    :path: ".symlinks/plugins/path_provider_ios/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
+  sqflite:
+    :path: ".symlinks/plugins/sqflite/ios"
   stripe_ios:
     :path: ".symlinks/plugins/stripe_ios/ios"
 
@@ -262,6 +277,7 @@ SPEC CHECKSUMS:
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   flutter_mapbox_navigation: b2d023f58478f5f80242db9b70cc75ee37f42e20
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   geolocator_apple: b741765c55dc21950e3e106e8b3584e55cf81ce5
   google_maps_flutter: abdb8dee6c52d4be36ad131ee6ebfacd14417c5a
   GoogleAppMeasurement: 2c0c6e2a7ab3fe730ade6379f732bdefb46f50b0
@@ -281,10 +297,12 @@ SPEC CHECKSUMS:
   MapboxNavigationNative: e811b9beed18c01e4693e29f843d36b4a760fa61
   MapboxSpeech: 4b3aea42e35d056fae1d7ad847a9fc0f412d911e
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
+  path_provider_ios: 7d7ce634493af4477d156294792024ec3485acd5
   Polyline: fce41d72e1146c41c6d081f7656827226f643dff
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
   shared_preferences: 5033afbb22d372e15aff8ff766df9021b845f273
   Solar: 2dc6e7cc39186cb0c8228fa08df76fb50c7d8f24
+  sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   Stripe: 57c6997c64042a3f5aedae9b76e331942f8b75d2
   stripe_ios: a47cfc31126ca3f0c47a9c60c0bd4be110d14aea
   StripeCore: a6e50d58119a0c7601773b56f274db2d394dcdac

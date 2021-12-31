@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,6 +16,7 @@ import 'package:pengo/ui/widgets/api/no_result.dart';
 import 'package:pengo/ui/widgets/button/custom_button.dart';
 import 'package:pengo/ui/widgets/layout/sliver_appbar.dart';
 import 'package:pengo/ui/widgets/layout/sliver_body.dart';
+import 'package:skeleton_animation/skeleton_animation.dart';
 
 class ItemInfoView extends StatefulWidget {
   const ItemInfoView({Key? key}) : super(key: key);
@@ -98,8 +100,10 @@ class _ItemInfoViewState extends State<ItemInfoView> {
                               ),
                             ),
                             clipBehavior: Clip.hardEdge,
-                            child: Image.network(
-                              state.item.poster,
+                            child: CachedNetworkImage(
+                              imageUrl: state.item.poster,
+                              placeholder: (BuildContext context, String url) =>
+                                  const SkeletonText(height: 30),
                               width: double.infinity,
                               height: double.infinity,
                               fit: BoxFit.cover,

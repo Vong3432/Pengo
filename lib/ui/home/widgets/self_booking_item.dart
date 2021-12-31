@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pengo/config/color.dart';
@@ -7,6 +8,7 @@ import 'package:pengo/helpers/geo/geo_helper.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/models/booking_record_model.dart';
 import 'package:pengo/ui/booking-records/booking_record_detail_view.dart';
+import 'package:skeleton_animation/skeleton_animation.dart';
 
 class SelfBookingItem extends StatefulWidget {
   const SelfBookingItem({
@@ -52,8 +54,10 @@ class _SelfBookingItemState extends State<SelfBookingItem> {
               children: [
                 Stack(
                   children: <Widget>[
-                    Image.network(
-                      widget.record.item!.poster,
+                    CachedNetworkImage(
+                      imageUrl: widget.record.item!.poster,
+                      placeholder: (BuildContext context, String url) =>
+                          const SkeletonText(height: 30),
                       fit: BoxFit.cover,
                       width: double.infinity,
                       height: 150,

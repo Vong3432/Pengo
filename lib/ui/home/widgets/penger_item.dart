@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -5,6 +6,7 @@ import 'package:pengo/config/color.dart';
 import 'package:pengo/helpers/theme/custom_font.dart';
 import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/ui/widgets/list/custom_list_item.dart';
+import 'package:skeleton_animation/skeleton_animation.dart';
 
 class PengerItem extends StatelessWidget {
   const PengerItem({
@@ -56,8 +58,10 @@ class PengerItem extends StatelessWidget {
                 height: 52,
                 fit: BoxFit.cover,
               )
-            : Image.network(
-                logo,
+            : CachedNetworkImage(
+                imageUrl: logo,
+                placeholder: (BuildContext context, String url) =>
+                    const SkeletonText(height: 30),
                 width: 52,
                 height: 52,
                 fit: BoxFit.cover,
