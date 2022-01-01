@@ -9,6 +9,7 @@ import 'package:pengo/helpers/theme/theme_helper.dart';
 import 'package:pengo/helpers/toast/toast_helper.dart';
 import 'package:pengo/ui/widgets/button/custom_button.dart';
 import 'package:pengo/ui/widgets/input/custom_textfield.dart';
+import 'package:provider/src/provider.dart';
 
 class SaveLocationModal extends StatefulWidget {
   const SaveLocationModal({
@@ -91,8 +92,15 @@ class _SaveLocationModalState extends State<SaveLocationModal> {
       // call save api
       // ... await apiHelper.post('xxx')
       try {
+        // to ensure the new location will be marked as favorite only
+        await LocationRepo().markAllLocationNotFav();
         await LocationRepo()
             .saveLocation(widget.lat, widget.lng, _controller.text);
+
+        // ignore: use_build_context_synchronously
+        // Let app knows users are not using device location when they try to
+        // save location.
+        context.read<GeoHelper>().isUsingDevice = false;
 
         // update position
         await GeoHelper().determinePosition();

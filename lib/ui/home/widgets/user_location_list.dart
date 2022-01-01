@@ -15,17 +15,13 @@ class UsersOwnLocationList extends StatelessWidget {
     required this.locations,
   }) : super(key: key);
 
-  final void Function(double lat, double lng, String name) showSaveModal;
+  /// This callback will be fired when users tap on any previously saved location
+  final void Function(double lat, double lng, String name, {int? id})
+      showSaveModal;
   final List<UserLocation> locations;
 
   @override
   Widget build(BuildContext context) {
-    // List<UserLocation>? _userLocations =
-    //     context.select<AuthModel, List<UserLocation>?>(
-    //   (value) => value.user?.user.locations,
-    // );
-
-    // debugPrint(_userLocations.toString());
     return Visibility(
       visible: locations.isNotEmpty == true,
       child: Column(
@@ -53,6 +49,7 @@ class UsersOwnLocationList extends StatelessWidget {
                   ul.geolocation!.latitude,
                   ul.geolocation!.longitude,
                   ul.name,
+                  id: ul.id,
                 ),
                 contentPadding: EdgeInsets.zero,
                 minLeadingWidth: 22,

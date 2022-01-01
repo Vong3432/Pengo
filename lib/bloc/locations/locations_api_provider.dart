@@ -38,6 +38,20 @@ class LocationsApiProvider {
     }
   }
 
+  Future<ResponseModel> markThisLocationFav(int id) async {
+    try {
+      final response =
+          await _apiHelper.put('/pengoo/locations/0', queryParameters: {
+        "user_location_id": id,
+      });
+      final ResponseModel responseModel = ResponseModel.fromResponse(response);
+      return responseModel;
+    } on DioError catch (e) {
+      debugPrint(e.response.toString());
+      throw e.response!.data['msg'].toString();
+    }
+  }
+
   Future<ResponseModel> saveLocation(
     double lat,
     double lng,

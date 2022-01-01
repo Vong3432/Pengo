@@ -20,6 +20,10 @@ class LocationRepo {
 
   Future<ResponseModel> markAllLocationNotFav() async =>
       _locationsApiProvider.markAllLocationNotFav();
+
+  Future<ResponseModel> markThisLocationFav(int id) async =>
+      _locationsApiProvider.markThisLocationFav(id);
+
   Future<ResponseModel> saveLocation(
     double lat,
     double lng,

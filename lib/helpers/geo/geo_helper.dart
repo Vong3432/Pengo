@@ -26,6 +26,10 @@ class GeoHelper extends ChangeNotifier {
 
   bool get isUsingDevice => _isUsingDevice;
 
+  set isUsingDevice(bool isUsing) {
+    _isUsingDevice = isUsing;
+  }
+
   Map<String, dynamic>? currentPos() {
     if (_currentLat != null && _currentLng != null && _currentAddress != null) {
       return <String, dynamic>{
@@ -91,26 +95,39 @@ class GeoHelper extends ChangeNotifier {
     return position;
   }
 
+  Future<List<UserLocation>?> getUserSavedLocations() async {
+    final String? _user = await SharedPreferencesHelper().getKey("user");
+
+    if (_user == null) return null;
+
+    final List<UserLocation> userLocations =
+        await LocationRepo().fetchUserLocations();
+
+    return userLocations;
+  }
+
   /// Determine and set the current position of the device or users' favourite position.
   ///
   /// When the location services are not enabled or permissions
   /// are denied the `Future` will return an error.
   Future<void> determinePosition() async {
-    final String? _user = await SharedPreferencesHelper().getKey("user");
+    final List<UserLocation> userLocations =
+        await getUserSavedLocations() ?? <UserLocation>[];
 
     // check user saved location > device gps
-    if (_user != null) {
-      final List<UserLocation> userLocations =
-          await LocationRepo().fetchUserLocations();
+    if (userLocations.isNotEmpty) {
       final UserLocation? location =
           userLocations.firstWhereOrNull((UserLocation loc) => loc.isFav);
 
+      // Use saved location from users when
+      // - Have records
+      // - Users are not using device location.
       if (location != null &&
           location.geolocation?.latitude != null &&
-          location.geolocation?.longitude != null) {
+          location.geolocation?.longitude != null &&
+          _isUsingDevice == false) {
         _currentLat = location.geolocation!.latitude;
         _currentLng = location.geolocation!.longitude;
-        _isUsingDevice = false;
 
         final LatLon latLng = LatLon(
           location.geolocation!.latitude,

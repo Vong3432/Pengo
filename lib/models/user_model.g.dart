@@ -35,6 +35,7 @@ UserLocation _$UserLocationFromJson(Map<String, dynamic> json) {
     geolocation: json['geolocation'] == null
         ? null
         : Geolocation.fromJson(json['geolocation'] as Map<String, dynamic>),
+    id: json['id'] as int,
     isFav: json['is_fav'] as bool,
     name: json['name'] as String,
   );
@@ -42,6 +43,7 @@ UserLocation _$UserLocationFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$UserLocationToJson(UserLocation instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'name': instance.name,
       'address': instance.address,
       'street': instance.street,

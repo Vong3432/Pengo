@@ -31,6 +31,7 @@ class UserLocation {
     this.address,
     this.street,
     this.geolocation,
+    required this.id,
     required this.isFav,
     required this.name,
   });
@@ -39,6 +40,7 @@ class UserLocation {
       _$UserLocationFromJson(json);
   Map<String, dynamic> toJson() => _$UserLocationToJson(this);
 
+  final int id;
   final String name;
   final String? address;
   final String? street;

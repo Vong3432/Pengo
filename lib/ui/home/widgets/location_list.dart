@@ -80,10 +80,16 @@ class _LocationListState extends State<LocationList> {
                     ),
                     if (context.watch<AuthModel>().user != null)
                       UsersOwnLocationList(
-                        locations: _userLocations,
-                        showSaveModal: (double lat, double lng, String name) =>
-                            _showSaveModal(lat, lng, user, name: name),
-                      ),
+                          locations: _userLocations,
+                          showSaveModal: (double lat, double lng, String name,
+                              {int? id}) async {
+                            // mark current location as fav because user tapped their saved location
+                            if (id != null) {
+                              await LocationRepo().markThisLocationFav(id);
+                            }
+
+                            _showSaveModal(lat, lng, user, name: name);
+                          }),
                   ],
                 ),
               )
@@ -139,8 +145,6 @@ class _LocationListState extends State<LocationList> {
                         );
                     if (user == null) return;
 
-                    await LocationRepo().markAllLocationNotFav();
-
                     showCupertinoModalBottomSheet(
                         context: context,
                         builder: (BuildContext context) {
@@ -182,10 +186,13 @@ class _LocationListState extends State<LocationList> {
                                       ),
                                       Expanded(
                                         child: CupertinoButton(
-                                          child: const Text("No"),
-                                          onPressed: () =>
-                                              Navigator.of(context).pop(),
-                                        ),
+                                            child: const Text("No"),
+                                            onPressed: () {
+                                              context
+                                                  .read<GeoHelper>()
+                                                  .isUsingDevice = true;
+                                              Navigator.of(context).pop();
+                                            }),
                                       ),
                                     ],
                                   )
@@ -266,6 +273,14 @@ class _LocationListState extends State<LocationList> {
     User? user, {
     String? name,
   }) {
+    // Only saved location by users will have name
+    // This block will be executed when users tap any saved location
+    // and we don't care they save it or not, just let the app knows
+    // they are using their saved location right now.
+    if (name != null) {
+      context.read<GeoHelper>().setCurrentPos(latitude, longitude, false);
+    }
+
     showCupertinoModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
