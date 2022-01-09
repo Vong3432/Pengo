@@ -148,36 +148,36 @@ class SearchViewState extends State<SearchView> {
                   name: penger.name,
                   logo: penger.logo,
                   location: penger.location?.address,
-                  trailing: context.watch<GeoHelper>().currentPos == null
-                      ? Container()
-                      : Row(
-                          children: [
-                            SvgPicture.asset(
-                              DISTANCE_ICON_PATH,
-                              width: 16,
-                            ),
-                            FutureBuilder(
-                                future: GeoHelper().distanceBetween(
-                                  penger.location!.geolocation.latitude,
-                                  penger.location!.geolocation.longitude,
-                                ),
-                                builder: (
-                                  BuildContext context,
-                                  AsyncSnapshot<double?> snapshot,
-                                ) {
-                                  if (snapshot.hasData) {
-                                    return Text(
-                                      "${snapshot.data!.metersToKm().toStringAsFixed(1)} km",
-                                      style:
-                                          PengoStyle.caption(context).copyWith(
-                                        color: secondaryTextColor,
-                                        fontSize: 12,
-                                      ),
-                                    );
-                                  }
-                                  return Container();
-                                }),
-                          ],
+                  trailing: penger.location == null
+                      ? const SizedBox()
+                      : FutureBuilder<double?>(
+                          future: GeoHelper().distanceBetween(
+                            penger.location!.geolocation.latitude,
+                            penger.location!.geolocation.longitude,
+                          ),
+                          builder: (
+                            BuildContext context,
+                            AsyncSnapshot<double?> snapshot,
+                          ) {
+                            if (snapshot.hasData) {
+                              return Row(
+                                children: <Widget>[
+                                  SvgPicture.asset(
+                                    DISTANCE_ICON_PATH,
+                                    width: 16,
+                                  ),
+                                  Text(
+                                    "${snapshot.data!.metersToKm().toStringAsFixed(1)} km",
+                                    style: PengoStyle.caption(context).copyWith(
+                                      color: secondaryTextColor,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }
+                            return Container();
+                          },
                         ),
                 );
               });

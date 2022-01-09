@@ -21,6 +21,9 @@
 - IOT GooCard Integration.
 - Open-source API/SDK.
 
+### Video demo
+- https://youtu.be/EOd6GbxzcF8
+
 ### Commands
 
 1. Generate JSON serializable files

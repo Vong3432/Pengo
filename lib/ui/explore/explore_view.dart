@@ -33,6 +33,7 @@ class _ExploreViewState extends State<ExploreView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final FilterCubit _cubit = FilterCubit();
+  final PengerBloc _pengerBloc = PengerBloc();
   int _tabIndex = 0;
 
   @override
@@ -45,65 +46,68 @@ class _ExploreViewState extends State<ExploreView>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: <Widget>[
-          CustomSliverAppBar(
-            title: Text(
-              "Explore",
-              style: PengoStyle.navigationTitle(context),
-            ),
-            actions: <Widget>[
-              IconButton(
-                iconSize: 26,
-                onPressed: _openSearch,
-                icon: SvgPicture.asset(
-                  SEARCH_ICON_PATH,
-                  fit: BoxFit.scaleDown,
-                ),
+    return BlocProvider<PengerBloc>(
+      create: (BuildContext context) => _pengerBloc,
+      child: Scaffold(
+        body: CustomScrollView(
+          slivers: <Widget>[
+            CustomSliverAppBar(
+              title: Text(
+                "Explore",
+                style: PengoStyle.navigationTitle(context),
               ),
-              IconButton(
-                iconSize: 26,
-                onPressed: _openFilter,
-                icon: SvgPicture.asset(
-                  FILTER_ICON_PATH,
-                  fit: BoxFit.scaleDown,
-                ),
-              ),
-            ],
-            bottom: PreferredSize(
-              preferredSize: const Size(double.infinity, 15),
-              child: Container(
-                decoration: BoxDecoration(
-                  //This is for bottom border that is needed
-                  border: Border(
-                    bottom: BorderSide(color: greyBgColor, width: 2),
+              actions: <Widget>[
+                IconButton(
+                  iconSize: 26,
+                  onPressed: _openSearch,
+                  icon: SvgPicture.asset(
+                    SEARCH_ICON_PATH,
+                    fit: BoxFit.scaleDown,
                   ),
                 ),
-                width: double.infinity,
-                child: TabBar(
-                  onTap: _tabChanged,
-                  controller: _tabController,
-                  unselectedLabelColor: secondaryTextColor,
-                  labelColor: textColor,
-                  indicatorColor: primaryColor,
-                  indicatorWeight: 3,
-                  tabs: _generateTabBar,
+                IconButton(
+                  iconSize: 26,
+                  onPressed: _openFilter,
+                  icon: SvgPicture.asset(
+                    FILTER_ICON_PATH,
+                    fit: BoxFit.scaleDown,
+                  ),
+                ),
+              ],
+              bottom: PreferredSize(
+                preferredSize: const Size(double.infinity, 15),
+                child: Container(
+                  decoration: BoxDecoration(
+                    //This is for bottom border that is needed
+                    border: Border(
+                      bottom: BorderSide(color: greyBgColor, width: 2),
+                    ),
+                  ),
+                  width: double.infinity,
+                  child: TabBar(
+                    onTap: _tabChanged,
+                    controller: _tabController,
+                    unselectedLabelColor: secondaryTextColor,
+                    labelColor: textColor,
+                    indicatorColor: primaryColor,
+                    indicatorWeight: 3,
+                    tabs: _generateTabBar,
+                  ),
                 ),
               ),
             ),
-          ),
-          SliverFillRemaining(
-            child: TabBarView(
-              physics: const NeverScrollableScrollPhysics(),
-              controller: _tabController,
-              children: <Widget>[
-                _itemsTabView(),
-                _pengersTabView(),
-              ],
-            ),
-          )
-        ],
+            SliverFillRemaining(
+              child: TabBarView(
+                physics: const NeverScrollableScrollPhysics(),
+                controller: _tabController,
+                children: <Widget>[
+                  _itemsTabView(),
+                  _pengersTabView(),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -194,61 +198,61 @@ class _ExploreViewState extends State<ExploreView>
               return const NoResultWidget();
             }
             return ListView.separated(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-                itemCount: state.pengers.length,
-                separatorBuilder: (BuildContext context, int index) {
-                  return const SizedBox(height: SECTION_GAP_HEIGHT);
-                },
-                itemBuilder: (BuildContext context, int index) {
-                  final Penger penger = state.pengers[index];
-                  return PengerItem(
-                    onTap: () {
-                      Navigator.of(context, rootNavigator: true)
-                          .push(
-                            CupertinoPageRoute(
-                              builder: (BuildContext context) =>
-                                  InfoPage(penger: penger),
-                            ),
-                          )
-                          .then((_) => _load());
-                    },
-                    name: penger.name,
-                    logo: penger.logo,
-                    location: penger.location?.address,
-                    trailing: context.watch<GeoHelper>().currentPos == null
-                        ? Container()
-                        : Row(
-                            children: [
-                              SvgPicture.asset(
-                                DISTANCE_ICON_PATH,
-                                width: 16,
-                              ),
-                              FutureBuilder(
-                                  future: GeoHelper().distanceBetween(
-                                    penger.location!.geolocation.latitude,
-                                    penger.location!.geolocation.longitude,
-                                  ),
-                                  builder: (
-                                    BuildContext context,
-                                    AsyncSnapshot<double?> snapshot,
-                                  ) {
-                                    if (snapshot.hasData) {
-                                      return Text(
-                                        "${snapshot.data!.metersToKm().toStringAsFixed(1)} km",
-                                        style: PengoStyle.caption(context)
-                                            .copyWith(
-                                          color: secondaryTextColor,
-                                          fontSize: 12,
-                                        ),
-                                      );
-                                    }
-                                    return Container();
-                                  }),
-                            ],
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+              itemCount: state.pengers.length,
+              separatorBuilder: (BuildContext context, int index) {
+                return const SizedBox(height: SECTION_GAP_HEIGHT);
+              },
+              itemBuilder: (BuildContext context, int index) {
+                final Penger penger = state.pengers[index];
+                return PengerItem(
+                  onTap: () {
+                    Navigator.of(context, rootNavigator: true)
+                        .push(
+                          CupertinoPageRoute(
+                            builder: (BuildContext context) =>
+                                InfoPage(penger: penger),
                           ),
-                  );
-                });
+                        )
+                        .then((_) => _load());
+                  },
+                  name: penger.name,
+                  logo: penger.logo,
+                  location: penger.location?.address,
+                  trailing: penger.location == null
+                      ? const SizedBox()
+                      : FutureBuilder<double?>(
+                          future: GeoHelper().distanceBetween(
+                            penger.location!.geolocation.latitude,
+                            penger.location!.geolocation.longitude,
+                          ),
+                          builder: (
+                            BuildContext context,
+                            AsyncSnapshot<double?> snapshot,
+                          ) {
+                            if (snapshot.hasData) {
+                              return Row(
+                                children: <Widget>[
+                                  SvgPicture.asset(
+                                    DISTANCE_ICON_PATH,
+                                    width: 16,
+                                  ),
+                                  Text(
+                                    "${snapshot.data!.metersToKm().toStringAsFixed(1)} km",
+                                    style: PengoStyle.caption(context).copyWith(
+                                      color: secondaryTextColor,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }
+                            return Container();
+                          },
+                        ),
+                );
+              },
+            );
           }
           return Container();
         },
@@ -321,7 +325,7 @@ class _ExploreViewState extends State<ExploreView>
       _tabController.animateTo(1);
       // debugPrint("fetch penger");
       // fetch pengers
-      BlocProvider.of<PengerBloc>(context).add(
+      _pengerBloc.add(
         FetchPengers(
           sortDistance:
               _cubit.state.sortBy == ExploreListSorting.distance ? 1 : null,

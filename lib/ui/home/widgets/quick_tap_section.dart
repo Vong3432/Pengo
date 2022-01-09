@@ -81,84 +81,11 @@ class _QuickTapSectionState extends State<QuickTapSection> {
         return Container();
       },
     );
-    //   return Column(
-    //     children: <Widget>[
-    //       Row(
-    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //         children: <QuickTapItem>[
-    //           QuickTapItem(
-    //             title: "Scan",
-    //             assetName: SCAN_ICON_PATH,
-    //             onTap: () {
-    //               showCupertinoModalBottomSheet(
-    //                   useRootNavigator: true,
-    //                   context: context,
-    //                   builder: (BuildContext context) {
-    //                     return Container(
-    //                       padding: const EdgeInsets.all(18),
-    //                       height: mediaQuery(context).size.height * 0.3,
-    //                       child: Column(
-    //                         crossAxisAlignment: CrossAxisAlignment.start,
-    //                         mainAxisSize: MainAxisSize.min,
-    //                         children: <Widget>[
-    //                           Text(
-    //                             "Use",
-    //                             style: PengoStyle.header(context),
-    //                           ),
-    //                           Row(
-    //                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    //                             children: <Widget>[
-    //                               OptionItem(
-    //                                 assetName: GOOCARD_ICON_PATH,
-    //                                 title: 'Booking Pass',
-    //                                 onTap: () {
-    //                                   showCupertinoModalBottomSheet(
-    //                                       context: context,
-    //                                       builder: (context) {
-    //                                         return const BookingPassView();
-    //                                       });
-    //                                 },
-    //                               ),
-    //                               const SizedBox(width: 10),
-    //                               OptionItem(
-    //                                   assetName: COUPON_ICON_PATH,
-    //                                   title: 'Coupon',
-    //                                   onTap: () {}),
-    //                             ],
-    //                           ),
-    //                         ],
-    //                       ),
-    //                     );
-    //                   });
-    //             },
-    //           ),
-    //           QuickTapItem(
-    //             title: "FAQ",
-    //             assetName: INFO_ICON_PATH,
-    //             onTap: () {},
-    //           ),
-    //           QuickTapItem(
-    //             title: "Coupons",
-    //             assetName: COUPON_ICON_PATH,
-    //             onTap: () {},
-    //           ),
-    //           QuickTapItem(
-    //             title: "Feedback",
-    //             assetName: REPORT_ICON_PATH,
-    //             onTap: () {},
-    //           )
-    //         ],
-    //       ),
-    //       const Padding(
-    //         padding: EdgeInsets.symmetric(vertical: 10),
-    //       )
-    //     ],
-    //   );
   }
 
   void _loadCategories() {
     BlocProvider.of<BookingCategoryBloc>(context)
-        .add(FetchBookingCategoriesEvent());
+        .add(const FetchBookingCategoriesEvent());
   }
 
   List<Color> _colors() {
@@ -190,7 +117,7 @@ class QuickTapActionItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (category != null) {
-          Navigator.of(context).push(
+          Navigator.of(context, rootNavigator: true).push(
             CupertinoPageRoute<Widget>(
               builder: (BuildContext context) {
                 return InfoPage(penger: category!.penger!);
