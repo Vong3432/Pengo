@@ -7,6 +7,9 @@
 <small><i>The actual booking app.</i></small>
 </p>
 
+### Notes
+This project is in Phaseout stage and no longer maintained.
+
 ### Features
 
 - All in one multipurpose booking app.
