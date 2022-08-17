@@ -58,5 +58,7 @@
 	<string>$(PRODUCT_NAME) needs access to your camera for video call.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>$(PRODUCT_NAME) needs access to your microphone for video call.</string>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 </dict>
 </plist>
