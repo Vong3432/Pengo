@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -22,12 +24,20 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app needs access to photo</string>
+	<key>NSCameraUsageDescription</key>
+	<string>$(PRODUCT_NAME) needs access to your camera for video call.</string>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
+	<key>MGLMapboxMetricsEnabledSettingShownInApp</key>
+	<true/>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>This app needs access to location when in the background.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs access to location when open.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>$(PRODUCT_NAME) needs access to your microphone for video call.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app needs access to photo</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
@@ -54,11 +64,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSCameraUsageDescription</key>
-	<string>$(PRODUCT_NAME) needs access to your camera for video call.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>$(PRODUCT_NAME) needs access to your microphone for video call.</string>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
+	<key>MGLMapboxAccessToken</key>
+	<string>pk.eyJ1Ijoidm9uZzM0MzIiLCJhIjoiY2s2cXAwc29kMXpnczNscWZlZjd1aTRkZSJ9.rp03VAUN-UKlQD1JqdJ67Q</string>
 </dict>
 </plist>

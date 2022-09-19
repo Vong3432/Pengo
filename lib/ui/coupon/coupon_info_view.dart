@@ -231,7 +231,7 @@ class CouponInfoContent extends StatelessWidget {
                   height: 4,
                 ),
                 Text(
-                  coupon.description!,
+                  coupon.description ?? "",
                   style: PengoStyle.text(context).copyWith(
                     color: textColor,
                   ),

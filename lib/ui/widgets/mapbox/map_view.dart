@@ -201,7 +201,7 @@ class _MapViewState extends State<MapView> {
     if (!mounted) return;
 
     _directions = MapBoxNavigation(onRouteEvent: _onEmbeddedRouteEvent);
-
+    print("OK");
     _options = MapBoxOptions(
       initialLatitude: widget.initialLat,
       initialLongitude: widget.initialLng,

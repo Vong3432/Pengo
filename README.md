@@ -46,3 +46,20 @@ Flutter 3
 
 ### If previously installed this project with Flutter 2 and updated to version 3 
 - Check this out: https://stackoverflow.com/a/72462085/10868150
+
+### Setup installation problems
+1.
+```
+Error: CocoaPods's specs repository is too out-of-date to satisfy dependencies.
+To update the CocoaPods specs, run:
+  pod repo update
+
+  ...
+```
+- Refer: [Flutter: CocoaPods's specs repository is too out-of-date to satisfy dependencies](https://stackoverflow.com/a/71458394)
+
+2. 
+```
+[!] Error installing Mapbox-iOS-SDK
+```
+- Refer: [Mapbox installation guide](https://docs.mapbox.com/ios/maps/guides/install/)
