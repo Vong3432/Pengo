@@ -24,7 +24,7 @@ class ApiHelper {
     _dio.interceptors.addAll([
       InterceptorsWrapper(onError:
           (DioError error, ErrorInterceptorHandler errorInterceptorHandler) {
-        // debugPrint("Error dio: ${error.response?.data['msg'].toString()}");
+        debugPrint("Error dio: ${error.response?.data['msg'].toString()}");
 
         errorInterceptorHandler.reject(error);
         if (error.response?.statusCode == 401) {

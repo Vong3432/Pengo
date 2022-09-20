@@ -61,6 +61,7 @@ class _BookingPassViewState extends State<BookingPassView> {
     final String? pin = _recordListener.getPin();
 
     debugPrint("Record id: ${record?.id}");
+    debugPrint("Record pin: ${pin}");
     if (record == null) return;
 
     final Map<String, String> fd = {
@@ -69,7 +70,7 @@ class _BookingPassViewState extends State<BookingPassView> {
     };
 
     await _api.post('verify-pass',
-        data: fd, options: Options(contentType: 'multipart/form-data'));
+        data: fd, options: Options(contentType: 'multipart/form-data'), isFormData: true);
 
     final Socket instance = _socketHelper.getSocket;
     instance.on("rest-join", (data) {
